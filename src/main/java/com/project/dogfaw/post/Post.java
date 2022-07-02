@@ -1,4 +1,4 @@
 package com.project.dogfaw.post;
 
-public class post {
+public class Post {
 }
