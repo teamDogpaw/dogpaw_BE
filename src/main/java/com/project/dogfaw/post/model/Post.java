@@ -68,7 +68,6 @@ public class Post extends Timestamped {
     }
 
 
-    
     //참여신청시 +1, 참여취소시 -1(건영)
     //현재모집인원 +1
     public void increaseCnt() {this.currentMember += 1;}
