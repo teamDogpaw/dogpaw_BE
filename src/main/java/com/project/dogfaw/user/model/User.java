@@ -8,12 +8,14 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
-@Entity
+@Entity(name = "Users")
 @DynamicUpdate // null 값인 field 를 DB에서 설정된 default을 줌
 public class User {
 
@@ -34,11 +36,21 @@ public class User {
     @Column
     private String profileImg;
 
-    @Column
-    private String stack;
+//    @Column
+//    private String stack;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
+    @OneToMany
+    @JoinColumn(name = "stack_id")
+    private List<Stack> stacks = new ArrayList<>();
+
+
+
+    public void updateStack(List<Stack> stack) {
+        this.stacks = stack;
+    }
+
+//    @Enumerated(EnumType.STRING)
+//    private Role role;
 
 //    private String List<bookMark>;
 //
