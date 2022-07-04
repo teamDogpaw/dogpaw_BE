@@ -27,7 +27,7 @@ public class PostResponseDto {
 
     private int commentCnt;
 
-    public PostResponseDto(Post post){
+    public PostResponseDto(Post post) {
         this.postId = post.getId();
         this.title = post.getTitle();
         this.online = post.getOnline();
@@ -43,17 +43,4 @@ public class PostResponseDto {
 
     }
 
-
-    // this.title = title;
-    //        this.online = online;
-    //        this.stack = stack;
-    //        this.period = period;
-    //        this.startAt = startAt;
-    //        this.content = content;
-    //        this.deadline = deadline;
-    //        this.nickname = nickname;
-    //        this.maxCapacity = maxCapacity;
-    //        this.currentMember = currentMember;
-    //        this.bookmarkCnt = bookmarkCnt;
-    //        this.commentCnt = commentCnt;
 }
