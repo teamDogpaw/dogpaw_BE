@@ -33,16 +33,24 @@ public class BookMarkService {
                 ()-> new NullPointerException("해당 게시물이 존재하지 않음")
         );
 
-        //북마크 db에 해당 userId와 PostId 가 존재하지 않으면 db에 저장(북마크 등록)
+        //북마크 db에 해당 userId와 PostId 가 존재하지 않으면 db에 저장(북마크 등록) 및 post의 북마크 총 갯수 +1
          if(!bookMarkRepository.existsByUserAndPost(user,post)){
             BookMark bookMark = new BookMark(user, post);
             bookMarkRepository.save(bookMark);
+            post.increaseBmCount();
             return true;
-            //다시 눌러서 요청할 경우 db에 존재하기 때문에 삭제후 return false(북마크 등록 취소)
+            //다시 눌러서 요청할 경우 db에 존재하기 때문에 삭제후 return false(북마크 등록 취소) 및 post의 북마크 총 갯수 -1
         }else{
             BookMark bookMark = bookMarkRepository.getBookMarkByUserAndPost(user,post);
             bookMarkRepository.delete(bookMark);
+            post.decreaseBmCount();
             return false;
         }
+
+//         if (bookMarkRepository.existsByUserAndPost(user,post)){
+//             boolean bookMarkCheck = true;
+//         } else {
+//             boolean bookMarkCheck = false;
+//         }
     }
 }

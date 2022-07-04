@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.dto;
 
 import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,17 +18,20 @@ public class PostResponseDto {
     private int startAt;
     private String content;
 
+    private boolean deadline;
+
     private String nickname;
 
-    private int maxCapacity;
-
-    private int currentMember;
+    private String profileImg;
 
     private int bookmarkCnt;
 
     private int commentCnt;
 
-    public PostResponseDto(Post post) {
+    private boolean bookMarkStatus;
+
+    public PostResponseDto(Post post, boolean bookMarkStatus, User user){
+
         this.postId = post.getId();
         this.title = post.getTitle();
         this.online = post.getOnline();
@@ -36,10 +40,10 @@ public class PostResponseDto {
         this.startAt = post.getStartAt();
         this.content = post.getContent();
         this.nickname = post.getNickname();
-        this.maxCapacity = post.getMaxCapacity();
-        this.currentMember = post.getCurrentMember();
+        this.profileImg = user.getProfileImg();
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();
+        this.bookMarkStatus = bookMarkStatus;
 
     }
 

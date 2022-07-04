@@ -41,7 +41,7 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int maxCapacity;
 
-    @Column(nullable = false)
+    @Column
     private int currentMember;
 
     @Column(nullable = false)
@@ -84,17 +84,19 @@ public class Post extends Timestamped {
         }
     }
 
-<<<<<<< Updated upstream
+
 
     
     //참여신청시 +1, 참여취소시 -1(건영)
     //현재모집인원 +1
     public void increaseCnt() {this.currentMember += 1;}
     //현재모집인원 -1
-    public void decreaseCnt() {
-        this.currentMember -= 1;
-    }
-=======
->>>>>>> Stashed changes
+    public void decreaseCnt() {this.currentMember -= 1;}
+
+    //유저가 북마크시 해당 게시글 북마크 수 +1, 취소시 -1
+    public void increaseBmCount(){this.bookmarkCnt += 1;}
+    public void decreaseBmCount(){this.bookmarkCnt -= 1;}
+
+
 
 }
