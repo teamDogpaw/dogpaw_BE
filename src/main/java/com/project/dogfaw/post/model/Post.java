@@ -33,8 +33,11 @@ public class Post extends Timestamped {
     @Column(length = 400, nullable = false)
     private String content;
 
-    @Column
-    private String profileImg;
+    @Column(nullable = false)
+    private int maxCapacity;
+
+    @Column(nullable = false)
+    private int currentMember;
 
     @Column(nullable = false)
     private int deadline;
@@ -48,7 +51,7 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int commentCnt;
 
-    public Post(String title, Boolean online, String stack, String period, int startAt, String content, int deadline, String nickname, String profileImg, int bookmarkCnt, int commentCnt) {
+    public Post(String title, Boolean online, String stack, String period, int startAt, String content, int deadline, String nickname, int maxCapacity, int currentMember, int bookmarkCnt, int commentCnt) {
         this.title = title;
         this.online = online;
         this.stack = stack;
@@ -57,7 +60,8 @@ public class Post extends Timestamped {
         this.content = content;
         this.deadline = deadline;
         this.nickname = nickname;
-        this. profileImg = profileImg;
+        this.maxCapacity = maxCapacity;
+        this.currentMember = currentMember;
         this.bookmarkCnt = bookmarkCnt;
         this.commentCnt = commentCnt;
 
