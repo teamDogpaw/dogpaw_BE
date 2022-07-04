@@ -24,9 +24,7 @@ public class UserValidator {
 
     public static void validateInputStack(SignupRequestDto requestDto) {
 
-        String stack = requestDto.getStack();
-
-        if (stack.isEmpty()) {
+        if (requestDto.getStacks().size()==0) {
             throw new CustomException(ErrorCode.SIGNUP_MAJOR_WRONG_INPUT);
         }
     }

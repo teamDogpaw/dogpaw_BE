@@ -31,41 +31,21 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int startAt;
 
-    @Column(nullable = true)
-    private int currentMember;
-
     @Column(nullable = false)
-    private int maxCapacity;
+    private int capacity;
 
     @Column(nullable = false)
     private String content;
 
     @Column(nullable = false)
-    private String creatAt;
+    private String nickname;
 
     @Column(nullable = false)
-    private String modifiedAt;
+    private String profileImg;
 
     @Column(nullable = false)
-    private String deadline;
+    private
 
-    @Column(nullable = false)
-    private String username;
-
-
-
-
-
-
-    //참가신청시 현재 모집인원 + 또는 - 하기위한 생성자(건영)
-    //모집인원 +1
-    public void increaseCnt() {
-        this.currentMember += 1;
-    }
-    //모집인원 -1
-    public void decreaseCnt() {
-        this.currentMember -= 1;
-    }
 
 }
 
