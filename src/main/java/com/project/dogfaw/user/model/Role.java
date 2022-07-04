@@ -1,4 +1,7 @@
 package com.project.dogfaw.user.model;
 
-public enum Role {
-}
+import javax.persistence.Entity;
+
+//@Entity
+//public enum Role {
+//}

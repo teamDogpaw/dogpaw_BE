@@ -23,7 +23,6 @@ public class UserApplication {
     @JoinColumn
     private Post post;
 
-
     public UserApplication(User user, Post post) {
         this.user = user;
         this.post = post;
