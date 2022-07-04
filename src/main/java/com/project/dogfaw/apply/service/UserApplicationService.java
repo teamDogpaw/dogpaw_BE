@@ -30,7 +30,7 @@ public class UserApplicationService {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new NullPointerException("해당 게시물이 존재하지 않음")
         );
-        
+
         //해당 게시물의 현재 모집인원 수 와 쵀대 모집인원 수
         int currentCnt = post.getCurrentMember();
         int maxCmt = post.getMaxCapacity();
