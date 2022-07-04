@@ -21,7 +21,6 @@ public class PostController {
 
     private final PostService postService;
 
-
 //    post 전체조회
     @GetMapping("/api/allpost")
     public ArrayList<PostResponseDto> postPosts(@RequestHeader("Authorization") String authorization) {
@@ -54,7 +53,6 @@ public class PostController {
         return postId;
     }
     //post 삭제
-
     @DeleteMapping("/api/post/detail/{postId}")
     public Long deletePost(@PathVariable Long postId, @RequestHeader("Authorization") String authorization) {
         return postService.deletePost(postId, authorization)
