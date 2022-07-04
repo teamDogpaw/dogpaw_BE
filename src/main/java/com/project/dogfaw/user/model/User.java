@@ -1,5 +1,6 @@
 package com.project.dogfaw.user.model;
 
+import com.project.dogfaw.user.dto.SignupRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.List;
 @Getter
 @Builder
 @Entity(name = "Users")
-@DynamicUpdate // null 값인 field 를 DB에서 설정된 default을 줌
+@DynamicUpdate // null 값인 field를 DB에서 설정된 default을 줌
 public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,13 +47,16 @@ public class User {
     private List<Stack> stacks = new ArrayList<>();
 
 
-
     public void updateStack(List<Stack> stack) {
         this.stacks = stack;
     }
 
-//    @Enumerated(EnumType.STRING)
-//    private Role role;
+    public void addInfo(SignupRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+    }
+
+
+
 
 //    private String List<bookMark>;
 //

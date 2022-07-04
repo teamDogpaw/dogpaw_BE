@@ -5,7 +5,6 @@ import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.model.Post;
 
 import com.project.dogfaw.post.repository.PostRepository;
-import com.project.dogfaw.user.Member;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
