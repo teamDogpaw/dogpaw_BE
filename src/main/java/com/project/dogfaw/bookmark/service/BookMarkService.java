@@ -33,7 +33,7 @@ public class BookMarkService {
          if(bookMarkRepository.findByMemberAndPost(member,post))==null){
             BookMark bookMark = new BookMark(member, post);
             bookMarkRepository.save(bookMark);
-            bookMark.increaseCnt();  //post 테이블 완성되면 post 테이블에 생성자 추가
+            bookMark.increaseCnt();  //post 테이블 완성되면 post 테이블에 생성자 추가//
             return true;
         }else{ //북마크 db에 저장이 되어있지 않다면 저장을 시키고 Post테이블의 currentMember -1 시킴
             BookMark bookMark = bookMarkRepository.getBookMarkByMemberAndPost(member,post);
