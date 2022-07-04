@@ -1,6 +1,7 @@
 package com.project.dogfaw.apply.model;
 
-import com.project.dogfaw.post.Post;
+import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,15 +17,14 @@ public class UserApplication {
 
     @ManyToOne
     @JoinColumn
-    private Member member;
+    private User user;
 
     @ManyToOne
     @JoinColumn
     private Post post;
 
-
-    public UserApplication(Member member, Post post) {
-        this.member = member;
+    public UserApplication(User user, Post post) {
+        this.user = user;
         this.post = post;
     }
 }
