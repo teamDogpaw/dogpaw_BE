@@ -13,6 +13,7 @@ public class UserApplicationController {
 
     private final UserApplicationService userApplicationService;
 
+
     @PostMapping("/api/apply/{postId}")
     public Long userApply(@PathVariable Long postId, @RequestBody Long userId){
         //모집인원 초과시 return 1L, 참여등록되었을 시 return 2L, 참여취소 시 return 3L
@@ -23,6 +24,7 @@ public class UserApplicationController {
         } else {
             return 3L;
         }
+
 
     }
 

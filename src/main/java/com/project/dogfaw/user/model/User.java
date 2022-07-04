@@ -27,7 +27,7 @@ public class User {
     private String username;
 
     @Column(nullable = false)
-    @JsonIgnore
+//    @JsonIgnore
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -36,9 +36,11 @@ public class User {
     @Column
     private String profileImg;
 
+    @Column
+    private Long kakaoId;
+
 //    @Column
 //    private String stack;
-
     @OneToMany
     @JoinColumn(name = "stack_id")
     private List<Stack> stacks = new ArrayList<>();

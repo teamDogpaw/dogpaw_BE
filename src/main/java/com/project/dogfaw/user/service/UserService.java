@@ -2,15 +2,13 @@ package com.project.dogfaw.user.service;
 
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.common.validator.UserValidator;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
-import com.project.dogfaw.user.dto.LoginDto;
-import com.project.dogfaw.user.dto.SignupRequestDto;
-import com.project.dogfaw.user.dto.StackDto;
-import com.project.dogfaw.user.dto.UserInfo;
+import com.project.dogfaw.user.dto.*;
 import com.project.dogfaw.user.model.RefreshToken;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
@@ -160,6 +158,26 @@ public class UserService {
 
         return tokenDto;
     }
+
+//    public StatusResponseDto SignupUserCheck(Long kakaoId) {
+//
+//        User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+//
+//        if (loginUser.getStacks().equals("default")) {
+//            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
+//                    .userId(loginUser.getId())
+//                    .kakaoId(kakaoId)
+//                    .isProfileSet(false)
+//                    .build();
+//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", kakaoUserInfo);
+//        } else {
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//            return new StatusResponseDto("로그인 성공", tokenDto);
+//        }
+//    }
+
+
+
 
 //    public List<Stack> tostack(List<StackDto> stackDtoList)  {
 //        List<Stack> stacks = new ArrayList<>();
