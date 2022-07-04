@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.model;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.project.dogfaw.post.dto.PostRequestDto;
+import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,13 +17,16 @@ public class Post extends Timestamped {
     @Id
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name="userId", nullable = false)
+    private User user;
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private Boolean online;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String stack;
 
     @Column(nullable = false)
@@ -31,53 +35,66 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int startAt;
 
-    @Column(nullable = true)
-    private int currentMember;
+    @Column(length = 400, nullable = false)
+    private String content;
 
     @Column(nullable = false)
     private int maxCapacity;
 
     @Column(nullable = false)
-    private String content;
+    private int currentMember;
 
     @Column(nullable = false)
-    private String creatAt;
+    private int deadline;
 
     @Column(nullable = false)
-    private String modifiedAt;
+    private String nickname;
 
-    @Column(nullable = false)
-    private String deadline;
+    @Column
+    private int bookmarkCnt;
 
-    @Column(nullable = false)
-    private String username;
-
-
+    @Column
+    private int commentCnt;
 
 
+//    public Post(String title, Boolean online, String stack, String period, int startAt, String content, int deadline, String nickname, int maxCapacity, int currentMember, int bookmarkCnt, int commentCnt) {
+//        this.title = title;
+//        this.online = online;
+//        this.stack = stack;
+//        this.period = period;
+//        this.startAt = startAt;
+//        this.content = content;
+//        this.deadline = deadline;
+//        this.nickname = nickname;
+//        this.maxCapacity = maxCapacity;
+//        this.currentMember = currentMember;
+//        this.bookmarkCnt = bookmarkCnt;
+//        this.commentCnt = commentCnt;
+//
+//    }
 
-
-    //참가신청시 현재 모집인원 + 또는 - 하기위한 생성자(건영)
-    //모집인원 +1
-    public void increaseCnt() {
-        this.currentMember += 1;
+    public Post(PostRequestDto postRequestDto, User user) {
+        this.title = postRequestDto.getTitle();
+        this.online = postRequestDto.getOnline();
+        this.stack = postRequestDto.getStack();
+        this.period = postRequestDto.getPeriod();
+        this.startAt = postRequestDto.getStartAt();
+        this.content = postRequestDto.getContent();
+        this.user = user;
+        }
     }
-    //모집인원 -1
+
+<<<<<<< Updated upstream
+
+    
+    //참여신청시 +1, 참여취소시 -1(건영)
+    //현재모집인원 +1
+    public void increaseCnt() {this.currentMember += 1;}
+    //현재모집인원 -1
     public void decreaseCnt() {
         this.currentMember -= 1;
     }
+=======
+>>>>>>> Stashed changes
 
 }
-
-//”id” : postId,
-//”title”: post 제목,
-//”online”: 진행 방식 (온/오프라인),
-//”stack”: ,
-//”period”: ,
-//”startAt”: ,
-//”content”: ,
-//”deadline”: ,
-//”nickname”: ,
-//”profileImg”:
-//”bookmarkCnt ” :
-//”commentCnt” :
