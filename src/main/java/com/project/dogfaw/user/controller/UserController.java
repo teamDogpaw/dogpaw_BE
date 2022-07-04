@@ -1,5 +1,6 @@
 package com.project.dogfaw.user.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.ExceptionResponse;
 import com.project.dogfaw.common.exception.StatusResponseDto;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RestController
 public class UserController {
     private final UserService userService;
+//    private final KakaoUserService kakaoUserService;
     private final UserRepository userRepository;
 
     // 회원가입 API
@@ -80,7 +82,15 @@ public class UserController {
         com.project.dogfaw.user.model.User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new UsernameNotFoundException("존재하지 않는 유저입니다")
         );
-        return new UserInfo(user.getUsername(), user.getNickname());
+        return new UserInfo(user.getUsername(), user.getNickname(),user.getProfileImg(), user.getStacks());
 //        return user;
     }
+
+    // 카카오 로그인 API
+//    @GetMapping("/user/kakao/login")
+//    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+//        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
+//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+//    }
+
 }

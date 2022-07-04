@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class UserApplicationController {
 
-    private final UserApplicationService userApplicationService
+    private final UserApplicationService userApplicationService;
 
     @PostMapping("/api/apply/{postId}/{userId}")
     public boolean userApply(@PathVariable Long postId, @PathVariable Long userId){
