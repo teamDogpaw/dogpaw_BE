@@ -63,29 +63,6 @@ public class Post extends Timestamped {
 
     }
 
-
-
-    //참가신청시 현재 모집인원 + 또는 - 하기위한 생성자(건영)
-    //모집인원 +1
-    public void increaseCnt() {
-        this.currentMember += 1;
-    }
-    //모집인원 -1
-    public void decreaseCnt() {
-        this.currentMember -= 1;
-    }
-
 }
 
-//”id” : postId,
-//”title”: post 제목,
-//”online”: 진행 방식 (온/오프라인),
-//”stack”: ,
-//”period”: ,
-//”startAt”: ,
-//”content”: ,
-//”deadline”: ,
-//”nickname”: ,
-//”profileImg”:
-//”bookmarkCnt ” :
-//”commentCnt” :
+

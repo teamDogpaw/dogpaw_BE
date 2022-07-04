@@ -50,7 +50,7 @@ public class JwtTokenProvider {
         Claims claims = Jwts.claims().setSubject(String.valueOf(user.getId()));
         claims.put("username", user.getUsername());
         claims.put("nickname", user.getNickname());
-        claims.put("Stack", user.getStack());
+        claims.put("Stack", user.getStacks());
 //        claims.put("profileImg", user.getProfileImg());
 
         Date now = new Date();
