@@ -67,6 +67,15 @@ public class Post extends Timestamped {
 
     }
 
+    //모집인원 +1
+    public void increaseCnt() {
+        this.currentMember += 1;
+    }
+    //모집인원 -1
+    public void decreaseCnt() {
+        this.currentMember -= 1;
+    }
+
 }
 
 

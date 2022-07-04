@@ -25,19 +25,9 @@ public class BookMark {
     @JoinColumn
     private Post post;
 
-    private int cnt;
 
-    public BookMark(Member member, Post post) {
-        this.member = member;
+    public BookMark(User user, Post post) {
+        this.user = user;
         this.post = post;
-    }
-
-    //모집인원 +1
-    public void increaseCnt() {
-        this.cnt += 1;
-    }
-    //모집인원 -1
-    public void decreaseCnt() {
-        this.cnt -= 1;
     }
 }

@@ -23,13 +23,8 @@ public class UserApplication {
     @JoinColumn
     private Post post;
 
-    private int cnt;
-
-
-    //모집인원 +1
-    public void increaseCnt() {this.cnt += 1;}
-    //모집인원 -1
-    public void decreaseCnt() {
-        this.cnt -= 1;
+    public UserApplication(User user, Post post) {
+        this.user = user;
+        this.post = post;
     }
 }

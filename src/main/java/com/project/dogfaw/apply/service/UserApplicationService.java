@@ -23,7 +23,7 @@ public class UserApplicationService {
     private final UserApplicationRepository userApplicationRepository;
 
     @Transactional
-    public boolean userApply(Long postId, Long userId) {
+    public Long userApply(Long postId, Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 ()-> new NullPointerException("해당 ID가 존재하지 않음")
         );
@@ -34,20 +34,24 @@ public class UserApplicationService {
         //해당 게시물의 현재 모집인원 수 와 쵀대 모집인원 수
         int currentCnt = post.getCurrentMember();
         int maxCmt = post.getMaxCapacity();
-//        int plus = 1;
-//        int sum = currentCnt + plus;
-        //현재 모집 인원체크
-        if(currentCnt==maxCmt){throw new IllegalArgumentException("모집인원이 마감되었습니다");}
 
-        if(UserApplicationRepository.findByMemberAndPost(member,post))==null){
-            UserApplication userApplication = new UserApplication(,post);
-            UserApplicationRepository.save(userApplication);
-            post.setCurrentMember(sum);
-            return true;
+        //현재 모집 인원체크
+        if(currentCnt==maxCmt){
+            return 1L;
+        }
+
+        if(!userApplicationRepository.existsByUserAndPost(user,post)){
+            UserApplication userApplication = new UserApplication(user,post);
+            userApplicationRepository.save(userApplication);
+            //DB를 조회하여 참여신청 이력이 없으면 DB에 저장후 해당 게시글의 현재 모집인원 +1
+            post.increaseCnt();
+            return 2L;
         }else{
             UserApplication userApplication = userApplicationRepository.getUserApplicationByUserAndPost(user,post);
-            userRepository.delete(userApplication);
-            return false;
+            userApplicationRepository.delete(userApplication);
+            //참여 취소 버튼 클릭 시 DB를 조회하여 참여신청 이력이 있을경우 DB에서 삭제후 현재 모집인원 -1
+            post.decreaseCnt();
+            return 3L;
         }
 
     }
