@@ -1,7 +1,6 @@
 package com.project.dogfaw.apply.repository;
 
 import com.project.dogfaw.apply.model.UserApplication;
-import com.project.dogfaw.post.Post;
 import com.project.dogfaw.user.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

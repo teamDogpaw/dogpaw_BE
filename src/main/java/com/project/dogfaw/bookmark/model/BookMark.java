@@ -1,7 +1,8 @@
 package com.project.dogfaw.bookmark.model;
 
-import com.project.dogfaw.post.Post;
+import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.Member;
+import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,7 +19,7 @@ public class BookMark {
 
     @ManyToOne
     @JoinColumn
-    private Member member;
+    private User user;
 
     @ManyToOne
     @JoinColumn

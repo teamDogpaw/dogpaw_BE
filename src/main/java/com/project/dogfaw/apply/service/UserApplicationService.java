@@ -3,8 +3,10 @@ package com.project.dogfaw.apply.service;
 
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
-import com.project.dogfaw.bookmark.model.BookMark;
-import com.project.dogfaw.post.Post;
+import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.post.repository.PostRepository;
+import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,12 @@ import javax.transaction.Transactional;
 public class UserApplicationService {
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
+    private final UserRepository userRepository;
     private final UserApplicationRepository userApplicationRepository;
 
     @Transactional
     public boolean userApply(Long postId, Long userId) {
-        Member member = memberRepository.findById(userId).orElseThrow(
+        User user = userRepository.findById(userId).orElseThrow(
                 ()-> new NullPointerException("해당 ID가 존재하지 않음")
         );
         Post post = postRepository.findById(postId).orElseThrow(
