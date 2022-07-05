@@ -30,7 +30,7 @@ public class PostResponseDto {
 
     private boolean bookMarkStatus;
 
-    public PostResponseDto(Post post, boolean bookMarkStatus, User user){
+    public PostResponseDto(Post post, boolean bookMarkStatus, User writer){
 
         this.postId = post.getId();
         this.title = post.getTitle();
@@ -40,7 +40,7 @@ public class PostResponseDto {
         this.startAt = post.getStartAt();
         this.content = post.getContent();
         this.nickname = post.getNickname();
-        this.profileImg = user.getProfileImg();
+        this.profileImg = writer.getProfileImg();
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();
         this.bookMarkStatus = bookMarkStatus;
