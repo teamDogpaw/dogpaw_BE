@@ -3,6 +3,9 @@ package com.project.dogfaw.post.service;
 
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
+
+import com.project.dogfaw.post.dto.PostDetailResponseDto;
+
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
@@ -12,8 +15,11 @@ import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -83,24 +89,54 @@ public class PostService {
 
 
     // post 등록
+//    @Transactional
+//    public PostResponseDto postPost(PostRequestDto postRequestDto, String username) {
+//        User user = userRepository.findByUsername(username).orElseThrow(
+//                () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
+//        );
+//        // 게시글 작성자 저장 (편의 메서드 -> user에도 post에 해당 post add)
+//        Post post = new Post(postRequestDto, user, bookMarkRepository);
+//        PostResponseDto postResponseDto = new PostResponseDto(postRepository.save(post));
+//        // 저장된 Post -> PostResponseDto에 담아 리턴
+//        return postResponseDto;
+//
+//    }
+
+    //post 상세조회
+    public PostDetailResponseDto getPostDetail(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(
+                ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+        );
+        //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
+
+        return new PostDetailResponseDto(post);
+    }
+
+    //게시글 수정
     @Transactional
-    public PostResponseDto postPost(PostRequestDto postRequestDto, String username) {
+    public void updatePost(Long postId, PostRequestDto postRequestDto, String username) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+        );
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
         );
-
-        // 게시글 작성자 저장 (편의 메서드 -> member에도 post에 해당 post add)
-        Post post = new Post(postRequestDto, user);
-        PostResponseDto postResponseDto = new PostResponseDto(postRepository.save(post));
-        // 저장된 Post -> PostResponseDto에 담아 리턴
-        return postResponseDto;
-
+        if (!Objects.equals(username, post.getUser().getUsername())){
+            throw new IllegalArgumentException("본인의 게시글만 수정할 수 있습니다.");
+        }
+        post.update(postRequestDto, user.getId());
     }
 
-
-    //게시글 수정
-
     //게시글 삭제
+    public void deletePost(Long postId, String username) {
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+        );
+        if (!Objects.equals(username, post.getUser().getUsername())){
+            throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
+        }
+        postRepository.deleteById(postId);
+    }
 
     //북마크
 

@@ -1,5 +1,6 @@
 package com.project.dogfaw.post.dto;
 
+import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
