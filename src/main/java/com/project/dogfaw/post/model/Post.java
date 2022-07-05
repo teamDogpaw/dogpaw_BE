@@ -44,8 +44,8 @@ public class Post extends Timestamped {
     @Column
     private int currentMember;
 
-    @Column(nullable = false)
-    private int deadline;
+    @Column
+    private Boolean deadline;
 
     @Column(nullable = false)
     private String nickname;
@@ -95,6 +95,10 @@ public class Post extends Timestamped {
     public void increaseBmCount(){this.bookmarkCnt += 1;}
     public void decreaseBmCount(){this.bookmarkCnt -= 1;}
 
+
+    //모집마감 || 모집중
+    public void isDeadline(){this.deadline = true;}
+    public void isOngoing(){this.deadline = false;}
 
 
 }

@@ -6,29 +6,28 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 
 public class PostResponseDto {
 
-    private Long postId;
-    private String title;
-    private Boolean online;
-    private String stack;
-    private String period;
-    private int startAt;
-    private String content;
+    private final Long postId;
+    private final String title;
+    private final Boolean online;
+    private final String stack;
+    private final String period;
+    private final int startAt;
+    private final String content;
 
-    private boolean deadline;
+    private final boolean deadline;
 
-    private String nickname;
+    private final String nickname;
 
-    private String profileImg;
+    private final String profileImg;
 
-    private int bookmarkCnt;
+    private final int bookmarkCnt;
 
-    private int commentCnt;
+    private final int commentCnt;
 
-    private boolean bookMarkStatus;
+    private final boolean bookMarkStatus;
 
     public PostResponseDto(Post post, boolean bookMarkStatus, User writer){
 
@@ -39,6 +38,7 @@ public class PostResponseDto {
         this.period = post.getPeriod();
         this.startAt = post.getStartAt();
         this.content = post.getContent();
+        this.deadline = post.getDeadline();
         this.nickname = post.getNickname();
         this.profileImg = writer.getProfileImg();
         this.bookmarkCnt = post.getBookmarkCnt();
