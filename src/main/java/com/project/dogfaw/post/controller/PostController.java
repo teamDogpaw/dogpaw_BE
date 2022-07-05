@@ -8,7 +8,6 @@ import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.service.PostService;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
-import jdk.nashorn.internal.ir.RuntimeNode;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.security.SecurityUtil;
 import org.springframework.http.HttpStatus;
@@ -34,9 +33,9 @@ public class PostController {
     public ArrayList<PostResponseDto> postPosts(@RequestHeader("Authorization") String authorization) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        String username = principal.getUser().getUsername();
+        User user = principal.getUser();
 
-        return postService.allPost(username);
+        return postService.allPost(user);
     }
 
     //post 생성(메인)

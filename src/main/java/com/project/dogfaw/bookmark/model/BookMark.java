@@ -17,11 +17,11 @@ public class BookMark {
 
 
     @ManyToOne
-    @JoinColumn(nullable = false,name = "user_id")
+    @JoinColumn(nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(nullable = false,name = "post_id")
+    @JoinColumn(nullable = false)
     private Post post;
 
 
