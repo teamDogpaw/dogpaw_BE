@@ -13,19 +13,22 @@ public class PostRequestDto {
     private String stack;
     private String period;
     private int startAt;
-    private int capacity;
+    private int maxCapacity;
     private String content;
 
-    public PostRequestDto(String title, Boolean online, String stack, String period, int startAt, int capacity, String content){
+    private String profileImg;
+
+    public PostRequestDto(String title, Boolean online, String stack, String period, int startAt, int maxCapacity, String content, String profileImg){
         this.title = title;
         this.online = online;
         this.stack = stack;
         this.period = period;
         this.startAt = startAt;
-        this.capacity = capacity;
+        this.maxCapacity = maxCapacity;
         this.content = content;
-
+        this.profileImg = profileImg;
     }
+
 
 }
 

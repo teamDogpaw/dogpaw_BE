@@ -1,5 +1,6 @@
 package com.project.dogfaw.post.model;
 
+import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
@@ -51,6 +52,9 @@ public class Post extends Timestamped {
     private String nickname;
 
     @Column
+    private String profileImg;
+
+    @Column
     private int bookmarkCnt;
 
     @Column
@@ -73,16 +77,26 @@ public class Post extends Timestamped {
 //
 //    }
 
-    public Post(PostRequestDto postRequestDto, User user) {
+    public Post(PostRequestDto postRequestDto, User user, BookMarkRepository bookMarkRepository) {
         this.title = postRequestDto.getTitle();
         this.online = postRequestDto.getOnline();
         this.stack = postRequestDto.getStack();
         this.period = postRequestDto.getPeriod();
         this.startAt = postRequestDto.getStartAt();
         this.content = postRequestDto.getContent();
+        this.profileImg = postRequestDto.getProfileImg();
         this.user = user;
         }
+    public void update(PostRequestDto postRequestDto, Long id) {
+        this.title = postRequestDto.getTitle();
+        this.online = postRequestDto.getOnline();
+        this.stack = postRequestDto.getStack();
+        this.period = postRequestDto.getPeriod();
+        this.startAt = postRequestDto.getStartAt();
+        this.maxCapacity = postRequestDto.getMaxCapacity();
+        this.content = postRequestDto.getContent();
 
+    }
 
 
     //참여신청시 +1, 참여취소시 -1(건영)
@@ -98,3 +112,5 @@ public class Post extends Timestamped {
 
 
 }
+
+
