@@ -9,11 +9,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "cicd" ]
-
-
-permissions:
-  contents: read
+    branches: [ cicd ]
 
 jobs:
   build:
