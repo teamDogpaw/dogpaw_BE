@@ -88,30 +88,30 @@ public class PostService {
     }
 
 
+    // post 등록
+    @Transactional
+    public PostResponseDto postPost(PostRequestDto postRequestDto, User user) {
+        // 게시글 작성자 저장 (편의 메서드 -> user에도 post에 해당 post add)
+        Post post = postRepository.save(new Post(postRequestDto, user));
+        PostResponseDto postResponseDto = new PostResponseDto(post,false, user);
+        // 저장된 Post -> PostResponseDto에 담아 리턴
+        return postResponseDto;
 
+    }
 
-//     post 등록
-//    @Transactional
-//    public PostResponseDto postPost(PostRequestDto postRequestDto, String username) {
-//        User user = userRepository.findByUsername(username).orElseThrow(
-//                () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
-//        );
-//        // 게시글 작성자 저장 (편의 메서드 -> user에도 post에 해당 post add)
-//        Post post = new Post(postRequestDto, user, bookMarkRepository);
-//        PostResponseDto postResponseDto = new PostResponseDto(postRepository.save(post));
-//        // 저장된 Post -> PostResponseDto에 담아 리턴
-//        return postResponseDto;
-//
-//    }
 
     //post 상세조회
-    public PostDetailResponseDto getPostDetail(Long id) {
+    public PostDetailResponseDto getPostDetail(Long id, String username) {
         Post post = postRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
         );
+        User user = userRepository.findByUsername(username).orElseThrow(
+                () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
+        );
+        boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
         //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
 
-        return new PostDetailResponseDto(post);
+        return new PostDetailResponseDto(post, bookMarkStatus);
     }
 
     //게시글 수정
