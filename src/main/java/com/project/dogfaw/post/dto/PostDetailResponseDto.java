@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.dto;
 
 import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,7 +24,7 @@ public class PostDetailResponseDto {
     private boolean deadline;
     private boolean bookMarkStatus;
 
-    public PostDetailResponseDto(Post post, boolean bookMarkStatus){
+    public PostDetailResponseDto(Post post, User user, boolean bookMarkStatus){
         this.id = post.getId();
         this.title = post.getTitle();
         this.onLine = post.getOnline();
@@ -32,8 +33,8 @@ public class PostDetailResponseDto {
         this.startAt = post.getStartAt();
         this.maxCapacity = post.getMaxCapacity();
         this.content = post.getContent();
-        this.nickname = post.getNickname();
-        this.profileImg = post.getProfileImg();
+        this.nickname = user.getNickname();
+        this.profileImg = user.getProfileImg();
         this.deadline = post.getDeadline();
         this.bookMarkStatus = bookMarkStatus;
 

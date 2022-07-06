@@ -60,10 +60,10 @@ public class MypageService {
     /*내가 작성한 글 조회(완성)*/
     public ArrayList<PostResponseDto> myPost(User user) {
 
-        String nickname = user.getNickname();
+
 
         //유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
-        List<Post> posts = postRepository.findByNickname(nickname);
+        List<Post> posts = postRepository.findByUser(user);
         //유저가 북마크한 것들을 리스트로 불러옴
         List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
 
