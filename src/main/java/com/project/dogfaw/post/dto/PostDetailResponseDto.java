@@ -21,7 +21,7 @@ public class PostDetailResponseDto {
     private String content;
     private String nickname;
     private String profileImg;
-    private boolean deadline;
+    private Boolean deadline;
     private boolean bookMarkStatus;
 
     public PostDetailResponseDto(Post post, User user, boolean bookMarkStatus){
