@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class PostController {
 
     private final PostService postService;
-
     private final CommonService commonService;
 
 //    post 전체조회 (메인)
