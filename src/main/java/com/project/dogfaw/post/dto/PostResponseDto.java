@@ -1,34 +1,32 @@
 package com.project.dogfaw.post.dto;
 
-import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-
+@AllArgsConstructor
 @Getter
-
 public class PostResponseDto {
 
-    private final Long postId;
-    private final String title;
-    private final Boolean online;
-    private final String stack;
-    private final String period;
-    private final int startAt;
-    private final String content;
+    private Long postId;
+    private String title;
+    private Boolean online;
+    private String stack;
+    private String period;
+    private int startAt;
+    private String content;
 
-    private final boolean deadline;
+    private Boolean deadline;
 
-    private final String nickname;
+    private String nickname;
 
-    private final String profileImg;
+    private String profileImg;
 
-    private final int bookmarkCnt;
+    private int bookmarkCnt;
 
-    private final int commentCnt;
+    private int commentCnt;
 
-    private final boolean bookMarkStatus;
+    private boolean bookMarkStatus;
 
     public PostResponseDto(Post post, boolean bookMarkStatus, User writer){
 
@@ -40,7 +38,7 @@ public class PostResponseDto {
         this.startAt = post.getStartAt();
         this.content = post.getContent();
         this.deadline = post.getDeadline();
-        this.nickname = post.getNickname();
+        this.nickname = writer.getNickname();
         this.profileImg = writer.getProfileImg();
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();

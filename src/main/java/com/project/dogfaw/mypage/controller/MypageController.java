@@ -52,9 +52,9 @@ public class MypageController {
     }
 
 
-    @PatchMapping("/api/user/info/{image}")
-    public ResponseEntity<Object> updateInfo(@RequestPart MultipartFile multipartFile, @RequestPart MypageRequestDto requestDto){
-
-    }
+//    @PatchMapping("/api/user/info/{image}")
+//    public ResponseEntity<Object> updateInfo(@RequestPart MultipartFile multipartFile, @RequestPart MypageRequestDto requestDto){
+//
+//    }
 
 }
