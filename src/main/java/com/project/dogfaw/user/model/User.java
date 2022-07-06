@@ -55,6 +55,7 @@ public class User {
         this.nickname = requestDto.getNickname();
     }
 
+    
 
 
 
