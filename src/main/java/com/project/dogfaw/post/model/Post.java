@@ -38,11 +38,11 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int startAt;
 
-    @Column(length = 400, nullable = false)
-    private String content;
-
     @Column(nullable = false)
     private int maxCapacity;
+
+    @Column(length = 400, nullable = false)
+    private String content;
 
     @Column
     private int currentMember;
@@ -50,11 +50,11 @@ public class Post extends Timestamped {
     @Column
     private Boolean deadline;
 
-    @Column(nullable = false)
-    private String nickname;
-
-    @Column
-    private String profileImg;
+//    @Column
+//    private String nickname;
+//
+//    @Column
+//    private String profileImg;
 
     @Column
     private int bookmarkCnt;
@@ -62,9 +62,9 @@ public class Post extends Timestamped {
     @Column
     private int commentCnt;
 
-    @OneToMany
-    @JoinColumn(name = "poststack_id")
-    private List<PostStack> stacks = new ArrayList<>();
+//    @OneToMany
+//    @JoinColumn(name = "poststack_id")
+//    private List<PostStack> stacks = new ArrayList<>();
 
 
 
@@ -91,8 +91,9 @@ public class Post extends Timestamped {
         this.stack = postRequestDto.getStack();
         this.period = postRequestDto.getPeriod();
         this.startAt = postRequestDto.getStartAt();
+        this.maxCapacity = postRequestDto.getMaxCapacity();
         this.content = postRequestDto.getContent();
-        this.profileImg = postRequestDto.getProfileImg();
+//        this.profileImg = getProfileImg();
         this.user = user;
         }
 

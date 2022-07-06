@@ -32,20 +32,18 @@ public class PostController {
 
 //    post 전체조회 (메인)
     @GetMapping("/api/allpost")
-    public ArrayList<PostResponseDto> postPosts(@RequestHeader("Authorization") String authorization) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        User user = principal.getUser();
+    public ArrayList<PostResponseDto> postPosts() {
+        Long userId = commonService.getUser().getId();
 
-        return postService.allPost(user);
+        return postService.allPost(userId);
     }
 
     //post 생성(메인)
     @PostMapping("/api/post")
-    public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
+    public void postPosts(@RequestBody PostRequestDto postRequestDto) {
         User user = commonService.getUser();
 
-        return postService.postPost(postRequestDto, user);
+        postService.postPost(postRequestDto, user);
     }
 
    //post 상세조회 (디테일 페이지)

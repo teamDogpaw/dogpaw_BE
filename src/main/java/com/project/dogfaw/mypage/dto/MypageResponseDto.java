@@ -41,7 +41,7 @@ public class MypageResponseDto {
         this.startAt = post.getStartAt();
         this.content = post.getContent();
         this.deadline = post.getDeadline();
-        this.nickname = post.getNickname();
+        this.nickname = writer.getNickname();
         this.profileImg = writer.getProfileImg();
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();

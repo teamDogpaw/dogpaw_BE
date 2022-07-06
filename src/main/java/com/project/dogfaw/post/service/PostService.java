@@ -32,8 +32,10 @@ public class PostService {
     private final UserRepository userRepository;
 
     //전체조회
-    public ArrayList<PostResponseDto> allPost(User user) {
+    public ArrayList<PostResponseDto> allPost(Long userId) {
 
+        User user = userRepository.findById(userId).
+                orElseThrow(()-> new IllegalArgumentException("해당 아이디가 존재하지 않습니다"));
 
         //유저가 북마크한 것을 리스트로 모두 불러옴
         List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
@@ -59,7 +61,7 @@ public class PostService {
         ArrayList<PostResponseDto> postList = new ArrayList<>();
 
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
-        Boolean bookMarkStatus = null ;
+        Boolean bookMarkStatus = false ;
 
         //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
         for (Post post : posts) {
@@ -90,12 +92,12 @@ public class PostService {
 
     // post 등록
     @Transactional
-    public PostResponseDto postPost(PostRequestDto postRequestDto, User user) {
+    public void postPost(PostRequestDto postRequestDto, User user) {
         // 게시글 작성자 저장 (편의 메서드 -> user에도 post에 해당 post add)
         Post post = postRepository.save(new Post(postRequestDto, user));
-        PostResponseDto postResponseDto = new PostResponseDto(post,false, user);
+//        PostResponseDto postResponseDto = new PostResponseDto(post,false, user);
         // 저장된 Post -> PostResponseDto에 담아 리턴
-        return postResponseDto;
+//        return postResponseDto;
 
     }
 
@@ -111,7 +113,7 @@ public class PostService {
         boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
         //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
 
-        return new PostDetailResponseDto(post, bookMarkStatus);
+        return new PostDetailResponseDto(post, user, bookMarkStatus);
     }
 
     //게시글 수정
@@ -152,5 +154,5 @@ public class PostService {
     //북마크
 
     //댓글
-}
+
 
