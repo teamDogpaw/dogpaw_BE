@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -60,6 +62,12 @@ public class Post extends Timestamped {
     @Column
     private int commentCnt;
 
+    @OneToMany
+    @JoinColumn(name = "poststack_id")
+    private List<PostStack> stacks = new ArrayList<>();
+
+
+
 
 //    public Post(String title, Boolean online, String stack, String period, int startAt, String content, int deadline, String nickname, int maxCapacity, int currentMember, int bookmarkCnt, int commentCnt) {
 //        this.title = title;
@@ -87,6 +95,10 @@ public class Post extends Timestamped {
         this.profileImg = postRequestDto.getProfileImg();
         this.user = user;
         }
+
+
+
+
     public void update(PostRequestDto postRequestDto, Long id) {
         this.title = postRequestDto.getTitle();
         this.online = postRequestDto.getOnline();

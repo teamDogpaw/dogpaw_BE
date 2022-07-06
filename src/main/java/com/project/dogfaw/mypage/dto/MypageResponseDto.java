@@ -2,30 +2,33 @@ package com.project.dogfaw.mypage.dto;
 
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-@RequiredArgsConstructor
+import lombok.NoArgsConstructor;
+
+
+
+@NoArgsConstructor
 @Getter
 public class MypageResponseDto {
 
-    private final Long postId;
-    private final String title;
-    private final Boolean online;
-    private final String stack;
-    private final String period;
-    private final int startAt;
-    private final String content;
+    private Long postId;
+    private String title;
+    private Boolean online;
+    private String stack;
+    private String period;
+    private int startAt;
+    private String content;
 
-    private final boolean deadline;
+    private boolean deadline;
 
-    private final String nickname;
+    private String nickname;
 
-    private final String profileImg;
+    private String profileImg;
 
-    private final int bookmarkCnt;
+    private int bookmarkCnt;
 
-    private final int commentCnt;
+    private int commentCnt;
 
 
     public MypageResponseDto(Post post, User writer){

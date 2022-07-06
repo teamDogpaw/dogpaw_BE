@@ -1,18 +1,18 @@
 package com.project.dogfaw.mypage.controller;
 
 
+import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
@@ -52,6 +52,9 @@ public class MypageController {
     }
 
 
-    @PatchMapping("")
+    @PatchMapping("/api/user/info/{image}")
+    public ResponseEntity<Object> updateInfo(@RequestPart MultipartFile multipartFile, @RequestPart MypageRequestDto requestDto){
+
+    }
 
 }
