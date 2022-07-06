@@ -20,10 +20,10 @@ public class PostDetailResponseDto {
     private String content;
     private String nickname;
     private String profileImg;
-    private int deadline;
+    private boolean deadline;
     private boolean bookMarkStatus;
 
-    public PostDetailResponseDto(Post post){
+    public PostDetailResponseDto(Post post, boolean bookMarkStatus){
         this.id = post.getId();
         this.title = post.getTitle();
         this.onLine = post.getOnline();
@@ -35,9 +35,10 @@ public class PostDetailResponseDto {
         this.nickname = post.getNickname();
         this.profileImg = post.getProfileImg();
         this.deadline = post.getDeadline();
-        //this.bookMarkStatus = post.getBookMarkStatus();
-
+        this.bookMarkStatus = bookMarkStatus;
 
     }
+
+
 }
 
