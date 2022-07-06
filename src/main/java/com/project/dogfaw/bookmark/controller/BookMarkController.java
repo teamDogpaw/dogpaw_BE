@@ -11,13 +11,4 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class BookMarkController {
 
-    private final BookMarkService bookMarkService;
-
-    @PostMapping("/api/bookMark/{postId}/{userId}")
-    public boolean bookMark(@PathVariable Long postId,@PathVariable Long userId){
-        if(bookMarkService.bookMarkUp(postId, userId)){
-            return true;
-        } else return false;
-    }
-
 }

@@ -8,24 +8,6 @@ import lombok.Setter;
 
 public class PostRequestDto {
 
-    private String title;
-    private Boolean online;
-    private String stack;
-    private String period;
-    private int startAt;
-    private int capacity;
-    private String content;
-
-    public PostRequestDto(String title, Boolean online, String stack, String period, int startAt, int capacity, String content){
-        this.title = title;
-        this.online = online;
-        this.stack = stack;
-        this.period = period;
-        this.startAt = startAt;
-        this.capacity = capacity;
-        this.content = content;
-
-    }
 
 }
 
