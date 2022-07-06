@@ -85,7 +85,7 @@ public class Post extends Timestamped {
 //
 //    }
 
-    public Post(PostRequestDto postRequestDto, User user, BookMarkRepository bookMarkRepository) {
+    public Post(PostRequestDto postRequestDto, User user) {
         this.title = postRequestDto.getTitle();
         this.online = postRequestDto.getOnline();
         this.stack = postRequestDto.getStack();
