@@ -2,9 +2,13 @@ package com.project.dogfaw.mypage.dto;
 
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
+
+
+@NoArgsConstructor
 @Getter
 public class MypageResponseDto {
 
@@ -16,6 +20,8 @@ public class MypageResponseDto {
     private int startAt;
     private String content;
 
+    private boolean deadline;
+
     private String nickname;
 
     private String profileImg;
@@ -24,9 +30,8 @@ public class MypageResponseDto {
 
     private int commentCnt;
 
-    private boolean bookMarkStatus;
 
-    public MypageResponseDto(Post post, boolean bookMarkStatus, User writer){
+    public MypageResponseDto(Post post, User writer){
 
         this.postId = post.getId();
         this.title = post.getTitle();
@@ -35,11 +40,11 @@ public class MypageResponseDto {
         this.period = post.getPeriod();
         this.startAt = post.getStartAt();
         this.content = post.getContent();
+        this.deadline = post.getDeadline();
         this.nickname = post.getNickname();
         this.profileImg = writer.getProfileImg();
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();
-        this.bookMarkStatus = bookMarkStatus;
 
     }
 }
