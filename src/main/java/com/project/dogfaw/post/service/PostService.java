@@ -9,7 +9,9 @@ import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
+import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -85,6 +87,7 @@ public class PostService {
         return postList;
     }
 
+
     // post 등록
     @Transactional
     public PostResponseDto postPost(PostRequestDto postRequestDto, User user) {
@@ -95,6 +98,7 @@ public class PostService {
         return postResponseDto;
 
     }
+
 
     //post 상세조회
     public PostDetailResponseDto getPostDetail(Long id, String username) {
@@ -135,6 +139,15 @@ public class PostService {
         }
         postRepository.deleteById(postId);
     }
+
+    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
+        List<PostStack> stackList = new ArrayList<>();
+        for(StackDto stackdto : requestDto){
+            stackList.add(new PostStack(stackdto, post ));
+        }
+        return stackList;
+    }
+}
 
     //북마크
 
