@@ -34,9 +34,15 @@ public class PostController {
 //    post 전체조회 (메인)
     @GetMapping("/api/allpost")
     public ArrayList<PostResponseDto> postPosts() {
-        Long userId = commonService.getUser().getId();
-
-        return postService.allPost(userId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getDetails() != null){
+            User user = null;
+            return postService.allPost(user);
+        }else {
+            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+            User user = principal.getUser();
+            return postService.allPost(user);
+        }
     }
 
     //post 생성(메인)

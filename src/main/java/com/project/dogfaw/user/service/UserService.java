@@ -12,6 +12,7 @@ import com.project.dogfaw.user.dto.*;
 import com.project.dogfaw.user.model.RefreshToken;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.model.UserRoleEnum;
 import com.project.dogfaw.user.repository.RefreshTokenRepository;
 import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
@@ -67,6 +68,7 @@ public class UserService {
                         .username(requestDto.getUsername())
                         .password(password)
                         .nickname(requestDto.getNickname())
+                        .role(UserRoleEnum.USER)
                         .build()
         );
 
