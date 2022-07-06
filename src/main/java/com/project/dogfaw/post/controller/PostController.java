@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.controller;
 
 
+import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
@@ -28,6 +29,8 @@ public class PostController {
 
     private final PostService postService;
 
+    private final CommonService commonService;
+
 //    post 전체조회 (메인)
     @GetMapping("/api/allpost")
     public ArrayList<PostResponseDto> postPosts(@RequestHeader("Authorization") String authorization) {
@@ -39,20 +42,21 @@ public class PostController {
     }
 
     //post 생성(메인)
-//    @PostMapping("/api/post")
-//    public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-//        String username = principal.getUser().getUsername();
-//
-//        return postService.postPost(postRequestDto, username);
-//    }
+    @PostMapping("/api/post")
+    public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
+        User user = commonService.getUser();
+
+        return postService.postPost(postRequestDto, user);
+    }
 
    //post 상세조회 (디테일 페이지)
     @GetMapping("/api/post/detail/{postId}")
     public PostDetailResponseDto getPostDetail(@PathVariable Long postID){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        String username = principal.getUser().getUsername();
 
-        return postService.getPostDetail(postID);
+        return postService.getPostDetail(postID, username);
     }
 
 
@@ -68,13 +72,14 @@ public class PostController {
         return postId;
     }
     //post 삭제 (디테일 페이지)
-//    @DeleteMapping("/api/post/{postId}")
-//    public Long deletePost(@PathVariable Long postId) {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-//        String username = principal.getUser().getUsername();
-//
-//        return postService.deletePost(postId, username);
-//    }
+    @DeleteMapping("/api/post/{postId}")
+    public Long deletePost(@PathVariable Long postId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+        String username = principal.getUser().getUsername();
+
+        postService.deletePost(postId, username);
+        return postId;
+    }
 
 }
