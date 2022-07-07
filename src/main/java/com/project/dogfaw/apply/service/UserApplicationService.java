@@ -3,11 +3,16 @@ package com.project.dogfaw.apply.service;
 
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
+import com.project.dogfaw.common.exception.CustomException;
+import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -23,10 +28,10 @@ public class UserApplicationService {
     private final UserApplicationRepository userApplicationRepository;
 
     @Transactional
-    public Long userApply(Long postId, Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                ()-> new NullPointerException("해당 ID가 존재하지 않음")
-        );
+    public ResponseEntity<Object> userApply(Long postId, User user) {
+//        User user = userRepository.findById(userId).orElseThrow(
+//                ()-> new NullPointerException("해당 ID가 존재하지 않음")
+//        );
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new NullPointerException("해당 게시물이 존재하지 않음")
         );
@@ -38,9 +43,7 @@ public class UserApplicationService {
         //인원 꽉찰 경우 모집마감(deadline = true)
         if(currentCnt==maxCnt){
             post.isDeadline();
-            return 1L;
-        } else{
-            post.isOngoing();
+            throw new CustomException(ErrorCode.APPLY_PEOPLE_SET_CLOSED);
         }
 
         //DB를 조회하여 참여신청 이력이 없으면 DB에 저장후 해당 게시글의 현재 모집인원 +1
@@ -49,12 +52,14 @@ public class UserApplicationService {
             UserApplication userApplication = new UserApplication(user,post);
             userApplicationRepository.save(userApplication);
             post.increaseCnt();
-            return 2L;
+            Boolean data = true;
+            return new  ResponseEntity<>(new StatusResponseDto("신청이 완료되었습니다.", data), HttpStatus.OK);
         }else{
             UserApplication userApplication = userApplicationRepository.getUserApplicationByUserAndPost(user,post);
             userApplicationRepository.delete(userApplication);
             post.decreaseCnt();
-            return 3L;
+            Boolean data = false;
+            return new  ResponseEntity<>(new StatusResponseDto("신청이 취소되었습니다.", data), HttpStatus.OK);
         }
 
     }

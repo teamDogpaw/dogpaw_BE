@@ -1,6 +1,5 @@
 package com.project.dogfaw.post.model;
 
-import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
@@ -8,8 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor

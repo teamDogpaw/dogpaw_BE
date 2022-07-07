@@ -20,7 +20,7 @@ public class MypageResponseDto {
     private int startAt;
     private String content;
 
-    private boolean deadline;
+    private Boolean deadline;
 
     private String nickname;
 
