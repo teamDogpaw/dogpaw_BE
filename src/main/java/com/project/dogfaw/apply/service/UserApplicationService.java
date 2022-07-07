@@ -3,9 +3,8 @@ package com.project.dogfaw.apply.service;
 
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
-import com.project.dogfaw.common.exception.CustomException;
-import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
+import com.project.dogfaw.common.validator.ApplyValidator;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.user.model.User;
@@ -36,19 +35,14 @@ public class UserApplicationService {
                 ()-> new NullPointerException("해당 게시물이 존재하지 않음")
         );
 
-        //해당 게시물의 현재 모집인원 수 와 쵀대 모집인원 수
-        int currentCnt = post.getCurrentMember();
-        int maxCnt = post.getMaxCapacity();
 
-        //인원 꽉찰 경우 모집마감(deadline = true)
-        if(currentCnt==maxCnt){
-            post.isDeadline();
-            throw new CustomException(ErrorCode.APPLY_PEOPLE_SET_CLOSED);
-        }
 
         //DB를 조회하여 참여신청 이력이 없으면 DB에 저장후 해당 게시글의 현재 모집인원 +1
         //참여 취소 버튼 클릭 시 DB를 조회하여 참여신청 이력이 있을경우 DB에서 삭제후 현재 모집인원 -1
         if(!userApplicationRepository.existsByUserAndPost(user,post)){
+            //모집인원 마감 체크
+            ApplyValidator.currentMemberCheck(post);
+
             UserApplication userApplication = new UserApplication(user,post);
             userApplicationRepository.save(userApplication);
             post.increaseCnt();
@@ -63,4 +57,6 @@ public class UserApplicationService {
         }
 
     }
+
+
 }
