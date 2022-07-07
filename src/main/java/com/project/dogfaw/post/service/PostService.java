@@ -56,9 +56,16 @@ public class PostService {
         //로그인한 유저가 아닐때는 모든게시글을 불러와주고 bookMarkStatus는 모두 false로 리턴
         if(user == null){
             for(Post post:posts){
+                Long postId = post.getId();
                 User writer = post.getUser();
+                //다솔다솔이(민지민지) 추가한 부분
+                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                List<String> stringPostStacks = new ArrayList<>();
+                for(PostStack postStack : postStacks){
+                    stringPostStacks.add(postStack.getStack());
+                }
                 //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-                PostResponseDto postDto = new PostResponseDto(post, bookMarkStatus, writer);
+                PostResponseDto postDto = new PostResponseDto(post,stringPostStacks, bookMarkStatus, writer);
                 //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
                 postList.add(postDto);
             }
