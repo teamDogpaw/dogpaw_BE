@@ -10,13 +10,11 @@ import com.project.dogfaw.common.validator.UserValidator;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
-import com.project.dogfaw.user.dto.KakaoUserInfo;
-import com.project.dogfaw.user.dto.LoginDto;
-import com.project.dogfaw.user.dto.SignupRequestDto;
-import com.project.dogfaw.user.dto.UserInfo;
+import com.project.dogfaw.user.dto.*;
 //import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
+import com.project.dogfaw.user.service.GoogleUserService;
 import com.project.dogfaw.user.service.KakaoUserService;
 import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +34,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final KakaoUserService kakaoUserService;
+    private final GoogleUserService googleUserService;
     private final UserRepository userRepository;
     private final CommonService commonService;
 
@@ -93,6 +92,13 @@ public class UserController {
     public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+    }
+
+    // 카카오 로그인 API
+    @GetMapping("/user/google/login")
+    public ResponseEntity<Object> googleLogin(@RequestParam String code) throws JsonProcessingException {
+        GoogleUserInfo googleUserInfo = googleUserService.googleLogin(code);
+        return new ResponseEntity<>(userService.SignupUserCheck(googleUserInfo.getId()), HttpStatus.OK);
     }
 
     // 회원가입 추가 정보 API

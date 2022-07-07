@@ -1,11 +1,12 @@
 package com.project.dogfaw.user.dto;
 
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 @Builder
-public class GoogleUserInfoDto  {
+public class GoogleUserInfo  {
 
     private String id;
     private String email;

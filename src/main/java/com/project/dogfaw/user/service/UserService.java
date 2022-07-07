@@ -161,7 +161,7 @@ public class UserService {
         return tokenDto;
     }
 
-    // 로그인 유저 상태 확인
+    // 카카오 로그인 유저 상태 확인
     public StatusResponseDto SignupUserCheck(Long kakaoId) {
 
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
@@ -170,6 +170,23 @@ public class UserService {
             KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
                     .userId(loginUser.getId())
                     .kakaoId(kakaoId)
+                    .build();
+            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", kakaoUserInfo);
+        } else {
+            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+            return new StatusResponseDto("로그인 성공", tokenDto);
+        }
+    }
+
+    // 구글 로그인 유저 상태 확인
+    public StatusResponseDto SignupUserCheck(String Id) {
+
+        User loginUser = userRepository.findByGoogleId(Id).orElse(null);
+
+        if (loginUser.getNickname().equals("default")) {
+            GoogleUserInfo kakaoUserInfo = GoogleUserInfo.builder()
+                    .id(Id)
+                    .email(loginUser.getUsername())
                     .build();
             return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", kakaoUserInfo);
         } else {
