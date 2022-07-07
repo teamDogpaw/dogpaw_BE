@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface PostStackRepository extends JpaRepository<PostStack, Long> {
 
-
+    List<PostStack> findByPostId(Long postId);
 }

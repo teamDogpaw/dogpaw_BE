@@ -1,7 +1,10 @@
 package com.project.dogfaw.post.dto;
 
+import com.project.dogfaw.post.model.PostStack;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -10,7 +13,7 @@ public class PostRequestDto {
 
     private String title;
     private Boolean online;
-    private String stack;
+    private List<String> stacks;
     private String period;
     private int startAt;
     private int maxCapacity;
@@ -18,19 +21,16 @@ public class PostRequestDto {
 
     private String profileImg;
 
-    public PostRequestDto(String title, Boolean online, String stack, String period, int startAt, int maxCapacity, String content){
+    public PostRequestDto(String title, Boolean online, List<String> stacks, String period, int startAt, int maxCapacity, String content) {
         this.title = title;
         this.online = online;
-        this.stack = stack;
+        this.stacks = stacks;
         this.period = period;
         this.startAt = startAt;
         this.maxCapacity = maxCapacity;
         this.content = content;
     }
-
-
 }
-
 
 //“title”:  프로젝트제목,
 //“online”: 진행방식,
