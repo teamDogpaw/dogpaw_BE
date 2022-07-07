@@ -23,12 +23,12 @@ public class MypageController {
     private final MypageService mypageService;
     //북마크한 게시물 불러오기
     @GetMapping("/api/user/mypage/bookmark")
-    public ArrayList<MypageResponseDto> myBookmark(@RequestHeader("Authorization") String authorization) {
+    public ArrayList<MypageResponseDto> myBookmark(@RequestHeader("Authorization") String authorization, Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
         User user = principal.getUser();
 
-        return mypageService.myBookmark(user);
+        return mypageService.myBookmark(user, postId);
     }
 
     //내가 작성한 글 불러오기
