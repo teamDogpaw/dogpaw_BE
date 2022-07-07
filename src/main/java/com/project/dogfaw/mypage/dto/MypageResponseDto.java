@@ -36,7 +36,7 @@ public class MypageResponseDto {
         this.postId = post.getId();
         this.title = post.getTitle();
         this.online = post.getOnline();
-        this.stack = post.getStack();
+//        this.stack = post.getStack();
         this.period = post.getPeriod();
         this.startAt = post.getStartAt();
         this.content = post.getContent();

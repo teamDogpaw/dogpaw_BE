@@ -7,7 +7,9 @@ import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
+import com.project.dogfaw.post.repository.PostStackRepository;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class MypageService {
 
     private final PostRepository postRepository;
     private final BookMarkRepository bookMarkRepository;
-
+    private final PostStackRepository postStackRepository;
     private final UserApplicationRepository userApplicationRepository;
 
     private final UserRepository userRepository;
@@ -97,8 +99,14 @@ public class MypageService {
                     bookMarkStatus = false;
                 }
             }
+            //다솔다솔이(민지민지) 추가한 부분 - StackList
+            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
             //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-            PostResponseDto postDto = new PostResponseDto(post, bookMarkStatus, writer);
+            PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
         }
@@ -150,8 +158,14 @@ public class MypageService {
                     bookMarkStatus = false;
                 }
             }
+            //다솔다솔이(민지민지) 추가한 부분 - StackList
+            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
             //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-            PostResponseDto postDto = new PostResponseDto(post, bookMarkStatus, writer);
+            PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
         }

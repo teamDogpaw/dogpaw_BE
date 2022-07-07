@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,7 +16,7 @@ public class PostDetailResponseDto {
     private Long id;
     private String title;
     private boolean onLine;
-    private String stack;
+    private List<String> stacks;
     private String period;
     private int startAt;
     private int maxCapacity;
@@ -24,11 +26,11 @@ public class PostDetailResponseDto {
     private Boolean deadline;
     private boolean bookMarkStatus;
 
-    public PostDetailResponseDto(Post post, User user, boolean bookMarkStatus){
+    public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus){
         this.id = post.getId();
         this.title = post.getTitle();
         this.onLine = post.getOnline();
-        this.stack = post.getStack();
+        this.stacks = stacks;
         this.period = post.getPeriod();
         this.startAt = post.getStartAt();
         this.maxCapacity = post.getMaxCapacity();

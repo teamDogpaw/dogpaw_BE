@@ -40,10 +40,10 @@ public class PostController {
 
     //post 생성(메인)
     @PostMapping("/api/post")
-    public void postPosts(@RequestBody PostRequestDto postRequestDto) {
+    public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
         User user = commonService.getUser();
 
-        postService.postPost(postRequestDto, user);
+        return postService.postPost(postRequestDto, user);
     }
 
    //post 상세조회 (디테일 페이지)
@@ -53,7 +53,7 @@ public class PostController {
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
         String username = principal.getUser().getUsername();
 
-        return postService.getPostDetail(postId, username);
+        return postService.getPostDetail(postId, username, postId);
     }
 
 
