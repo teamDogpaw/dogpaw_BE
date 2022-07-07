@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 
 
 @NoArgsConstructor
@@ -15,7 +16,7 @@ public class MypageResponseDto {
     private Long postId;
     private String title;
     private Boolean online;
-    private String stack;
+    private List<String> stacks;
     private String period;
     private int startAt;
     private String content;
@@ -31,12 +32,12 @@ public class MypageResponseDto {
     private int commentCnt;
 
 
-    public MypageResponseDto(Post post, User writer){
+    public MypageResponseDto(Post post, List<String> stacks, User writer){
 
         this.postId = post.getId();
         this.title = post.getTitle();
         this.online = post.getOnline();
-        this.stack = post.getStack();
+        this.stacks = stacks;
         this.period = post.getPeriod();
         this.startAt = post.getStartAt();
         this.content = post.getContent();
