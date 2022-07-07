@@ -40,8 +40,10 @@ public class User {
     @Column
     private Long kakaoId;
 
-//    @Column
-//    private String stack;
+    @Column
+    private String googleId;
+
+
     @OneToMany
     @JoinColumn(name = "stack_id")
     private List<Stack> stacks = new ArrayList<>();
