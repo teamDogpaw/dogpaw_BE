@@ -21,10 +21,10 @@ public class MypageController {
     private final MypageService mypageService;
     //북마크한 게시물 불러오기
     @GetMapping("/api/user/mypage/bookmark")
-    public ArrayList<MypageResponseDto> myBookmark(@RequestHeader("Authorization") String authorization, Long postId) {
+    public ArrayList<MypageResponseDto> myBookmark(@RequestHeader("Authorization") String authorization) {
         User user = commonService.getUser();
 
-        return mypageService.myBookmark(user, postId);
+        return mypageService.myBookmark(user);
     }
 
     //내가 작성한 글 불러오기
