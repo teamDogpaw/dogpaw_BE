@@ -81,7 +81,7 @@ public enum ErrorCode {
     ALREADY_APPLY_POST_ERROR(HttpStatus.BAD_REQUEST,"400", "이미 지원한 프로젝트입니다"),
     APPLY_MAJOR_WRONG_INPUT(HttpStatus.BAD_REQUEST,"400", "지원할 분야를 선택해주세요"),
     APPLY_MAJOR_NOT_EXIST(HttpStatus.NOT_FOUND, "404","해당 분야는 모집하지 않습니다"),
-    APPLY_PEOPLE_SET_CLOSED(HttpStatus.BAD_REQUEST, "400", "해당 분야의 정원이 다 찼습니다"),
+    APPLY_PEOPLE_SET_CLOSED(HttpStatus.BAD_REQUEST, "400", "해당 모집글의 정원이 다 찼습니다"),
     APPLY_NOT_FOUND(HttpStatus.BAD_REQUEST,"404", "해당 지원 정보를 찾을 수 없습니다"),
     APPLY_OVER_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "권한이 없습니다"),
     APPLY_MESSAGE_INPUT_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "400", "지원 메시지는 20자 이내로 작성해주세요"),

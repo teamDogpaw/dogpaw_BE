@@ -1,6 +1,6 @@
 package com.project.dogfaw.post.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.user.model.Stack;
@@ -11,8 +11,6 @@ import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @NoArgsConstructor

@@ -28,8 +28,8 @@ public class PostStack {
     @Column
     private String stack;
 
-
     private Long postId;
+
 
 
 

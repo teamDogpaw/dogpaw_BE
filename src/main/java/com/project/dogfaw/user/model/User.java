@@ -46,6 +46,10 @@ public class User {
     @JoinColumn(name = "stack_id")
     private List<Stack> stacks = new ArrayList<>();
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
+
 
     public void updateStack(List<Stack> stack) {
         this.stacks = stack;

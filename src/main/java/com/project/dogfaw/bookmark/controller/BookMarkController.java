@@ -22,9 +22,8 @@ public class BookMarkController {
     @PostMapping("/api/bookMark/{postId}")
     public boolean bookMark(@PathVariable Long postId){
         User user = commonService.getUser();
-        String username = user.getUsername();
 
-        if(bookMarkService.bookMarkUp(postId, username)){
+        if(bookMarkService.bookMarkUp(postId, user)){
             return true;
         } else return false;
     }
