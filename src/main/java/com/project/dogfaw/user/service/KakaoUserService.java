@@ -27,10 +27,10 @@ public class KakaoUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${client_id}")
+    @Value("${kakao_client_id}")
     private String client_id;
 
-    @Value("${redirect_uri}")
+    @Value("${kakao_redirect_uri}")
     private String redirect_uri;
 
     public KakaoUserInfo kakaoLogin(String code) throws JsonProcessingException {
