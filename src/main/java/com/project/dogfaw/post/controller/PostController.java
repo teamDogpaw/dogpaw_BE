@@ -28,7 +28,6 @@ import java.util.ArrayList;
 public class PostController {
 
     private final PostService postService;
-
     private final CommonService commonService;
 
 //    post 전체조회 (메인)
@@ -47,20 +46,20 @@ public class PostController {
 
     //post 생성(메인)
     @PostMapping("/api/post")
-    public void postPosts(@RequestBody PostRequestDto postRequestDto) {
+    public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
         User user = commonService.getUser();
 
-        postService.postPost(postRequestDto, user);
+        return postService.postPost(postRequestDto, user);
     }
 
    //post 상세조회 (디테일 페이지)
     @GetMapping("/api/post/detail/{postId}")
-    public PostDetailResponseDto getPostDetail(@PathVariable Long postID){
+    public PostDetailResponseDto getPostDetail(@PathVariable Long postId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
         String username = principal.getUser().getUsername();
 
-        return postService.getPostDetail(postID, username);
+        return postService.getPostDetail(postId, username, postId);
     }
 
 

@@ -12,6 +12,7 @@ import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
+import com.project.dogfaw.post.repository.PostStackRepository;
 import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
@@ -29,6 +30,7 @@ import java.util.Objects;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostStackRepository postStackRepository;
     private final BookMarkRepository bookMarkRepository;
     private final UserRepository userRepository;
 
@@ -87,11 +89,18 @@ public class PostService {
                         bookMarkStatus = false;
                     }
                 }
+                //다솔다솔이(민지민지) 추가한 부분
+            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+
+            //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
+            PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
+            postList.add(postDto);
                 
-                //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-                PostResponseDto postDto = new PostResponseDto(post, bookMarkStatus, writer);
-                //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
-                postList.add(postDto);
             }
         }
         return postList;
@@ -100,28 +109,40 @@ public class PostService {
 
     // post 등록
     @Transactional
-    public void postPost(PostRequestDto postRequestDto, User user) {
+    public PostResponseDto postPost(PostRequestDto postRequestDto, User user) {
         // 게시글 작성자 저장 (편의 메서드 -> user에도 post에 해당 post add)
         Post post = postRepository.save(new Post(postRequestDto, user));
 //        PostResponseDto postResponseDto = new PostResponseDto(post,false, user);
         // 저장된 Post -> PostResponseDto에 담아 리턴
 //        return postResponseDto;
+        List<String> stacks = postRequestDto.getStacks();
+        for(String stack : stacks){
+            PostStack postStack = new PostStack(post.getId(), stack);
+            postStackRepository.save(postStack);
+        }
+        return new PostResponseDto(post, stacks, false, user);
 
     }
 
 
     //post 상세조회
-    public PostDetailResponseDto getPostDetail(Long id, String username) {
+    public PostDetailResponseDto getPostDetail(Long id, String username, Long postId) {
         Post post = postRepository.findById(id).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
         );
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
         );
-        boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
+        Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
+
+        List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+        List<String> stringPostStacks = new ArrayList<>();
+        for(PostStack postStack : postStacks){
+            stringPostStacks.add(postStack.getStack());
+        }
         //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
 
-        return new PostDetailResponseDto(post, user, bookMarkStatus);
+        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus);
     }
 
     //게시글 수정

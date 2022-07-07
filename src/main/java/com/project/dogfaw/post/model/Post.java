@@ -1,10 +1,14 @@
 package com.project.dogfaw.post.model;
 
+
+import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.dto.PostRequestDto;
+import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -25,9 +29,6 @@ public class Post extends Timestamped {
 
     @Column(nullable = false)
     private Boolean online;
-
-    @Column(nullable = false)
-    private String stack;
 
     @Column(nullable = false)
     private String period;
@@ -66,26 +67,9 @@ public class Post extends Timestamped {
 
 
 
-//    public Post(String title, Boolean online, String stack, String period, int startAt, String content, int deadline, String nickname, int maxCapacity, int currentMember, int bookmarkCnt, int commentCnt) {
-//        this.title = title;
-//        this.online = online;
-//        this.stack = stack;
-//        this.period = period;
-//        this.startAt = startAt;
-//        this.content = content;
-//        this.deadline = deadline;
-//        this.nickname = nickname;
-//        this.maxCapacity = maxCapacity;
-//        this.currentMember = currentMember;
-//        this.bookmarkCnt = bookmarkCnt;
-//        this.commentCnt = commentCnt;
-//
-//    }
-
     public Post(PostRequestDto postRequestDto, User user) {
         this.title = postRequestDto.getTitle();
         this.online = postRequestDto.getOnline();
-        this.stack = postRequestDto.getStack();
         this.period = postRequestDto.getPeriod();
         this.startAt = postRequestDto.getStartAt();
         this.maxCapacity = postRequestDto.getMaxCapacity();
@@ -100,7 +84,6 @@ public class Post extends Timestamped {
     public void update(PostRequestDto postRequestDto, Long id) {
         this.title = postRequestDto.getTitle();
         this.online = postRequestDto.getOnline();
-        this.stack = postRequestDto.getStack();
         this.period = postRequestDto.getPeriod();
         this.startAt = postRequestDto.getStartAt();
         this.maxCapacity = postRequestDto.getMaxCapacity();

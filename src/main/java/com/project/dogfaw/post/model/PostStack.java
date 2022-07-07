@@ -31,8 +31,11 @@ public class PostStack {
     private Long postId;
 
 
-    public PostStack(StackDto stackdto) {
-        this.stack = stackdto.getStack();
+
+
+    public PostStack(Long postId, String stack) {
+        this.postId = postId;
+        this.stack = stack;
     }
 
     public PostStack(StackDto stackdto, Post post) {
