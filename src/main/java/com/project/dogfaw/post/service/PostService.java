@@ -87,6 +87,7 @@ public class PostService {
                         bookMarkStatus = false;
                     }
                 }
+                
                 //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
                 PostResponseDto postDto = new PostResponseDto(post, bookMarkStatus, writer);
                 //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
