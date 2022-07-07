@@ -2,51 +2,46 @@ package com.project.dogfaw.post.dto;
 
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
-public class PostResponseDto {
+@Setter
+@NoArgsConstructor
 
-    private Long postId;
+public class PostDetailResponseDto {
+    private Long id;
     private String title;
-    private Boolean online;
+    private boolean onLine;
     private List<String> stacks;
     private String period;
     private int startAt;
+    private int maxCapacity;
     private String content;
-
-    private Boolean deadline;
-
     private String nickname;
-
     private String profileImg;
-
-    private int bookmarkCnt;
-
-    private int commentCnt;
-
+    private Boolean deadline;
     private boolean bookMarkStatus;
 
-    public PostResponseDto(Post post, List<String> stacks, boolean bookMarkStatus, User writer){
-
-        this.postId = post.getId();
+    public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus){
+        this.id = post.getId();
         this.title = post.getTitle();
-        this.online = post.getOnline();
+        this.onLine = post.getOnline();
         this.stacks = stacks;
         this.period = post.getPeriod();
         this.startAt = post.getStartAt();
+        this.maxCapacity = post.getMaxCapacity();
         this.content = post.getContent();
+        this.nickname = user.getNickname();
+        this.profileImg = user.getProfileImg();
         this.deadline = post.getDeadline();
-        this.nickname = writer.getNickname();
-        this.profileImg = writer.getProfileImg();
-        this.bookmarkCnt = post.getBookmarkCnt();
-        this.commentCnt = post.getCommentCnt();
         this.bookMarkStatus = bookMarkStatus;
 
     }
 
+
 }
+
