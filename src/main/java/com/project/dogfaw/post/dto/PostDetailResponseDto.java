@@ -25,6 +25,7 @@ public class PostDetailResponseDto {
     private String profileImg;
     private Boolean deadline;
     private boolean bookMarkStatus;
+    private int currentMember;
 
     public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus){
         this.id = post.getId();
@@ -39,9 +40,7 @@ public class PostDetailResponseDto {
         this.profileImg = user.getProfileImg();
         this.deadline = post.getDeadline();
         this.bookMarkStatus = bookMarkStatus;
-
+        this.currentMember = post.getCurrentMember();
     }
-
-
 }
 
