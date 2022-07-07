@@ -30,7 +30,7 @@ public class MypageService {
     private final UserRepository userRepository;
 
     /*내가 북마크한 글 조회*/
-    public ArrayList<MypageResponseDto> myBookmark(User user, Long postId) {
+    public ArrayList<MypageResponseDto> myBookmark(User user) {
 
         //유저가 북마크한 것을 리스트로 모두 불러옴
         List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
@@ -46,15 +46,18 @@ public class MypageService {
             Post userPosting = userPost.getPost();
             userPostings.add(userPosting);
         }
-        //다솔다솔이(민지민지) 추가한 부분
-        List<PostStack> postStacks = postStackRepository.findByPostId(postId);
-        List<String> stringPostStacks = new ArrayList<>();
-        for(PostStack postStack : postStacks){
-            stringPostStacks.add(postStack.getStack());
-        }
+
         //유저가 북마크한 게시물과 그 게시물의 user 객체를 postList 에 담아서 전달
         for (Post post : userPostings) {
+            Long postId = post.getId();
             User writer = post.getUser();
+
+            //다솔다솔이(민지민지) 추가한 부분
+            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
 
             //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
             MypageResponseDto postDto = new MypageResponseDto(post, stringPostStacks, writer);
