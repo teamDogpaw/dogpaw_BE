@@ -18,38 +18,38 @@
 //    private final CommentService commentService;
 //
 //    @GetMapping("/api/posts/{postId}/comments")
-//    public List<Comment> getComment(@PathVariable Long contentId){
+//    public List<Comment> getComment(@PathVariable Long commentId){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 //        String username = principal.getUser().getUsername();
 //
-//        return commentService.getComment(contentId);
+//        return commentService.getComment(commentId);
 //    }
 //
 //    @PostMapping("/api/posts/{postId}/comments")
-//    public Long postComment(@PathVariable Long contentId, @RequestBody CommentRequestDto commentDto){
+//    public Long postComment(@PathVariable Long commentId, @RequestBody CommentRequestDto commentDto){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 //        String username = principal.getUser().getUsername();
 //
-//        return commentService.postComment(contentId,commentDto);
+//        return commentService.postComment(commentId,commentDto);
 //    }
 //
 //    @PutMapping("/api/posts/{postId}/comments/{commentId}")
-//    public Long updateComment(@PathVariable Long contentId, @PathVariable Long id){
+//    public Long updateComment(@PathVariable Long commentId, @PathVariable Long id){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 //        String username = principal.getUser().getUsername();
 //
-//        return commentService.updateComment(contentId,id);
+//        return commentService.updateComment(commentId,id);
 //    }
 //
 //    @DeleteMapping("/api/posts/{postId}/comments/{commentId}")
-//    public Long deleteComment(@PathVariable Long contentId,@PathVariable Long id){
+//    public Long deleteComment(@PathVariable Long commentId,@PathVariable Long id){
 //        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 //        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
 //        String username = principal.getUser().getUsername();
 //
-//        return commentService.deleteComment(contentId,id);
+//        return commentService.deleteComment(commentId, id);
 //    }
 //}

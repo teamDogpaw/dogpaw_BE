@@ -18,7 +18,7 @@ public class PostDetailResponseDto {
     private boolean onLine;
     private List<String> stacks;
     private String period;
-    private int startAt;
+    private String startAt;
     private int maxCapacity;
     private String content;
     private String nickname;
