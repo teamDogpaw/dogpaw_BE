@@ -39,6 +39,7 @@ public class UserService {
     private final StackRepository stackRepository;
 
 
+
     // 일반 회원가입
     @Transactional
     public TokenDto register(SignupRequestDto requestDto) {
