@@ -84,7 +84,6 @@ public class KakaoUserService {
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
@@ -116,6 +115,7 @@ public class KakaoUserService {
                 .kakaoId(kakaoUserInfo.getKakaoId())
                 .username(kakaoUserInfo.getKakaoMemberId())
                 .password(encodedPassword)
+                .nickname("default")
                 .build();
         userRepository.save(kakaoUser);
     }

@@ -39,9 +39,8 @@ public class User {
     @Column
     private Long kakaoId;
 
-    @Column
-    private String googleId;
-
+//    @Column
+//    private String googleId;
 
     @OneToMany
     @JoinColumn(name = "stack_id")
