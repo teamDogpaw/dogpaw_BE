@@ -51,7 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // login 없이 허용
                 .antMatchers("/user/**").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/post/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
 //                .antMatchers("/api/posts").permitAll()
 //                .antMatchers("/api/preview").permitAll()
 //                .antMatchers("/post/filter/**").permitAll()
@@ -77,8 +77,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true) ;
-        configuration.addAllowedOriginPattern("http://localhost:3000");
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net");
 //        configuration.addAllowedOrigin(""); // local 테스트 시
 //        configuration.addAllowedOrigin("https://amplify.d3ifjxscizr42x.amplifyapp.com"); // 배포 시
 //        configuration.addAllowedOrigin("https://www.everymohum.com");

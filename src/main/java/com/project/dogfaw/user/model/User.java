@@ -1,10 +1,10 @@
 package com.project.dogfaw.user.model;
 
+import com.project.dogfaw.user.dto.SignupRequestDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -14,9 +14,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 @Entity(name = "Users")
-@DynamicUpdate // null 값인 field 를 DB에서 설정된 default을 줌
+@DynamicUpdate // null 값인 field를 DB에서 설정된 default을 줌
 public class User {
 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,19 +41,28 @@ public class User {
     private Long kakaoId;
 
 //    @Column
-//    private String stack;
+//    private String googleId;
+
     @OneToMany
     @JoinColumn(name = "stack_id")
     private List<Stack> stacks = new ArrayList<>();
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
 
     public void updateStack(List<Stack> stack) {
         this.stacks = stack;
     }
 
-//    @Enumerated(EnumType.STRING)
-//    private Role role;
+    public void addInfo(SignupRequestDto requestDto) {
+        this.nickname = requestDto.getNickname();
+    }
+
+    
+
+
 
 //    private String List<bookMark>;
 //

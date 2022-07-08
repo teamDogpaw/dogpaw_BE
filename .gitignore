@@ -5,6 +5,13 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+###AWS S3 ##
+aws.yml
+
+###Application.properties
+application.properties
+
+
 ### STS ###
 .apt_generated
 .classpath

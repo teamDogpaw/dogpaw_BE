@@ -1,10 +1,17 @@
 package com.project.dogfaw.post.model;
 
+
+import com.project.dogfaw.bookmark.repository.BookMarkRepository;
+import com.project.dogfaw.post.dto.PostRequestDto;
+import com.project.dogfaw.user.model.Stack;
+import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -15,55 +22,72 @@ public class Post extends Timestamped {
     @Id
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name="userId", nullable = false)
+    private User user;
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
-    private Boolean online;
-
-    @Column(nullable = false)
-    private String stack;
+    private String online;
 
     @Column(nullable = false)
     private String period;
 
     @Column(nullable = false)
-    private int startAt;
-
-    @Column(length = 400, nullable = false)
-    private String content;
+    private String startAt;
 
     @Column(nullable = false)
     private int maxCapacity;
 
-    @Column(nullable = false)
+    @Column(length = 2500, nullable = false)
+    private String content;
+
+    @Column
     private int currentMember;
+    @Column
+    private Boolean deadline = false;
 
-    @Column(nullable = false)
-    private int deadline;
+//    @Column
+//    private String nickname;
+//
+//    @Column
+//    private String profileImg;
 
-    @Column(nullable = false)
-    private String nickname;
-
-    @Column(nullable = false)
+    @Column
     private int bookmarkCnt;
 
-    @Column(nullable = false)
+    @Column
     private int commentCnt;
 
-    public Post(String title, Boolean online, String stack, String period, int startAt, String content, int deadline, String nickname, int maxCapacity, int currentMember, int bookmarkCnt, int commentCnt) {
-        this.title = title;
-        this.online = online;
-        this.stack = stack;
-        this.period = period;
-        this.startAt = startAt;
-        this.content = content;
-        this.deadline = deadline;
-        this.nickname = nickname;
-        this.maxCapacity = maxCapacity;
-        this.currentMember = currentMember;
-        this.bookmarkCnt = bookmarkCnt;
-        this.commentCnt = commentCnt;
+//    @OneToMany
+//    @JoinColumn(name = "poststack_id")
+//    private List<PostStack> stacks = new ArrayList<>();
+
+
+
+
+    public Post(PostRequestDto postRequestDto, User user) {
+        this.title = postRequestDto.getTitle();
+        this.online = postRequestDto.getOnline();
+        this.period = postRequestDto.getPeriod();
+        this.startAt = postRequestDto.getStartAt();
+        this.maxCapacity = postRequestDto.getMaxCapacity();
+        this.content = postRequestDto.getContent();
+//        this.profileImg = getProfileImg();
+        this.user = user;
+        }
+
+
+
+
+    public void update(PostRequestDto postRequestDto, Long id) {
+        this.title = postRequestDto.getTitle();
+        this.online = postRequestDto.getOnline();
+        this.period = postRequestDto.getPeriod();
+        this.startAt = postRequestDto.getStartAt();
+        this.maxCapacity = postRequestDto.getMaxCapacity();
+        this.content = postRequestDto.getContent();
 
     }
 
@@ -72,8 +96,18 @@ public class Post extends Timestamped {
     //현재모집인원 +1
     public void increaseCnt() {this.currentMember += 1;}
     //현재모집인원 -1
-    public void decreaseCnt() {
-        this.currentMember -= 1;
-    }
+    public void decreaseCnt() {this.currentMember -= 1;}
+
+    //유저가 북마크시 해당 게시글 북마크 수 +1, 취소시 -1
+    public void increaseBmCount(){this.bookmarkCnt += 1;}
+    public void decreaseBmCount(){this.bookmarkCnt -= 1;}
+
+
+    //모집마감 || 모집중
+    public void isDeadline(){this.deadline = true;}
+    public void isOngoing(){this.deadline = false;}
+
 
 }
+
+

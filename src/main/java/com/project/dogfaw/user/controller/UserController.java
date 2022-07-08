@@ -1,26 +1,29 @@
 package com.project.dogfaw.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.project.dogfaw.common.CommonService;
+import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.ExceptionResponse;
 import com.project.dogfaw.common.exception.StatusResponseDto;
+import com.project.dogfaw.common.validator.UserValidator;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
-import com.project.dogfaw.user.dto.LoginDto;
-import com.project.dogfaw.user.dto.SignupRequestDto;
-import com.project.dogfaw.user.dto.UserInfo;
+import com.project.dogfaw.user.dto.*;
 //import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
+import com.project.dogfaw.user.service.KakaoUserService;
 import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -29,8 +32,9 @@ import java.util.Map;
 @RestController
 public class UserController {
     private final UserService userService;
-//    private final KakaoUserService kakaoUserService;
+    private final KakaoUserService kakaoUserService;
     private final UserRepository userRepository;
+    private final CommonService commonService;
 
     // 회원가입 API
     @PostMapping("/user/signup")
@@ -76,21 +80,29 @@ public class UserController {
     @ResponseBody
     public UserInfo Session(){
 //    public com.project.dogfaw.user.model.User Session(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        String username = principal.getUser().getUsername();
-        com.project.dogfaw.user.model.User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new UsernameNotFoundException("존재하지 않는 유저입니다")
-        );
+        User user = commonService.getUser();
         return new UserInfo(user.getUsername(), user.getNickname(),user.getProfileImg(), user.getStacks());
 //        return user;
     }
 
     // 카카오 로그인 API
-//    @GetMapping("/user/kakao/login")
-//    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
-//        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+    @GetMapping("/user/kakao/login")
+    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
+        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+    }
+
+    // 구글 로그인 API
+//    @GetMapping("/user/google/login")
+//    public ResponseEntity<Object> googleLogin(@RequestParam String code) throws JsonProcessingException {
+//        GoogleUserInfo googleUserInfo = googleUserService.googleLogin(code);
+//        return new ResponseEntity<>(userService.SignupUserCheck(googleUserInfo.getId()), HttpStatus.OK);
 //    }
 
+    // 회원가입 추가 정보 API
+    @PostMapping("/user/signup/addInfo")
+    public ResponseEntity<Object> addInfo(@RequestBody SignupRequestDto requestDto) {
+        TokenDto tokenDto = userService.addInfo(requestDto);
+        return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공", tokenDto), HttpStatus.CREATED);
+    }
 }

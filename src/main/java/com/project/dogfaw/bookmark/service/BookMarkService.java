@@ -1,5 +1,6 @@
 package com.project.dogfaw.bookmark.service;
 
+import com.project.dogfaw.bookmark.dto.BookMarkRequestDto;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.model.Post;
@@ -23,25 +24,34 @@ public class BookMarkService {
 
 
     @Transactional // Transactinal을 사용함으로써 set 내용이 dirtyCheck를 하고 통과되면 db에 반영이 됨
-    public Boolean bookMarkUp(Long postId, Long userId) {
+    public Boolean bookMarkUp(Long postId, User user) {
         //user와 post Id 찾아옴
-        User user = userRepository.findById(userId).orElseThrow(
-                ()-> new NullPointerException("해당 ID가 존재하지 않음")
-        );
+
+//        User user = userRepository.findByUsername(username).orElseThrow(
+//                ()-> new NullPointerException("해당 ID가 존재하지 않음")
+//        );
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new NullPointerException("해당 게시물이 존재하지 않음")
         );
 
-        //북마크 db에 해당 userId와 PostId 가 존재하지 않으면 db에 저장(북마크 등록)
+        //북마크 db에 해당 userId와 PostId 가 존재하지 않으면 db에 저장(북마크 등록) 및 post의 북마크 총 갯수 +1
          if(!bookMarkRepository.existsByUserAndPost(user,post)){
             BookMark bookMark = new BookMark(user, post);
             bookMarkRepository.save(bookMark);
+            post.increaseBmCount();
             return true;
-            //다시 눌러서 요청할 경우 db에 존재하기 때문에 삭제후 return false(북마크 등록 취소)
+            //다시 눌러서 요청할 경우 db에 존재하기 때문에 삭제후 return false(북마크 등록 취소) 및 post의 북마크 총 갯수 -1
         }else{
             BookMark bookMark = bookMarkRepository.getBookMarkByUserAndPost(user,post);
             bookMarkRepository.delete(bookMark);
+            post.decreaseBmCount();
             return false;
         }
+
+//         if (bookMarkRepository.existsByUserAndPost(user,post)){
+//             boolean bookMarkCheck = true;
+//         } else {
+//             boolean bookMarkCheck = false;
+//         }
     }
 }

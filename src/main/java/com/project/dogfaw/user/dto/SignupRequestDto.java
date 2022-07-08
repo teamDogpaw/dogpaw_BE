@@ -1,5 +1,6 @@
 package com.project.dogfaw.user.dto;
 
+import com.project.dogfaw.user.model.UserRoleEnum;
 import lombok.Getter;
 
 import java.util.ArrayList;
