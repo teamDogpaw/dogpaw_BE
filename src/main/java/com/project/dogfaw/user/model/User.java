@@ -7,8 +7,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
