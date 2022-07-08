@@ -18,14 +18,10 @@ import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -161,7 +157,7 @@ public class UserService {
         return tokenDto;
     }
 
-    // 로그인 유저 상태 확인
+    // 카카오 로그인 유저 상태 확인
     public StatusResponseDto SignupUserCheck(Long kakaoId) {
 
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
@@ -177,6 +173,23 @@ public class UserService {
             return new StatusResponseDto("로그인 성공", tokenDto);
         }
     }
+
+    // 구글 로그인 유저 상태 확인
+//    public StatusResponseDto SignupUserCheck(String Id) {
+//
+//        User loginUser = userRepository.findByGoogleId(Id).orElse(null);
+//
+//        if (loginUser.getNickname().equals("default")) {
+//            GoogleUserInfo kakaoUserInfo = GoogleUserInfo.builder()
+//                    .id(Id)
+//                    .email(loginUser.getUsername())
+//                    .build();
+//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", kakaoUserInfo);
+//        } else {
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//            return new StatusResponseDto("로그인 성공", tokenDto);
+//        }
+//    }
 
     // 회원가입 추가 정보 등록
     @Transactional

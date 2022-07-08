@@ -38,7 +38,6 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
     implementation 'org.springframework.security:spring-security-test'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 
