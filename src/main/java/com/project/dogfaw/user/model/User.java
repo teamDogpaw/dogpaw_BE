@@ -1,8 +1,10 @@
 package com.project.dogfaw.user.model;
 
 import com.project.dogfaw.user.dto.SignupRequestDto;
-import lombok.*;
-import net.minidev.json.annotate.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -39,7 +41,8 @@ public class User {
     private Long kakaoId;
 
 //    @Column
-//    private String stack;
+//    private String googleId;
+
     @OneToMany
     @JoinColumn(name = "stack_id")
     private List<Stack> stacks = new ArrayList<>();

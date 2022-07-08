@@ -10,10 +10,7 @@ import com.project.dogfaw.common.validator.UserValidator;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
-import com.project.dogfaw.user.dto.KakaoUserInfo;
-import com.project.dogfaw.user.dto.LoginDto;
-import com.project.dogfaw.user.dto.SignupRequestDto;
-import com.project.dogfaw.user.dto.UserInfo;
+import com.project.dogfaw.user.dto.*;
 //import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
@@ -94,6 +91,13 @@ public class UserController {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
     }
+
+    // 구글 로그인 API
+//    @GetMapping("/user/google/login")
+//    public ResponseEntity<Object> googleLogin(@RequestParam String code) throws JsonProcessingException {
+//        GoogleUserInfo googleUserInfo = googleUserService.googleLogin(code);
+//        return new ResponseEntity<>(userService.SignupUserCheck(googleUserInfo.getId()), HttpStatus.OK);
+//    }
 
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")

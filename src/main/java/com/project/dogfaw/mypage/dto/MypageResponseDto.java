@@ -18,7 +18,7 @@ public class MypageResponseDto {
     private String online;
     private List<String> stacks;
     private String period;
-    private int startAt;
+    private String startAt;
     private String content;
 
     private Boolean deadline;
