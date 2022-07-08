@@ -17,6 +17,7 @@ import java.util.ArrayList;
 @RestController
 public class MypageController {
 
+//    private final S3Uploader s3Uploader;
     private final CommonService commonService;
     private final MypageService mypageService;
     //북마크한 게시물 불러오기
@@ -44,9 +45,15 @@ public class MypageController {
     }
 
 
-//    @PatchMapping("/api/user/info/{image}")
-//    public ResponseEntity<Object> updateInfo(@RequestPart MultipartFile multipartFile, @RequestPart MypageRequestDto requestDto){
+//    @PostMapping("/api/user/info/{image}")
+//    public ResponseEntity<Object> updateInfo(@RequestPart MultipartFile multipartFile, @RequestPart MypageRequestDto requestDto) throws IOException {
+//        User user = commonService.getUser();
+//
+//        s3Uploader.upload(multipartFile,"static",user,requestDto);
+//
+//        return new ResponseEntity<>(new StatusResponseDto("프로필이미지 수정 완료", ""), HttpStatus.OK);
 //
 //    }
+
 
 }

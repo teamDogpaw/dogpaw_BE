@@ -12,7 +12,7 @@ import java.util.List;
 public class PostRequestDto {
 
     private String title;
-    private Boolean online;
+    private String online;
     private List<String> stacks;
     private String period;
     private int startAt;
@@ -21,7 +21,7 @@ public class PostRequestDto {
 
     private String profileImg;
 
-    public PostRequestDto(String title, Boolean online, List<String> stacks, String period, int startAt, int maxCapacity, String content) {
+    public PostRequestDto(String title, String online, List<String> stacks, String period, int startAt, int maxCapacity, String content) {
         this.title = title;
         this.online = online;
         this.stacks = stacks;
