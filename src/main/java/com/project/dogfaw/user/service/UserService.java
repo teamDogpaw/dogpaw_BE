@@ -38,7 +38,7 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final StackRepository stackRepository;
 
-    
+
 
     // 일반 회원가입
     @Transactional
