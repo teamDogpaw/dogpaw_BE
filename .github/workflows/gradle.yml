@@ -33,11 +33,11 @@ jobs:
       #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
       #          restore-keys: |
       #            ${{ runner.os }}-gradle-
-      #
-      #      - name: Create ./src/main/resources/
-      #        run: |
-      #          mkdir -p ./src/main/resources/
-      #
+      
+      - name: Create ./src/main/resources/
+        run: |
+          mkdir -p ./src/main/resources/
+
       - name: make application.properties
         run: |
           cd ./src/main/resources
