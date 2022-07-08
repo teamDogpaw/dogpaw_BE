@@ -1,10 +1,7 @@
 package com.project.dogfaw.user.model;
 
 import com.project.dogfaw.user.dto.SignupRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
