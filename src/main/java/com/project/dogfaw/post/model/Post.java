@@ -8,7 +8,6 @@ import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -30,25 +29,24 @@ public class Post extends Timestamped {
     private String title;
 
     @Column(nullable = false)
-    private Boolean online;
+    private String online;
 
     @Column(nullable = false)
     private String period;
 
     @Column(nullable = false)
-    private int startAt;
+    private String startAt;
 
     @Column(nullable = false)
     private int maxCapacity;
 
-    @Column(length = 400, nullable = false)
+    @Column(length = 2500, nullable = false)
     private String content;
 
     @Column
     private int currentMember;
-
     @Column
-    private Boolean deadline;
+    private Boolean deadline = false;
 
 //    @Column
 //    private String nickname;

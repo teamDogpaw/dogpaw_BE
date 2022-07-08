@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.service;
 
 
+import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 
@@ -32,6 +33,8 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostStackRepository postStackRepository;
     private final BookMarkRepository bookMarkRepository;
+
+    private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
 
     private final CommonService commonService;
@@ -46,12 +49,12 @@ public class PostService {
         //내림차순으로 Top 20만 내림차순으로
         //List<Post> posts = postRepository.findTop20ByOrderByModifiedAtDesc();
 
-        //모든 게시글 내림차순으로
-        List<Post> posts = postRepository.findAllByOrderByModifiedAtDesc();
+        //모든 게시글 내림차순으로(startAt으로 변경 필요)
+        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
         ArrayList<PostResponseDto> postList = new ArrayList<>();
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
-        Boolean bookMarkStatus = false ;
+        Boolean bookMarkStatus = false;
 
         //로그인한 유저가 아닐때는 모든게시글을 불러와주고 bookMarkStatus는 모두 false로 리턴
         if(user == null){
@@ -141,6 +144,7 @@ public class PostService {
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
         );
         Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
+        Boolean applyStatus = userApplicationRepository.existsByUserAndPost(user,post);
 
         List<PostStack> postStacks = postStackRepository.findByPostId(postId);
         List<String> stringPostStacks = new ArrayList<>();
@@ -149,7 +153,7 @@ public class PostService {
         }
         //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
 
-        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus);
+        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applyStatus);
     }
 
     //게시글 수정

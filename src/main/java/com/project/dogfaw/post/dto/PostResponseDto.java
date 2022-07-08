@@ -13,10 +13,10 @@ public class PostResponseDto {
 
     private Long postId;
     private String title;
-    private Boolean online;
+    private String online;
     private List<String> stacks;
     private String period;
-    private int startAt;
+    private String startAt;
     private String content;
 
     private Boolean deadline;

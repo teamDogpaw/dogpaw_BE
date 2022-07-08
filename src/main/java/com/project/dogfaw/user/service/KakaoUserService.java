@@ -27,10 +27,10 @@ public class KakaoUserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @Value("${client_id}")
+    @Value("${kakao_client_id}")
     private String client_id;
 
-    @Value("${redirect_uri}")
+    @Value("${kakao_redirect_uri}")
     private String redirect_uri;
 
     public KakaoUserInfo kakaoLogin(String code) throws JsonProcessingException {
@@ -84,7 +84,6 @@ public class KakaoUserService {
         headers.add("Authorization", "Bearer " + accessToken);
         headers.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-
         // HTTP 요청 보내기
         HttpEntity<MultiValueMap<String, String>> kakaoUserInfoRequest = new HttpEntity<>(headers);
         RestTemplate rt = new RestTemplate();
@@ -116,6 +115,7 @@ public class KakaoUserService {
                 .kakaoId(kakaoUserInfo.getKakaoId())
                 .username(kakaoUserInfo.getKakaoMemberId())
                 .password(encodedPassword)
+                .nickname("default")
                 .build();
         userRepository.save(kakaoUser);
     }
