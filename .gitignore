@@ -9,7 +9,7 @@ build/
 aws.yml
 
 ###Application.properties
-application.properties
+/src/main/resources/application.properties
 
 
 ### STS ###
