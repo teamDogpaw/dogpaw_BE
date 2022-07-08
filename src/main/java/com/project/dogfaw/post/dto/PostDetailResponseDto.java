@@ -18,7 +18,7 @@ public class PostDetailResponseDto {
     private boolean onLine;
     private List<String> stacks;
     private String period;
-    private int startAt;
+    private String startAt;
     private int maxCapacity;
     private String content;
     private String nickname;
@@ -36,7 +36,7 @@ public class PostDetailResponseDto {
         this.startAt = post.getStartAt();
         this.maxCapacity = post.getMaxCapacity();
         this.content = post.getContent();
-        this.nickname = user.getNickname();
+        this.nickname = post.getUser().getNickname();
         this.profileImg = user.getProfileImg();
         this.deadline = post.getDeadline();
         this.bookMarkStatus = bookMarkStatus;

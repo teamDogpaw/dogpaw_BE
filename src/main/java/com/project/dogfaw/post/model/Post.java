@@ -35,7 +35,7 @@ public class Post extends Timestamped {
     private String period;
 
     @Column(nullable = false)
-    private int startAt;
+    private String startAt;
 
     @Column(nullable = false)
     private int maxCapacity;
