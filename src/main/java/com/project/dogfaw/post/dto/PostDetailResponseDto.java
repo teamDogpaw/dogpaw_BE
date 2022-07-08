@@ -15,7 +15,7 @@ import java.util.List;
 public class PostDetailResponseDto {
     private Long id;
     private String title;
-    private boolean onLine;
+    private String onLine;
     private List<String> stacks;
     private String period;
     private String startAt;
@@ -27,7 +27,9 @@ public class PostDetailResponseDto {
     private boolean bookMarkStatus;
     private int currentMember;
 
-    public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus){
+    private Boolean applyStatus;
+
+    public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus, boolean applyStatus){
         this.id = post.getId();
         this.title = post.getTitle();
         this.onLine = post.getOnline();
@@ -41,6 +43,7 @@ public class PostDetailResponseDto {
         this.deadline = post.getDeadline();
         this.bookMarkStatus = bookMarkStatus;
         this.currentMember = post.getCurrentMember();
+        this.applyStatus = applyStatus;
     }
 }
 

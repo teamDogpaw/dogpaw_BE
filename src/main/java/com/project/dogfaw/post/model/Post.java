@@ -29,7 +29,7 @@ public class Post extends Timestamped {
     private String title;
 
     @Column(nullable = false)
-    private Boolean online;
+    private String online;
 
     @Column(nullable = false)
     private String period;
@@ -40,14 +40,13 @@ public class Post extends Timestamped {
     @Column(nullable = false)
     private int maxCapacity;
 
-    @Column(length = 400, nullable = false)
+    @Column(length = 2500, nullable = false)
     private String content;
 
     @Column
     private int currentMember;
-
     @Column
-    private Boolean deadline;
+    private Boolean deadline = false;
 
 //    @Column
 //    private String nickname;
