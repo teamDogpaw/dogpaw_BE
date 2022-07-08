@@ -8,6 +8,10 @@ build/
 ###AWS S3 ##
 aws.yml
 
+###Application.properties
+application.properties
+
+
 ### STS ###
 .apt_generated
 .classpath
