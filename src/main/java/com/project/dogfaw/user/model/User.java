@@ -1,10 +1,7 @@
 package com.project.dogfaw.user.model;
 
 import com.project.dogfaw.user.dto.SignupRequestDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -15,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 @Entity(name = "Users")
 @DynamicUpdate // null 값인 field를 DB에서 설정된 default을 줌
