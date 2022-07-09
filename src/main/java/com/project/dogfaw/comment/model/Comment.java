@@ -1,60 +1,63 @@
 package com.project.dogfaw.comment.model;
 
+import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.comment.dto.CommentRequestDto;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.Timestamped;
 import com.project.dogfaw.user.model.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 public class Comment extends Timestamped {
+
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id
-    @Column(name = "comment_id")
     private Long id;
 
     @Column(nullable = false)
-    private String content;
+    private String comment;
 
     @Column(nullable = false)
-    private int startAt;
+    private String nickname;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @Column
+    private String profileImg;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="user_id")
+    // FK로 MEMBER_ID 들어옴.
+    @ManyToOne //ID 유저네임? 그 이아디?
+    @JoinColumn(name = "USER_ID")
     private User user;
 
-    // comment 등록
-    public Comment(Post post, CommentRequestDto requestDto, User user) {
-//        if (!StringUtils.hasText(requestDto.getComment())) {
-//            throw new CustomException(ErrorCode.COMMENT_WRONG_INPUT);
-//        }
+    // FK로 POST_ID 들어옴.
+    @ManyToOne
+    @JoinColumn(name = "POST_ID")
+    private Post post;
 
-        this.post = post;
-        this.content = requestDto.getContent();
+
+    public Comment(String comment, String nickname, String profileImg, User user, Post post) {
+        this.comment = comment;
+        this.nickname = nickname;
+        this.profileImg = profileImg;
         this.user = user;
-        this.startAt = getStartAt();
+        this.post = post;
     }
 
+    //코멘트 수정
+    public void updateComment(CommentPutDto requestDto) {
+        this.comment = requestDto.getComment();
 
-    // comment 수정
-    public void updateComment(CommentRequestDto requestDto) {
-//        if (!StringUtils.hasText(requestDto.getComment())) {
-//            throw new CustomException(ErrorCode.COMMENT_WRONG_INPUT);
-//        }
-        this.content = requestDto.getContent();
-        this.startAt = getStartAt();
     }
-
 }

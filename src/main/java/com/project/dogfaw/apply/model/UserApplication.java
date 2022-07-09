@@ -26,5 +26,7 @@ public class UserApplication {
     public UserApplication(User user, Post post) {
         this.user = user;
         this.post = post;
+
     }
 }
+

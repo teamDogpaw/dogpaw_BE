@@ -4,6 +4,8 @@ import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.model.Post;
 
+import javax.transaction.Transactional;
+
 public class ApplyValidator {
 
     public static void currentMemberCheck(Post post) {

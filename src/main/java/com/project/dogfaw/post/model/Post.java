@@ -29,25 +29,24 @@ public class Post extends Timestamped {
     private String title;
 
     @Column(nullable = false)
-    private Boolean online;
+    private String online;
 
     @Column(nullable = false)
     private String period;
 
     @Column(nullable = false)
-    private int startAt;
+    private String startAt;
 
     @Column(nullable = false)
     private int maxCapacity;
 
-    @Column(length = 400, nullable = false)
+    @Column(length = 2500, nullable = false)
     private String content;
 
     @Column
     private int currentMember;
-
     @Column
-    private Boolean deadline;
+    private Boolean deadline = false;
 
 //    @Column
 //    private String nickname;
@@ -103,6 +102,9 @@ public class Post extends Timestamped {
     public void increaseBmCount(){this.bookmarkCnt += 1;}
     public void decreaseBmCount(){this.bookmarkCnt -= 1;}
 
+    //코멘트 +1, -1
+    public void increaseCmCount(){this.commentCnt += 1;}
+    public void decreaseCmCount(){this.commentCnt -= 1;}
 
     //모집마감 || 모집중
     public void isDeadline(){this.deadline = true;}
