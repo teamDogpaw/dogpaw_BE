@@ -1,21 +1,14 @@
 package com.project.dogfaw.comment.model;
 
 import com.project.dogfaw.comment.dto.CommentPutDto;
-import com.project.dogfaw.comment.dto.CommentRequestDto;
-import com.project.dogfaw.common.exception.CustomException;
-import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.Timestamped;
 import com.project.dogfaw.user.model.User;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import net.minidev.json.annotate.JsonIgnore;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter

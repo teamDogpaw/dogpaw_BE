@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dogfaw.user.dto.KakaoUserInfo;
 import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.model.UserRoleEnum;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -116,6 +117,7 @@ public class KakaoUserService {
                 .username(kakaoUserInfo.getKakaoMemberId())
                 .password(encodedPassword)
                 .nickname("default")
+                .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(kakaoUser);
     }
