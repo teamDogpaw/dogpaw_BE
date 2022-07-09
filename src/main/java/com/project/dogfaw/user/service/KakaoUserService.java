@@ -43,7 +43,8 @@ public class KakaoUserService {
         System.out.println(3);
 
         User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
-        if (kakaoUser == null) {
+        if  (kakaoUser == null) {
+            System.out.println("if");
             registerKakaoUser(kakaoUserInfo);
         }
         System.out.println(4);
@@ -117,6 +118,8 @@ public class KakaoUserService {
         String password = UUID.randomUUID().toString();
         String encodedPassword = passwordEncoder.encode(password);
 
+        System.out.println("registerKakaoUser");
+        System.out.println(kakaoUserInfo.getKakaoMemberId());
         User kakaoUser = User.builder()
                 .kakaoId(kakaoUserInfo.getKakaoId())
                 .username(kakaoUserInfo.getKakaoMemberId())
@@ -125,5 +128,6 @@ public class KakaoUserService {
                 .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(kakaoUser);
+        System.out.println("save");
     }
 }
