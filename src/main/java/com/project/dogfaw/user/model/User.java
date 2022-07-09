@@ -7,12 +7,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 //@Setter
-@Builder
+
+
 @Entity(name = "Users")
 @DynamicUpdate // null 값인 field를 DB에서 설정된 default을 줌
 public class User {
@@ -56,8 +57,6 @@ public class User {
     public void addInfo(SignupRequestDto requestDto) {
         this.nickname = requestDto.getNickname();
     }
-
-    
 
 
 
