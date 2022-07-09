@@ -14,6 +14,7 @@ import com.project.dogfaw.user.dto.*;
 //import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
+//import com.project.dogfaw.user.service.GoogleUserService;
 import com.project.dogfaw.user.service.KakaoUserService;
 import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final KakaoUserService kakaoUserService;
+//    private final GoogleUserService googleUserService;
     private final UserRepository userRepository;
     private final CommonService commonService;
 
