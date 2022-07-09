@@ -44,7 +44,7 @@ public class KakaoUserService {
         if (kakaoUser == null) {
             registerKakaoUser(kakaoUserInfo);
         }
-        return getKakaoUserInfo(accessToken);
+        return kakaoUserInfo;
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
