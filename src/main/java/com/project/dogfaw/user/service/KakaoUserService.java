@@ -49,7 +49,8 @@ public class KakaoUserService {
         }
         System.out.println(4);
 
-        return kakaoUserInfo;
+        return getKakaoUserInfo(accessToken);
+//        return kakaoUserInfo;
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
