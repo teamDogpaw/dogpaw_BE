@@ -19,7 +19,7 @@ public class DogfawApplication {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(DogfawApplication.class, args);
+//        SpringApplication.run(DogfawApplication.class, args);
     }
 
 //    public static final String APPLICATION_LOCATIONS = "spring.config.location="
