@@ -4,6 +4,8 @@ import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.common.validator.UserValidator;
+import com.project.dogfaw.mypage.dto.MypageResponseDto;
+import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
@@ -23,10 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -123,6 +122,7 @@ public class UserService {
         );
         refreshTokenRepository.deleteById(refreshToken.getRefreshKey());
     }
+    
 
     // reissue(Token 재발급)
     @Transactional

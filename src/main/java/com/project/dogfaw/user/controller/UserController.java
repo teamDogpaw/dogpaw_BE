@@ -2,12 +2,9 @@ package com.project.dogfaw.user.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.dogfaw.common.CommonService;
-import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.ExceptionResponse;
 import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.common.validator.UserValidator;
-import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
 import com.project.dogfaw.user.dto.*;
@@ -20,11 +17,6 @@ import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -77,7 +69,7 @@ public class UserController {
         return new ResponseEntity<>(new StatusResponseDto("토큰 재발급 성공", tokenDto), HttpStatus.OK);
     }
 
-    // 유저정보
+    // 유저 정보 API
     @GetMapping("/user/userinfo")
     @ResponseBody
     public UserInfo Session(){
@@ -93,6 +85,14 @@ public class UserController {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
     }
+
+    // 회원 탈퇴 API
+    @DeleteMapping("/user/delete/{userId}")
+    public ResponseEntity<StatusResponseDto> deleteUser(@PathVariable Long userId){
+        userRepository.deleteById(userId);
+        return new ResponseEntity<>(new StatusResponseDto("회원 탈퇴 성공", ""), HttpStatus.OK);
+    }
+
 
     // 구글 로그인 API
 //    @GetMapping("/user/google/login")
