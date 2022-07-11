@@ -1,5 +1,6 @@
 package com.project.dogfaw.user.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.dogfaw.user.dto.SignupRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
@@ -34,6 +35,10 @@ public class User {
 
     @Column
     private String profileImg;
+
+    @JsonIgnore
+    @Column
+    private String Imgkey;
 
     @Column
     private Long kakaoId;

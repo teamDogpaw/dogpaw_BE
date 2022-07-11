@@ -2,6 +2,8 @@ package com.project.dogfaw.mypage.img;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
+import com.amazonaws.services.s3.model.DeleteObjectsRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
@@ -21,6 +23,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -42,30 +45,34 @@ public class S3Uploader {
     }
 
     public String upload(File uploadFile, String filePath, MypageRequestDto requestDto, User user) {
+
+        if(user.getProfileImg()!=null) {
+            String imgKey = user.getImgkey();
+            amazonS3Client.deleteObject(bucket,imgKey);
+
+        }
         String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        String imgKey = fileName;
         removeNewFile(uploadFile);
 
-//
 
-
-        return updateUser(uploadImageUrl,requestDto,user);
+        return updateUser(uploadImageUrl,imgKey,requestDto,user);
     }
 
     /*유저정보 업데이트(프로필추가 및 닉네임 편집)*/
 
     @Transactional
-    public String updateUser(String uploadImageUrl, MypageRequestDto requestDto, User user) {
+    public String updateUser(String uploadImageUrl,String imgKey, MypageRequestDto requestDto, User user) {
         /*닉네임 중복검사 후 편집*/
         String nickname = requestDto.getNickname();
         Long userId = user.getId();
         if (userRepository.existsByNickname(nickname)) {
             throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
         } else {
-
             user.setNickname(requestDto.getNickname());
-//            user.setStacks(requestDto.getStacks());
             user.setProfileImg(uploadImageUrl);
+            user.setImgkey(imgKey);
             stackRepository.deleteAllByUserId(userId);
             List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
             user.updateStack(stack);
@@ -75,7 +82,9 @@ public class S3Uploader {
     }
 
     // S3로 업로드
+    //유저의 기존 프로필 이미지 S3에서 삭제 후 업로드
     private String putS3(File uploadFile, String fileName) {
+
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
