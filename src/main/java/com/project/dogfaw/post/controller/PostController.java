@@ -76,13 +76,13 @@ public class PostController {
     }
     //post 삭제 (디테일 페이지)
     @DeleteMapping("/api/post/{postId}")
-    public Long deletePost(@PathVariable Long postId) {
+    public ResponseEntity<StatusResponseDto> deletePost(@PathVariable Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
         String username = principal.getUser().getUsername();
-
         postService.deletePost(postId, username);
-        return postId;
+        String data = null;
+        return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",data),HttpStatus.OK);
     }
 
 }
