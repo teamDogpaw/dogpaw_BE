@@ -6,6 +6,7 @@ import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 
 import com.project.dogfaw.common.CommonService;
+import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 
 import com.project.dogfaw.post.dto.PostRequestDto;
@@ -40,6 +41,7 @@ public class PostService {
     private final UserRepository userRepository;
 
     private final CommonService commonService;
+
 
 
 
@@ -120,10 +122,11 @@ public class PostService {
         return postList;
     }
 
-//    public Slice<PostResponseDto> allposts(int page) {
-//        PageRequest pageRequest = PageRequest.of(page,24);
-//        return postRepository.findByOrderByCreatedAtDesc(pageRequest);
-//    }
+    // 전체조회 무한스크롤
+    public Slice<PostResponseDto> allposts(int page) {
+        PageRequest pageRequest = PageRequest.of(page,24);
+        return postRepository.findByOrderByCreatedAtDesc(pageRequest);
+    }
 
 
     // post 등록
@@ -199,13 +202,35 @@ public class PostService {
         return stackList;
     }
 
+    //북마크 랭킹
 //    @Transactional
-//    public List<PostResponseDto> bookMarkRank() {
+//    public List<Post> bookMarkRank() {
 //        PageRequest pageRequest = PageRequest.of(0,3);
 //        return postRepository.findByOrderByBookmarkCntDesc(pageRequest);
 //    }
+//}
 
+    @Transactional
+    public List<BookmarkRankResponseDto> bookMarkRank(User user) {
+        PageRequest pageRequest = PageRequest.of(0, 3);
+        List<BookmarkRankResponseDto> bookmarkRank = new ArrayList<>();
 
+        if(user == null){
+            return postRepository.findByOrderByBookmarkCntDesc(pageRequest);
+        }else{
+            List<BookmarkRankResponseDto> bookmarkRankResponseDtos =
+                    postRepository.findByOrderByBookmarkCntDesc(pageRequest);
+            for (BookmarkRankResponseDto bookmarkRankResponseDto : bookmarkRankResponseDtos) {
+                if (bookMarkRepository.findByUserIdAndPostId(user.getId(), bookmarkRankResponseDto.getPostId())) {
+                    bookmarkRankResponseDto.setBookMarkStatus(true);
+                    bookmarkRank.add(bookmarkRankResponseDto);
+                } else {
+                    bookmarkRank.add(bookmarkRankResponseDto);
+                }
+            }
+            return bookmarkRank;
+        }
+    }
 }
 
     //북마크

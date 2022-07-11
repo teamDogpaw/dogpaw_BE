@@ -4,6 +4,7 @@ package com.project.dogfaw.post.controller;
 import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
+import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
@@ -51,6 +52,12 @@ public class PostController {
         }
     }
 
+    @GetMapping("/api/allposts")
+    public Slice<PostResponseDto> allposts(HttpServletRequest httpServletRequest){
+        int page = Integer.parseInt(httpServletRequest.getParameter("page"));
+        return postService.allposts(page);
+    }
+
     //post 생성(메인)
     @PostMapping("/api/post")
     public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
@@ -81,6 +88,7 @@ public class PostController {
         postService.updatePost(postId, postRequestDto, username);
         return postId;
     }
+
     //post 삭제 (디테일 페이지)
     @DeleteMapping("/api/post/{postId}")
     public ResponseEntity<StatusResponseDto> deletePost(@PathVariable Long postId) {
@@ -92,4 +100,16 @@ public class PostController {
         return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",data),HttpStatus.OK);
     }
 
+    @GetMapping("/api/bookmark/rank")
+    public List<BookmarkRankResponseDto> bookMarkRank(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getDetails() != null){
+            User user = null;
+            return postService.bookMarkRank(user);
+        }else {
+            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+            User user = principal.getUser();
+            return postService.bookMarkRank(user);
+        }
+    }
 }
