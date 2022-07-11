@@ -1,16 +1,20 @@
 package com.project.dogfaw.post.controller;
 
 
+import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
+import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.service.PostService;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.apache.catalina.security.SecurityUtil;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +23,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @RestController

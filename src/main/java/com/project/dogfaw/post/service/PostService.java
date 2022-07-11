@@ -18,6 +18,8 @@ import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,6 +40,8 @@ public class PostService {
     private final UserRepository userRepository;
 
     private final CommonService commonService;
+
+
 
     //전체조회
     public ArrayList<PostResponseDto> allPost(User user) {
@@ -116,6 +120,11 @@ public class PostService {
         return postList;
     }
 
+//    public Slice<PostResponseDto> allposts(int page) {
+//        PageRequest pageRequest = PageRequest.of(page,24);
+//        return postRepository.findByOrderByCreatedAtDesc(pageRequest);
+//    }
+
 
     // post 등록
     @Transactional
@@ -189,6 +198,14 @@ public class PostService {
         }
         return stackList;
     }
+
+//    @Transactional
+//    public List<PostResponseDto> bookMarkRank() {
+//        PageRequest pageRequest = PageRequest.of(0,3);
+//        return postRepository.findByOrderByBookmarkCntDesc(pageRequest);
+//    }
+
+
 }
 
     //북마크
