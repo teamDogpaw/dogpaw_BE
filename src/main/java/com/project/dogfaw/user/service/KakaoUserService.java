@@ -49,6 +49,7 @@ public class KakaoUserService {
         }
         System.out.println(4);
 
+//        return getKakaoUserInfo(accessToken);
         return kakaoUserInfo;
     }
 
@@ -130,4 +131,5 @@ public class KakaoUserService {
         userRepository.save(kakaoUser);
         System.out.println("save");
     }
+    
 }
