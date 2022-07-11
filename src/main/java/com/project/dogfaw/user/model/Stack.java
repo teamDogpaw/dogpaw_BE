@@ -1,10 +1,7 @@
 package com.project.dogfaw.user.model;
 
 import com.project.dogfaw.user.dto.StackDto;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -12,6 +9,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Builder
 @Entity
 @DynamicUpdate // null 값인 field 를 DB에서 설정된 default을 줌
