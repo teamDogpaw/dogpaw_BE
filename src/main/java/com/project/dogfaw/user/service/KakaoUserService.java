@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.dogfaw.user.dto.KakaoUserInfo;
 import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.model.UserRoleEnum;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,14 +37,20 @@ public class KakaoUserService {
     public KakaoUserInfo kakaoLogin(String code) throws JsonProcessingException {
         // "인가 코드"로 AccessToken 요청
         String accessToken = getAccessToken(code);
+        System.out.println(1);
 
         KakaoUserInfo kakaoUserInfo = getKakaoUserInfo(accessToken);
+        System.out.println(3);
 
         User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
-        if (kakaoUser == null) {
+        if  (kakaoUser == null) {
+            System.out.println("if");
             registerKakaoUser(kakaoUserInfo);
         }
-        return getKakaoUserInfo(accessToken);
+        System.out.println(4);
+
+//        return getKakaoUserInfo(accessToken);
+        return kakaoUserInfo;
     }
 
     private String getAccessToken(String code) throws JsonProcessingException {
@@ -93,6 +100,7 @@ public class KakaoUserService {
                 kakaoUserInfoRequest,
                 String.class
         );
+        System.out.println(2);
 
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -111,12 +119,17 @@ public class KakaoUserService {
         String password = UUID.randomUUID().toString();
         String encodedPassword = passwordEncoder.encode(password);
 
+        System.out.println("registerKakaoUser");
+        System.out.println(kakaoUserInfo.getKakaoMemberId());
         User kakaoUser = User.builder()
                 .kakaoId(kakaoUserInfo.getKakaoId())
                 .username(kakaoUserInfo.getKakaoMemberId())
                 .password(encodedPassword)
                 .nickname("default")
+                .role(UserRoleEnum.USER)
                 .build();
         userRepository.save(kakaoUser);
+        System.out.println("save");
     }
+    
 }
