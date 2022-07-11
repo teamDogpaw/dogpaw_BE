@@ -1,19 +1,16 @@
 package com.project.dogfaw.mypage.dto;
 
-import com.project.dogfaw.user.model.Stack;
+import com.project.dogfaw.user.dto.StackDto;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 @Getter
 public class MypageRequestDto {
-    private String nickName;
-    private List<Stack> stacks;
+    private String nickname;
+    private List<StackDto> stacks = new ArrayList<>();
 
-//    public MypageRequestDto(String nickName, List<Stack> stacks) {
-//        this.nickName = nickName;
-//        this.stacks = stacks;
-//    }
+
 }
