@@ -21,6 +21,8 @@ public interface BookMarkRepository extends JpaRepository<BookMark, Long> {
 
     List<BookMark> findAllByUser(User user);
 
+    Optional<BookMark> deleteAllByPost(Post post);
+
     BookMark getBookMarkByUserAndPost(User user, Post post);
 
 
