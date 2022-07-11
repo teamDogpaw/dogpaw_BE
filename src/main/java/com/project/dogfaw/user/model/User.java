@@ -11,7 +11,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
+//@Setter
+
+
 @Entity(name = "Users")
 @DynamicUpdate // null 값인 field를 DB에서 설정된 default을 줌
 public class User {
