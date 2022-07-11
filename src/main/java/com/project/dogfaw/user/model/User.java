@@ -36,6 +36,7 @@ public class User {
     @Column
     private String profileImg;
 
+    //S3삭제시 사용
     @JsonIgnore
     @Column
     private String Imgkey;
