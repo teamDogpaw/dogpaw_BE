@@ -12,6 +12,7 @@ import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,16 +55,16 @@ public class MypageController {
 
     //프로필 이미지를 넣지 않고 요청할 시 프론트에서 설정한 기본이미지로 바뀌어야함
     @Transactional
-    @PostMapping ("/api/user/modify")
+    @PutMapping ("/api/user/info")
     public ResponseEntity<Object> updateInfo(
-            @RequestPart(required = false) MultipartFile multipartFile,
-            @RequestPart MypageRequestDto requestDto) throws IOException {
+            @RequestPart("image") MultipartFile multipartFile,
+            @RequestPart("body") MypageRequestDto requestDto) throws IOException {
 
         User user = commonService.getUser();
         String data = null;
-        try {
+//        try {
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
-        } catch (Exception e) { return new ResponseEntity<>(new StatusResponseDto("프로필이미지가 누락되었습니다.",data), HttpStatus.BAD_REQUEST);}
+//        } catch (Exception e) { return new ResponseEntity<>(new StatusResponseDto("프로필이미지가 누락되었습니다.",data), HttpStatus.BAD_REQUEST);}
         return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",data), HttpStatus.OK);
     }
 }
