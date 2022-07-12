@@ -16,13 +16,10 @@ import com.project.dogfaw.user.repository.UserRepository;
 import com.project.dogfaw.user.service.KakaoUserService;
 import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -85,12 +82,9 @@ public class UserController {
 
     // 카카오 로그인 API
     @GetMapping("/user/kakao/login")
-    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException, URISyntaxException {
-        URI redirectUri = new URI("localhost:3000");
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setLocation(redirectUri);
+    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.SEE_OTHER);
+        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
     }
 
     // 회원 탈퇴 API
