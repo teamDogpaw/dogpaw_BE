@@ -71,14 +71,15 @@ public class UserController {
     }
 
     // 유저 정보 API
-    @GetMapping("/user/userinfo")
-    @ResponseBody
-    public UserInfo Session(){
-//    public com.project.dogfaw.user.model.User Session(){
-        User user = commonService.getUser();
-        return new UserInfo(user.getUsername(), user.getNickname(),user.getProfileImg(), user.getStacks());
-//        return user;
-    }
+//    @GetMapping("/user/userinfo")
+//    @ResponseBody
+//    public UserInfo Session(){
+////    public com.project.dogfaw.user.model.User Session(){
+//        User user = commonService.getUser();
+////        user.getUsername(), user.getNickname(),user.getProfileImg(), user.getStacks()
+//        return userService.userInfo(user);
+////        return user;
+//    }
 
     // 카카오 로그인 API
     @GetMapping("/user/kakao/login")

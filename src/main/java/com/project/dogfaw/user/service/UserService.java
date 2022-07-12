@@ -172,7 +172,6 @@ public class UserService {
 
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
-
             return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
@@ -239,4 +238,8 @@ public class UserService {
         }
         return stackList;
     }
+
+//    public UserInfo userInfo(User user) {
+//
+//    }
 }

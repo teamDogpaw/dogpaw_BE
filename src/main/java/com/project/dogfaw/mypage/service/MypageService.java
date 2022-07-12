@@ -4,17 +4,24 @@ import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
+import com.project.dogfaw.common.exception.CustomException;
+import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
+import com.project.dogfaw.user.dto.StackDto;
+import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +33,8 @@ public class MypageService {
     private final BookMarkRepository bookMarkRepository;
     private final PostStackRepository postStackRepository;
     private final UserApplicationRepository userApplicationRepository;
+
+    private final StackRepository stackRepository;
 
     private final UserRepository userRepository;
 
@@ -178,5 +187,36 @@ public class MypageService {
             postList.add(postDto);
         }
         return postList;
+    }
+
+    @Transactional
+    public void updateProfile(MypageRequestDto requestDto, User user) {
+        /*닉네임 중복검사 후 S3업로드 및 편집*/
+        String nickname = requestDto.getNickname();
+        /*현재 사용하고 있는 닉네임은 사용가능*/
+        if(!user.getNickname().equals(nickname)){
+            if (userRepository.existsByNickname(nickname)) {
+                throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
+            }
+        }
+        Long userId = user.getId();
+        user.setNickname(requestDto.getNickname());
+        stackRepository.deleteAllByUserId(userId);
+        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
+        user.updateStack(stack);
+    }
+
+    private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
+        List<Stack> stackList = new ArrayList<>();
+        for(StackDto stackdto : requestDto){
+            stackList.add(new Stack(stackdto, user));
+        }
+        return stackList;
+    }
+    @Transactional
+    //프로필 기본이미지로 변경 요청
+    public void basicImg(User user) {
+        user.setImgkey(null);
+        user.setProfileImg(null);
     }
 }

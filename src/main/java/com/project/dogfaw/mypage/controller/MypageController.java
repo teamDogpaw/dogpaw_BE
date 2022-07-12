@@ -10,6 +10,7 @@ import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,12 +57,21 @@ public class MypageController {
     public ResponseEntity<Object> updateInfo(
             @RequestPart("image") MultipartFile multipartFile,
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
-
         User user = commonService.getUser();
-        String data = null;
-//        try {
+
+        if (multipartFile.isEmpty()){
+            mypageService.updateProfile(requestDto,user);
+        }else {
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
-//        } catch (Exception e) { return new ResponseEntity<>(new StatusResponseDto("프로필이미지가 누락되었습니다.",data), HttpStatus.BAD_REQUEST);}
-        return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",data), HttpStatus.OK);
+        }
+        return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",""), HttpStatus.OK);
+    }
+
+    //유저 프로필 이미지 기본이미지로 변경 요청
+    @PutMapping ("/api/user/profile/basic")
+    public ResponseEntity<Object> updateInfo(){
+        User user = commonService.getUser();
+        mypageService.basicImg(user);
+        return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",""), HttpStatus.OK);
     }
 }
