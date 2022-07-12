@@ -4,6 +4,8 @@ import com.project.dogfaw.comment.model.Comment;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +14,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByPostId(Long postId);
 
     Optional<Comment> deleteAllByPost(Post post);
+
 
     // Comment findByPostId(Long postId);
 }

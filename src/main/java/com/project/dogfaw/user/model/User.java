@@ -47,6 +47,9 @@ public class User {
 //    @Column
 //    private String googleId;
 
+//    @Column
+//    private String googleId;
+
     @OneToMany
     @JoinColumn(name = "stack_id")
     private List<Stack> stacks = new ArrayList<>();

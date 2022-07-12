@@ -19,6 +19,7 @@ public class RefreshToken {
     public RefreshToken(String refreshKey, String refreshValue) {
         this.refreshKey = refreshKey;
         this.refreshValue = refreshValue;
+        
     }
 
     public RefreshToken updateValue(String token) {
