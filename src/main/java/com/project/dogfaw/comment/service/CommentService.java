@@ -32,8 +32,8 @@ public class CommentService {
                 .orElseThrow(RuntimeException::new);
         String profileImg = user.getProfileImg();
         String nickname = user.getNickname();
-        String comment = requestDto.getComment();
-        Comment cmt = new Comment(comment, nickname, profileImg, user, post);
+        String content = requestDto.getContent();
+        Comment cmt = new Comment(content, nickname, profileImg, user, post);
         post.increaseCmCount();
 
         commentRepository.save(cmt);
@@ -82,11 +82,11 @@ public class CommentService {
         // comment내의 memberid와 로그인한 member아이디 일치하는지 확인
         Long writerId = comment.getUser().getId();
         Long userId = user.getId();
-        String cmt = requestDto.getComment();
+        String cmt = requestDto.getContent();
         if (!writerId.equals(userId)) {
             return false;
         } else {
-            comment.setComment(cmt);
+            comment.setContent(cmt);
             commentRepository.save(comment);
         }
         return true;
