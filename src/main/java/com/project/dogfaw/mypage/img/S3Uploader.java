@@ -12,7 +12,6 @@ import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,41 +41,51 @@ public class S3Uploader {
     }
 
     public String upload(File uploadFile, String filePath, MypageRequestDto requestDto, User user) {
+        /*닉네임 중복검사 후 S3업로드 및 편집*/
+        String nickname = requestDto.getNickname();
+        /*현재 사용하고 있는 닉네임은 사용가능*/
+        if(!user.getNickname().equals(nickname)){
+            if (userRepository.existsByNickname(nickname)) {
+                throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
+            }
+        }
+
+        if(user.getProfileImg()!=null) {
+            String imgKey = user.getImgkey();
+            amazonS3Client.deleteObject(bucket,imgKey);
+        }
         String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
+        String imgKey = fileName; //http경로 없는 fileName 따로저장(이유: getURL에서 한글이름 파일 깨짐=삭제불가)
         removeNewFile(uploadFile);
 
-//
 
-
-        return updateUser(uploadImageUrl,requestDto,user);
+        return updateUser(uploadImageUrl,imgKey,requestDto,user);
     }
 
     /*유저정보 업데이트(프로필추가 및 닉네임 편집)*/
-
     @Transactional
-    public String updateUser(String uploadImageUrl, MypageRequestDto requestDto, User user) {
-        /*닉네임 중복검사 후 편집*/
-        String nickname = requestDto.getNickname();
-        Long userId = user.getId();
-        if (userRepository.existsByNickname(nickname)) {
-            throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
-        } else {
+    public String updateUser(String uploadImageUrl,String imgKey, MypageRequestDto requestDto, User user) {
 
+//        if (userRepository.existsByNickname(nickname)) {
+//            throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
+//        }
+            Long userId = user.getId();
             user.setNickname(requestDto.getNickname());
-//            user.setStacks(requestDto.getStacks());
             user.setProfileImg(uploadImageUrl);
+            user.setImgkey(imgKey);
             stackRepository.deleteAllByUserId(userId);
             List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
             user.updateStack(stack);
-//            userRepository.save(user);
             return uploadImageUrl;
             
         }
-    }
+
 
     // S3로 업로드
+    //유저의 기존 프로필 이미지 S3에서 삭제 후 업로드
     private String putS3(File uploadFile, String fileName) {
+
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
