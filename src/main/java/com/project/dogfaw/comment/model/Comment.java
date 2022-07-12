@@ -34,7 +34,7 @@ public class Comment extends Timestamped {
     private String profileImg;
 
     // FK로 USER_ID 들어옴.
-    @ManyToOne //ID 유저네임? 그 이아디?
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
