@@ -5,6 +5,7 @@ import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 
+import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
@@ -38,6 +39,8 @@ public class PostService {
     private final BookMarkRepository bookMarkRepository;
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
+
+    private final CommentRepository commentRepository;
 
     private final CommonService commonService;
 
@@ -180,6 +183,7 @@ public class PostService {
     }
 
     //게시글 삭제
+    @Transactional
     public void deletePost(Long postId, String username) {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
@@ -187,6 +191,9 @@ public class PostService {
         if (!Objects.equals(username, post.getUser().getUsername())){
             throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
         }
+        userApplicationRepository.deleteAllByPost(post);
+        bookMarkRepository.deleteAllByPost(post);
+        commentRepository.deleteAllByPost(post);
         postRepository.deleteById(postId);
     }
 

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 
 @Getter
@@ -12,7 +14,7 @@ import java.time.LocalDateTime;
 public class CommentResponseDto {
 
     private Long commentId;
-    private String comment;
+    private String content;
     private String modifiedAt;
     private Long userId;
     private String nickname;
@@ -20,7 +22,7 @@ public class CommentResponseDto {
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
-        this.comment = comment.getComment();
+        this.content = comment.getContent();
         this.userId = comment.getUser().getId();
         this.nickname = comment.getUser().getNickname();
         this.profileImg = comment.getUser().getProfileImg();

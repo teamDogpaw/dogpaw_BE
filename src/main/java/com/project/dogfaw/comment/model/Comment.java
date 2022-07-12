@@ -7,9 +7,13 @@ import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@RestController
 @NoArgsConstructor
 @Getter
 @Setter
@@ -21,7 +25,7 @@ public class Comment extends Timestamped {
     private Long id;
 
     @Column(nullable = false)
-    private String comment;
+    private String content;
 
     @Column(nullable = false)
     private String nickname;
@@ -29,7 +33,7 @@ public class Comment extends Timestamped {
     @Column
     private String profileImg;
 
-    // FK로 MEMBER_ID 들어옴.
+    // FK로 USER_ID 들어옴.
     @ManyToOne //ID 유저네임? 그 이아디?
     @JoinColumn(name = "USER_ID")
     private User user;
@@ -40,8 +44,9 @@ public class Comment extends Timestamped {
     private Post post;
 
 
-    public Comment(String comment, String nickname, String profileImg, User user, Post post) {
-        this.comment = comment;
+
+    public Comment(String content, String nickname, String profileImg, User user, Post post) {
+        this.content = content;
         this.nickname = nickname;
         this.profileImg = profileImg;
         this.user = user;
@@ -50,7 +55,7 @@ public class Comment extends Timestamped {
 
     //코멘트 수정
     public void updateComment(CommentPutDto requestDto) {
-        this.comment = requestDto.getComment();
+        this.content = requestDto.getContent();
 
     }
 }

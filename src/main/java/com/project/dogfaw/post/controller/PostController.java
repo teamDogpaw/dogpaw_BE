@@ -111,6 +111,6 @@ public class PostController {
         String username = principal.getUser().getUsername();
         postService.deletePost(postId, username);
         String data = null;
-        return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",data),HttpStatus.OK);
+        return new ResponseEntity(new StatusResponseDto("게시글 삭제가 완료되었습니다",data),HttpStatus.OK);
     }
 }

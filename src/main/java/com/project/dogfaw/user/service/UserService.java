@@ -169,8 +169,10 @@ public class UserService {
 //                    .kakaoId(kakaoId)
 //                    .build();
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
+
             return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
@@ -217,6 +219,7 @@ public class UserService {
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
 
         user.updateStack(stack);
+
     }
 
 

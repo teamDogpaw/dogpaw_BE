@@ -7,12 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserApplicationRepository extends JpaRepository<UserApplication,Long> {
 
     boolean existsByUserAndPost(User user, Post post);
 
+    Optional<UserApplication> deleteAllByPost(Post post);
 
     UserApplication getUserApplicationByUserAndPost(User user, Post post);
 
