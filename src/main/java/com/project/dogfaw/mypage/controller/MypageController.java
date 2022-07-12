@@ -12,6 +12,7 @@ import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,8 +57,8 @@ public class MypageController {
     @Transactional
     @PutMapping ("/api/user/info")
     public ResponseEntity<Object> updateInfo(
-            @RequestPart(required = false) MultipartFile multipartFile,
-            @RequestPart MypageRequestDto requestDto) throws IOException {
+            @RequestPart("image") MultipartFile multipartFile,
+            @RequestPart("body") MypageRequestDto requestDto) throws IOException {
 
         User user = commonService.getUser();
         String data = null;
