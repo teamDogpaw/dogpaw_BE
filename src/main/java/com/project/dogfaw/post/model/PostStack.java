@@ -1,8 +1,6 @@
 package com.project.dogfaw.post.model;
 
 import com.project.dogfaw.user.dto.StackDto;
-import com.project.dogfaw.user.model.Stack;
-import com.project.dogfaw.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,8 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 
 @AllArgsConstructor

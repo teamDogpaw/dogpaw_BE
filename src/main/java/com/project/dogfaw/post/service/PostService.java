@@ -154,6 +154,16 @@ public class PostService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
         );
+
+//        String checkName = user.getUsername();
+//        String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
+//
+//        if(checkName.equals(nickname)){
+//            //같은경우 = 작성자가 맞음 = enum을 writer로
+//        } else {
+//            //작성자가 아님 = enum을 member로
+//        }
+
         Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
         Boolean applyStatus = userApplicationRepository.existsByUserAndPost(user,post);
 
