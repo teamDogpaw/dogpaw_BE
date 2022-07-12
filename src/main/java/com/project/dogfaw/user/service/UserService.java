@@ -238,4 +238,8 @@ public class UserService {
         }
         return stackList;
     }
+
+//    public UserInfo userInfo(User user) {
+//
+//    }
 }
