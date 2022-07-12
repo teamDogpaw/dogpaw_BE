@@ -7,11 +7,12 @@ import com.project.dogfaw.common.exception.ExceptionResponse;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
-import com.project.dogfaw.user.dto.*;
-//import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.dto.KakaoUserInfo;
+import com.project.dogfaw.user.dto.LoginDto;
+import com.project.dogfaw.user.dto.SignupRequestDto;
+import com.project.dogfaw.user.dto.UserInfo;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
-//import com.project.dogfaw.user.service.GoogleUserService;
 import com.project.dogfaw.user.service.KakaoUserService;
 import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +94,6 @@ public class UserController {
         return new ResponseEntity<>(new StatusResponseDto("회원 탈퇴 성공", ""), HttpStatus.OK);
     }
 
-
     // 구글 로그인 API
 //    @GetMapping("/user/google/login")
 //    public ResponseEntity<Object> googleLogin(@RequestParam String code) throws JsonProcessingException {
@@ -104,7 +104,8 @@ public class UserController {
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
     public ResponseEntity<Object> addInfo(@RequestBody SignupRequestDto requestDto) {
-        TokenDto tokenDto = userService.addInfo(requestDto);
-        return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공", tokenDto), HttpStatus.CREATED);
+        User user = commonService.getUser();
+        userService.addInfo(requestDto,user);
+        return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
 }

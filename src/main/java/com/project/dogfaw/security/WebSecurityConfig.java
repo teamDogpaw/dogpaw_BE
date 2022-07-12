@@ -72,9 +72,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         UsernamePasswordAuthenticationFilter.class);
     }
 
-    //"http://localhost:3000","http://localhost:8080"
-    //"https://amplify.d3ifjxscizr42x.amplifyapp.com",
-    //"https://everymohum.shop","https://everymohum.com"
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
