@@ -52,6 +52,20 @@ public class PostController {
         }
     }
 
+    // 북마크 랭킹 조회
+    @GetMapping("/api/bookMark/rank")
+    public ArrayList<PostResponseDto> bookMarkRank(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getDetails() != null){
+            User user = null;
+            return postService.bookMarkRank(user);
+        }else {
+            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+            User user = principal.getUser();
+            return postService.bookMarkRank(user);
+        }
+    }
+
     @GetMapping("/api/allposts")
     public Slice<PostResponseDto> allposts(HttpServletRequest httpServletRequest){
         int page = Integer.parseInt(httpServletRequest.getParameter("page"));
@@ -98,18 +112,5 @@ public class PostController {
         postService.deletePost(postId, username);
         String data = null;
         return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",data),HttpStatus.OK);
-    }
-
-    @GetMapping("/api/bookmark/rank")
-    public List<BookmarkRankResponseDto> bookMarkRank(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication.getDetails() != null){
-            User user = null;
-            return postService.bookMarkRank(user);
-        }else {
-            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-            User user = principal.getUser();
-            return postService.bookMarkRank(user);
-        }
     }
 }

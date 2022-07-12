@@ -36,14 +36,10 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostStackRepository postStackRepository;
     private final BookMarkRepository bookMarkRepository;
-
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
 
     private final CommonService commonService;
-
-
-
 
     //전체조회
     public ArrayList<PostResponseDto> allPost(User user) {
@@ -202,38 +198,63 @@ public class PostService {
         return stackList;
     }
 
-    //북마크 랭킹
-//    @Transactional
-//    public List<Post> bookMarkRank() {
-//        PageRequest pageRequest = PageRequest.of(0,3);
-//        return postRepository.findByOrderByBookmarkCntDesc(pageRequest);
-//    }
-//}
 
-    @Transactional
-    public List<BookmarkRankResponseDto> bookMarkRank(User user) {
+
+    //북마크 랭킹
+    public ArrayList<PostResponseDto> bookMarkRank(User user) {
         PageRequest pageRequest = PageRequest.of(0, 3);
-        List<BookmarkRankResponseDto> bookmarkRank = new ArrayList<>();
+
+        List<Post> posts = postRepository.findByOrderByBookmarkCntDesc(pageRequest);
+        ArrayList<PostResponseDto> postList = new ArrayList<>();
+
+        Boolean bookMarkStatus = false;
 
         if(user == null){
-            return postRepository.findByOrderByBookmarkCntDesc(pageRequest);
-        }else{
-            List<BookmarkRankResponseDto> bookmarkRankResponseDtos =
-                    postRepository.findByOrderByBookmarkCntDesc(pageRequest);
-            for (BookmarkRankResponseDto bookmarkRankResponseDto : bookmarkRankResponseDtos) {
-                if (bookMarkRepository.findByUserIdAndPostId(user.getId(), bookmarkRankResponseDto.getPostId())) {
-                    bookmarkRankResponseDto.setBookMarkStatus(true);
-                    bookmarkRank.add(bookmarkRankResponseDto);
-                } else {
-                    bookmarkRank.add(bookmarkRankResponseDto);
+            for(Post post:posts){
+                Long postId = post.getId();
+                User writer = post.getUser();
+                //다솔다솔이(민지민지) 추가한 부분
+                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                List<String> stringPostStacks = new ArrayList<>();
+                for(PostStack postStack : postStacks){
+                    stringPostStacks.add(postStack.getStack());
                 }
+                PostResponseDto postDto = new PostResponseDto(post,stringPostStacks, bookMarkStatus, writer);
+                postList.add(postDto);
             }
-            return bookmarkRank;
+        }else {
+            List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
+            ArrayList<Post> userPostings = new ArrayList<>();
+            for (BookMark userPost : userPosts) {
+                Post userPosting = userPost.getPost();
+                userPostings.add(userPosting);
+            }
+
+            for (Post post : posts) {
+                Long postId = post.getId();
+                User writer = post.getUser();
+                for (Post userPost : userPostings) {
+                    Long userPostId = userPost.getId();
+
+                    if (postId.equals(userPostId)) {
+                        bookMarkStatus = true;
+                        break;
+                    } else {
+                        bookMarkStatus = false;
+                    }
+                }
+                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                List<String> stringPostStacks = new ArrayList<>();
+                for(PostStack postStack : postStacks){
+                    stringPostStacks.add(postStack.getStack());
+                }
+                PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                postList.add(postDto);
+            }
         }
+        return postList;
     }
 }
-
-    //북마크
 
     //댓글
 

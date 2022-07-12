@@ -164,11 +164,12 @@ public class UserService {
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (loginUser.getNickname().equals("default")) {
-            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
-                    .userId(loginUser.getId())
-                    .kakaoId(kakaoId)
-                    .build();
-            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", kakaoUserInfo);
+//            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
+//                    .userId(loginUser.getId())
+//                    .kakaoId(kakaoId)
+//                    .build();
+            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
             return new StatusResponseDto("로그인 성공", tokenDto);

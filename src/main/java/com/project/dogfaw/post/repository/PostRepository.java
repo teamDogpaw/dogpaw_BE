@@ -20,7 +20,10 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     List<Post> findByUser(User user);
 
-    List<BookmarkRankResponseDto> findByOrderByBookmarkCntDesc(PageRequest pageRequest);
+//    List<BookmarkRankResponseDto> findByOrderByBookmarkCntDesc(PageRequest pageRequest);
+
+    List<Post> findByOrderByBookmarkCntDesc(PageRequest pageRequest);
+
 
 
 
