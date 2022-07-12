@@ -54,7 +54,7 @@ public class MypageController {
 
     //프로필 이미지를 넣지 않고 요청할 시 프론트에서 설정한 기본이미지로 바뀌어야함
     @Transactional
-    @PostMapping ("/api/user/modify")
+    @PutMapping ("/api/user/info")
     public ResponseEntity<Object> updateInfo(
             @RequestPart(required = false) MultipartFile multipartFile,
             @RequestPart MypageRequestDto requestDto) throws IOException {
