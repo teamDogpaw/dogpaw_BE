@@ -131,5 +131,4 @@ public class KakaoUserService {
         userRepository.save(kakaoUser);
         System.out.println("save");
     }
-    
 }
