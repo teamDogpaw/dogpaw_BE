@@ -2,8 +2,6 @@ package com.project.dogfaw.mypage.controller;
 
 
 import com.project.dogfaw.common.CommonService;
-import com.project.dogfaw.common.exception.CustomException;
-import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;

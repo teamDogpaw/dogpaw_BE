@@ -9,5 +9,5 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class CommentPutDto {
-    private String comment;
+    private String content;
 }

@@ -13,7 +13,4 @@ public class SignupRequestDto {
     private String password;
     private String nickname;
     private List<StackDto> stacks = new ArrayList<>();
-
-    
-
 }
