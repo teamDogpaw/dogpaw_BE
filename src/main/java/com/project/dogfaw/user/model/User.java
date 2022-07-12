@@ -16,7 +16,7 @@ import java.util.List;
 @Entity(name = "Users")
 @DynamicUpdate // null 값인 field를 DB에서 설정된 default을 줌
 public class User {
-
+ 
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
