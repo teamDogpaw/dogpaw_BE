@@ -2,8 +2,6 @@ package com.project.dogfaw.mypage.controller;
 
 
 import com.project.dogfaw.common.CommonService;
-import com.project.dogfaw.common.exception.CustomException;
-import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
@@ -12,7 +10,6 @@ import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
