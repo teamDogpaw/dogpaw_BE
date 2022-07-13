@@ -7,6 +7,7 @@ import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 
 import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.CommonService;
+import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 
 import com.project.dogfaw.post.dto.PostRequestDto;
@@ -19,6 +20,8 @@ import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -34,7 +37,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final PostStackRepository postStackRepository;
     private final BookMarkRepository bookMarkRepository;
-
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
 
@@ -119,6 +121,12 @@ public class PostService {
         return postList;
     }
 
+    // 전체조회 무한스크롤
+    public Slice<PostResponseDto> allposts(int page) {
+        PageRequest pageRequest = PageRequest.of(page,24);
+        return postRepository.findByOrderByCreatedAtDesc(pageRequest);
+    }
+
 
     // post 등록
     @Transactional
@@ -146,6 +154,16 @@ public class PostService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
         );
+
+//        String checkName = user.getUsername();
+//        String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
+//
+//        if(checkName.equals(nickname)){
+//            //같은경우 = 작성자가 맞음 = enum을 writer로
+//        } else {
+//            //작성자가 아님 = enum을 member로
+//        }
+
         Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
         Boolean applyStatus = userApplicationRepository.existsByUserAndPost(user,post);
 
@@ -196,9 +214,64 @@ public class PostService {
         }
         return stackList;
     }
-}
 
-    //북마크
+
+
+    //북마크 랭킹
+    public ArrayList<PostResponseDto> bookMarkRank(User user) {
+        PageRequest pageRequest = PageRequest.of(0, 3);
+
+        List<Post> posts = postRepository.findByOrderByBookmarkCntDesc(pageRequest);
+        ArrayList<PostResponseDto> postList = new ArrayList<>();
+
+        Boolean bookMarkStatus = false;
+
+        if(user == null){
+            for(Post post:posts){
+                Long postId = post.getId();
+                User writer = post.getUser();
+                //다솔다솔이(민지민지) 추가한 부분
+                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                List<String> stringPostStacks = new ArrayList<>();
+                for(PostStack postStack : postStacks){
+                    stringPostStacks.add(postStack.getStack());
+                }
+                PostResponseDto postDto = new PostResponseDto(post,stringPostStacks, bookMarkStatus, writer);
+                postList.add(postDto);
+            }
+        }else {
+            List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
+            ArrayList<Post> userPostings = new ArrayList<>();
+            for (BookMark userPost : userPosts) {
+                Post userPosting = userPost.getPost();
+                userPostings.add(userPosting);
+            }
+
+            for (Post post : posts) {
+                Long postId = post.getId();
+                User writer = post.getUser();
+                for (Post userPost : userPostings) {
+                    Long userPostId = userPost.getId();
+
+                    if (postId.equals(userPostId)) {
+                        bookMarkStatus = true;
+                        break;
+                    } else {
+                        bookMarkStatus = false;
+                    }
+                }
+                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                List<String> stringPostStacks = new ArrayList<>();
+                for(PostStack postStack : postStacks){
+                    stringPostStacks.add(postStack.getStack());
+                }
+                PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                postList.add(postDto);
+            }
+        }
+        return postList;
+    }
+}
 
     //댓글
 
