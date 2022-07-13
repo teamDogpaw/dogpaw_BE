@@ -91,6 +91,8 @@ public enum ErrorCode {
 
     //mypage
     MYPAGE_INQUIRY_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "모집글 작성자만 조회가 가능합니다"),
+    MYPAGE_REJECTION_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "신청 거절은 작성자만 가능합니다"),
+    MYPAGE_ACCEPTANCE_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "신청 수락은 작성자만 가능합니다"),
 
     // mail
     EMAIL_WRONG_PATTERN(HttpStatus.BAD_REQUEST, "400", "이메일 형식을 맞춰주세요"),

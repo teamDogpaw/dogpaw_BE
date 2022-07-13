@@ -18,7 +18,7 @@ public class AcceptanceController {
     private final AcceptanceService acceptanceService;
     private final CommonService commonService;
 
-   /* 참여신청수락(작성자만)*/
+    /* 참여신청수락(작성자만)*/
     @PostMapping("/api/applicant/{userId}/acceptance/{postId}")
     public ResponseEntity<Object> acceptance(@PathVariable Long userId, @PathVariable Long postId){
         User user = commonService.getUser();
@@ -26,7 +26,7 @@ public class AcceptanceController {
         return new ResponseEntity(new StatusResponseDto("수락이완료되었습니다",""), HttpStatus.OK);
     }
 
-    
+
     /*참여신청거절(작성자만)*/
     @DeleteMapping("/api/applicant/{userId}/rejection/{postId}")
     public ResponseEntity<Object> rejection(@PathVariable Long userId, @PathVariable Long postId){
