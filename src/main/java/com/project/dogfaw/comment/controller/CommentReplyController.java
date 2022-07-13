@@ -41,7 +41,7 @@ public class CommentReplyController {
     }
 
     //대댓글수정
-    @PutMapping("/api/comments/{CommentId}/{commentReplyId}")
+    @PutMapping("/api/comments/{commentId}/{commentReplyId}")
     public Boolean updateCommentReply(@PathVariable Long commentReplyId, @RequestBody CmtReplyPutDto requestDto) {
         User user = commonService.getUser();
 
@@ -49,14 +49,11 @@ public class CommentReplyController {
     }
 
 
-
-
-
     //대댓글삭제
-    @DeleteMapping("/api/comments/{CommentId}/{commentReplyId}")
-    public Boolean deleteCommentReply(@PathVariable Long CommentId, @PathVariable Long commentReplyId) {
+    @DeleteMapping("/api/comments/{commentId}/{commentReplyId}")
+    public Boolean deleteCommentReply(@PathVariable Long commentId, @PathVariable Long commentReplyId) {
         User user = commonService.getUser();
 
-        return commentReplyService.deleteCommentReply(commentReplyId, user, CommentId);
+        return commentReplyService.deleteCommentReply(commentReplyId, user, commentId);
     }
 }

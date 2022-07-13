@@ -62,10 +62,10 @@ public class CommentReplyService {
     }
 
         //댓글삭제
-        public Boolean deleteCommentReply(Long commentReplyId, User user, Long CommentId) {
+        public Boolean deleteCommentReply(Long commentReplyId, User user, Long commentId) {
             CommentReply commentReply = commentReplyRepository.findById(commentReplyId).orElseThrow(() -> new IllegalArgumentException("존재하지않는 댓글입니다")
             );
-            Comment comment = commentRepository.findById(CommentId).orElseThrow(RuntimeException::new);
+            Comment comment = commentRepository.findById(commentId).orElseThrow(RuntimeException::new);
             Long writerId = commentReply.getUser().getId();
             Long userId = user.getId();
             if (!writerId.equals(userId)) {
