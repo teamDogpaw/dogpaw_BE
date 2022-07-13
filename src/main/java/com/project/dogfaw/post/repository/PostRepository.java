@@ -14,6 +14,8 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 //    List<Post> findAllByOrderByModifiedAtDesc();
     List<Post> findAllByOrderByCreatedAtDesc();
 
+    Slice<Post> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
+
     Slice<PostResponseDto> findByOrderByCreatedAtDesc(PageRequest pageRequest);
 
     List<Post> findTop20ByOrderByModifiedAtDesc();
