@@ -1,4 +1,4 @@
-package com.project.dogfaw.mypage.img;
+package com.project.dogfaw.mypage.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;

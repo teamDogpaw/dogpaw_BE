@@ -95,7 +95,52 @@ public class PostService {
                     //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
                     //객체 안의 특정 타입 id, nickname 등으로 비교하여 문제 해결
                     // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
-                    if (postId.equals(userPostId)) {
+                    if (postId.equals(userPostId))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    {
                         bookMarkStatus = true;
                         break; //true일 경우 탈출
                     } else {

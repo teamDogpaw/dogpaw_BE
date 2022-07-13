@@ -43,7 +43,7 @@ public class User {
 
     @OneToMany
     @JoinColumn(name = "stack_id")
-    private List<Stack> stacks = new ArrayList<>();
+    private List<Stack> stacks;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

@@ -6,6 +6,7 @@ import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.mypage.dto.AllApplicantsDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
@@ -218,5 +219,26 @@ public class MypageService {
     public void basicImg(User user) {
         user.setImgkey(null);
         user.setProfileImg(null);
+    }
+    @Transactional
+    //지원자 전체조회(작성자만)
+    public ArrayList<AllApplicantsDto> allApplicants(Long postId, User user) {
+        //모집글 존재여부 확인
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+        Long writer = post.getUser().getId();
+        //작성자 일치 확인
+        if(!writer.equals(user.getId())){
+            throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
+        }
+        //해당 게시글의 참여신청을 정보를 다 가져오고 해당 유저 정보를 뽑아와 dto에 담아 리스트로 반환
+        List<UserApplication> applicants = userApplicationRepository.findAllByPost(post);
+        ArrayList<AllApplicantsDto> users = new ArrayList<>();
+        for(UserApplication applicant:applicants){
+            User applier = applicant.getUser();
+            AllApplicantsDto allApplicantsDto =new AllApplicantsDto(applier);
+            users.add(allApplicantsDto);
+        }
+        return users;
     }
 }
