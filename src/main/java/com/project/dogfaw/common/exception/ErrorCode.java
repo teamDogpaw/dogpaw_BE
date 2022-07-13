@@ -89,6 +89,9 @@ public enum ErrorCode {
 
     NO_DIFFERENCE_STATUS(HttpStatus.FORBIDDEN,"403", "Status 변경 사항이 없습니다"),
 
+    //mypage
+    MYPAGE_INQUIRY_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "모집글 작성자만 조회가 가능합니다"),
+
     // mail
     EMAIL_WRONG_PATTERN(HttpStatus.BAD_REQUEST, "400", "이메일 형식을 맞춰주세요"),
 

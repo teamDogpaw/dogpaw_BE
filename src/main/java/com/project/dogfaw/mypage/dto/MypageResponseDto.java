@@ -48,4 +48,6 @@ public class MypageResponseDto {
         this.commentCnt = post.getCommentCnt();
 
     }
+
+
 }
