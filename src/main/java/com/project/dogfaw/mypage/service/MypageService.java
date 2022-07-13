@@ -1,5 +1,7 @@
 package com.project.dogfaw.mypage.service;
 
+import com.project.dogfaw.acceptance.Acceptance;
+import com.project.dogfaw.acceptance.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
@@ -34,9 +36,8 @@ public class MypageService {
     private final BookMarkRepository bookMarkRepository;
     private final PostStackRepository postStackRepository;
     private final UserApplicationRepository userApplicationRepository;
-
+    private final AcceptanceRepository acceptanceRepository;
     private final StackRepository stackRepository;
-
     private final UserRepository userRepository;
 
     /*내가 북마크한 글 조회*/
@@ -62,7 +63,6 @@ public class MypageService {
             Long postId = post.getId();
             User writer = post.getUser();
 
-            //다솔다솔이(민지민지) 추가한 부분
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
             for(PostStack postStack : postStacks){
@@ -77,10 +77,8 @@ public class MypageService {
         return postList;
     }
 
-    /*내가 작성한 글 조회(완성)*/
+    /*내가 작성한 글 조회*/
     public ArrayList<PostResponseDto> myPost(User user) {
-
-
 
         //유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
         List<Post> posts = postRepository.findByUser(user);
@@ -93,8 +91,7 @@ public class MypageService {
         ArrayList<PostResponseDto> postList = new ArrayList<>();
 
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
-        Boolean bookMarkStatus = null ;
-
+        Boolean bookMarkStatus = false ;
 
         //로그인한 유저가 북마크한 게시글들을 ArrayList에 담아줌
         for (BookMark userPost:userPosts){
@@ -117,13 +114,11 @@ public class MypageService {
                     bookMarkStatus = false;
                 }
             }
-            //다솔다솔이(민지민지) 추가한 부분 - StackList
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
             for(PostStack postStack : postStacks){
                 stringPostStacks.add(postStack.getStack());
             }
-            //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
             PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
@@ -131,7 +126,7 @@ public class MypageService {
         return postList;
     }
 
-    /*내가 참여신청한 프로젝트 조회(완성)*/
+    /*내가 참여신청한 프로젝트 조회*/
     public ArrayList<PostResponseDto> myApply(User user) {
 
         //유저가 참여신청한 것을 리스트로 모두 불러옴
@@ -147,7 +142,7 @@ public class MypageService {
         ArrayList<PostResponseDto> postList = new ArrayList<>();
 
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
-        Boolean bookMarkStatus = null ;
+        Boolean bookMarkStatus = false;
 
         //로그인한 유저가 참여신청한 게시글들을 ArrayList에 담아줌
         for (UserApplication userPost: userApply){
@@ -167,8 +162,6 @@ public class MypageService {
             User writer = post.getUser();
             for (Post userPost: userPostings ) {
                 Long userPostId = userPost.getId();
-                //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
-                // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
                 if (postId.equals(userPostId)) {
                     bookMarkStatus = true;
                     break; //true일 경우 탈출
@@ -176,13 +169,11 @@ public class MypageService {
                     bookMarkStatus = false;
                 }
             }
-            //다솔다솔이(민지민지) 추가한 부분 - StackList
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
             for(PostStack postStack : postStacks){
                 stringPostStacks.add(postStack.getStack());
             }
-            //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
             PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
@@ -190,38 +181,56 @@ public class MypageService {
         return postList;
     }
 
-    @Transactional
-    public void updateProfile(MypageRequestDto requestDto, User user) {
-        /*닉네임 중복검사 후 S3업로드 및 편집*/
-        String nickname = requestDto.getNickname();
-        /*현재 사용하고 있는 닉네임은 사용가능*/
-        if(!user.getNickname().equals(nickname)){
-            if (userRepository.existsByNickname(nickname)) {
-                throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
-            }
+    /*참여수락된프로젝트조회*/
+    public ArrayList<PostResponseDto> participation(User user) {
+        //해당 유저의 참여완료된(수락된) 리스트
+        List<Acceptance> acceptances = acceptanceRepository.findAllByUser(user);
+        //해당 유저의 북마크 리스트
+        List<BookMark> bookMarks = bookMarkRepository.findAllByUser(user);
+        //게시물 객체를 담아줄 ArrayList 생성
+        ArrayList<Post> acceptedList = new ArrayList<>();
+        ArrayList<Post> bookMarkedList = new ArrayList<>();
+        //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
+        ArrayList<PostResponseDto> postList = new ArrayList<>();
+
+        Boolean bookMarkStatus = false;
+
+        //해당 유저의 참여완료된 모집글 객체를 하나씩 ArrayList에 담아줌
+        for(Acceptance acceptance:acceptances){
+            Post post = acceptance.getPost();
+            acceptedList.add(post);
         }
-        Long userId = user.getId();
-        user.setNickname(requestDto.getNickname());
-        stackRepository.deleteAllByUserId(userId);
-        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
-        user.updateStack(stack);
+        //해당 유저가 북마크한 모집글 객체를 하나씩 ArrayList에 담아줌
+        for(BookMark bookMark:bookMarks){
+            Post post = bookMark.getPost();
+            bookMarkedList.add(post);
+        }
+        for(Post accepted : acceptedList){
+            Long acceptedId = accepted.getId();
+            User writer = accepted.getUser();
+            for(Post bookMarked:bookMarkedList){
+                Long bookMarkedId = bookMarked.getId();
+
+                if (acceptedId.equals(bookMarkedId)){
+                    bookMarkStatus = true;
+                    break;
+                }else {
+                    bookMarkStatus = false;
+                }
+            }
+            List<PostStack> postStacks = postStackRepository.findByPostId(acceptedId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+            PostResponseDto postDto = new PostResponseDto(accepted, stringPostStacks, bookMarkStatus, writer);
+            postList.add(postDto);
+        }
+        return postList;
     }
 
-    private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
-        List<Stack> stackList = new ArrayList<>();
-        for(StackDto stackdto : requestDto){
-            stackList.add(new Stack(stackdto, user));
-        }
-        return stackList;
-    }
     @Transactional
-    //프로필 기본이미지로 변경 요청
-    public void basicImg(User user) {
-        user.setImgkey(null);
-        user.setProfileImg(null);
-    }
-    @Transactional
-    //지원자 전체조회(작성자만)
+    /*지원자 전체조회(작성자만)*/
     public ArrayList<AllApplicantsDto> allApplicants(Long postId, User user) {
         //모집글 존재여부 확인
         Post post = postRepository.findById(postId)
@@ -247,5 +256,40 @@ public class MypageService {
         }
         return users;
     }
+
+    /*이미지업로드 없이 나머지 유저정보만 편집할때*/
+    @Transactional
+    public void updateProfile(MypageRequestDto requestDto, User user) {
+        //*닉네임 중복검사 후 S3업로드 및 편집
+        String nickname = requestDto.getNickname();
+        //현재 사용하고 있는 닉네임은 사용가능
+        if(!user.getNickname().equals(nickname)){
+            if (userRepository.existsByNickname(nickname)) {
+                throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
+            }
+        }
+        Long userId = user.getId();
+        user.setNickname(requestDto.getNickname());
+        stackRepository.deleteAllByUserId(userId);
+        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
+        user.updateStack(stack);
+    }
+
+    @Transactional
+    /*프로필 기본이미지로 변경 요청*/
+    public void basicImg(User user) {
+        user.setImgkey(null);
+        user.setProfileImg(null);
+    }
+
+    /*List<String> 형태로 변환*/
+    private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
+        List<Stack> stackList = new ArrayList<>();
+        for(StackDto stackdto : requestDto){
+            stackList.add(new Stack(stackdto, user));
+        }
+        return stackList;
+    }
+
 
 }
