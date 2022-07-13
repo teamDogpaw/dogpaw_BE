@@ -7,7 +7,6 @@ import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 
 import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.CommonService;
-import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 
 import com.project.dogfaw.post.dto.PostRequestDto;
@@ -26,9 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,13 +36,13 @@ public class PostService {
     private final BookMarkRepository bookMarkRepository;
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
-
     private final CommentRepository commentRepository;
 
     private final CommonService commonService;
 
     //전체조회
-    public ArrayList<PostResponseDto> allPost(User user) {
+    public Map<String, Object> allPost(User user, long page) {
+        PageRequest pageRequest = PageRequest.of((int) page,24);
         //BookmarkStatus를 true || false를 담아주기 위해 for문을 두번 돌리기 때문에
         //모든 게시글을 다 찾아와서 for문을 돌렸을 때 서버 부하가 어느정도 올지 모르겠음(만약 게시글이 많을 경우)
         //게시글이 많을 경우 이중 for문때문에 부하가 상당할 것으로 예상이 되므로 메인페이지에서 최신 게시글 Top20정도만
@@ -55,7 +52,8 @@ public class PostService {
         //List<Post> posts = postRepository.findTop20ByOrderByModifiedAtDesc();
 
         //모든 게시글 내림차순으로(startAt으로 변경 필요)
-        List<Post> posts = postRepository.findAllByOrderByCreatedAtDesc();
+        Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageRequest);
+
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
         ArrayList<PostResponseDto> postList = new ArrayList<>();
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
@@ -73,7 +71,7 @@ public class PostService {
                     stringPostStacks.add(postStack.getStack());
                 }
                 //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-                PostResponseDto postDto = new PostResponseDto(post,stringPostStacks, bookMarkStatus, writer);
+                PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
                 //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
                 postList.add(postDto);
             }
@@ -115,18 +113,13 @@ public class PostService {
             PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
-                
             }
         }
-        return postList;
+        Map<String, Object> data = new HashMap<>();
+        data.put("postList", postList);
+        data.put("posts.isLast", posts.isLast());
+        return data;
     }
-
-    // 전체조회 무한스크롤
-    public Slice<PostResponseDto> allposts(int page) {
-        PageRequest pageRequest = PageRequest.of(page,24);
-        return postRepository.findByOrderByCreatedAtDesc(pageRequest);
-    }
-
 
     // post 등록
     @Transactional
