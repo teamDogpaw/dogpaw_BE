@@ -23,4 +23,9 @@ public class Acceptance {
     @ManyToOne
     @JoinColumn(nullable = false)
     private Post post;
+
+    public Acceptance(User user, Post post) {
+        this.user = user;
+        this.post = post;
+    }
 }
