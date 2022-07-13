@@ -28,7 +28,5 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
 
 
-
-
 //    Optional<Post> findByUsername(String username );
 }
