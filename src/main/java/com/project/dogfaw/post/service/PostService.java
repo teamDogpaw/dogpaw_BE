@@ -96,50 +96,6 @@ public class PostService {
                     //객체 안의 특정 타입 id, nickname 등으로 비교하여 문제 해결
                     // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
                     if (postId.equals(userPostId))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     {
                         bookMarkStatus = true;
                         break; //true일 경우 탈출
@@ -162,7 +118,7 @@ public class PostService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("postList", postList);
-        data.put("posts.isLast", posts.isLast());
+        data.put("isLast", posts.isLast());
         return data;
     }
 
