@@ -39,7 +39,7 @@ public class PostDetailResponseDto {
         this.maxCapacity = post.getMaxCapacity();
         this.content = post.getContent();
         this.nickname = post.getUser().getNickname();
-        this.profileImg = user.getProfileImg();
+        this.profileImg = post.getUser().getProfileImg();
         this.deadline = post.getDeadline();
         this.bookMarkStatus = bookMarkStatus;
         this.currentMember = post.getCurrentMember();

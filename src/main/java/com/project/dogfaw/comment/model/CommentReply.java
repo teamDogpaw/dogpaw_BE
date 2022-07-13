@@ -34,6 +34,7 @@
 //
 //    @Column
 //    private String profileImg;
+//    //responseDto에 빼놓기
 //
 //    @ManyToOne //ID 유저네임? 그 이아디?
 //    @JoinColumn(name = "USER_ID")
