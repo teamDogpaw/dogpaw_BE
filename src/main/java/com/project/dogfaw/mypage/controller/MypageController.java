@@ -3,14 +3,14 @@ package com.project.dogfaw.mypage.controller;
 
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
+import com.project.dogfaw.mypage.dto.AllApplicantsDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
-import com.project.dogfaw.mypage.img.S3Uploader;
+import com.project.dogfaw.mypage.service.S3Uploader;
 import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,13 +43,28 @@ public class MypageController {
         return mypageService.myPost(user);
     }
 
-    //내가 신청한 프로젝트 불러오기
+    //내가 지원한 프로젝트 불러오기
     @GetMapping("/api/user/mypage/apply")
     public ArrayList<PostResponseDto> myApply(@RequestHeader("Authorization") String authorization) {
         User user = commonService.getUser();
 
         return mypageService.myApply(user);
     }
+
+    //내가 참여한 프로젝트 불러오기
+//    @GetMapping("/api/user/participation")
+
+
+    //지원자 보기(모집글 작성자만)
+    @GetMapping("/api/allApplicants/info/{postId}")
+    public ArrayList<AllApplicantsDto> allApplicants(@PathVariable Long postId){
+        User user = commonService.getUser();
+
+        return mypageService.allApplicants(postId,user);
+//        return new ResponseEntity(new StatusResponseDto("지원자 전체 불러오기 성공",data),HttpStatus.OK);
+    }
+
+
 
     //프로필 이미지를 넣지 않고 요청할 시 프론트에서 설정한 기본이미지로 바뀌어야함
     @Transactional
