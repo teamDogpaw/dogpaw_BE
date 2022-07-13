@@ -233,12 +233,19 @@ public class MypageService {
         }
         //해당 게시글의 참여신청을 정보를 다 가져오고 해당 유저 정보를 뽑아와 dto에 담아 리스트로 반환
         List<UserApplication> applicants = userApplicationRepository.findAllByPost(post);
+        List<String> stackList = new ArrayList<>();
         ArrayList<AllApplicantsDto> users = new ArrayList<>();
+
         for(UserApplication applicant:applicants){
             User applier = applicant.getUser();
-            AllApplicantsDto allApplicantsDto =new AllApplicantsDto(applier);
+            List<Stack> stacks = applier.getStacks();
+            for (Stack stack: stacks){
+                stackList.add(stack.getStack());
+            }
+            AllApplicantsDto allApplicantsDto =new AllApplicantsDto(applier,stackList);
             users.add(allApplicantsDto);
         }
         return users;
     }
+
 }

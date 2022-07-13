@@ -64,7 +64,7 @@ public class PostService {
             for(Post post:posts){
                 Long postId = post.getId();
                 User writer = post.getUser();
-                //다솔다솔이(민지민지) 추가한 부분
+                //Stacks(기술스택) 가져오기
                 List<PostStack> postStacks = postStackRepository.findByPostId(postId);
                 List<String> stringPostStacks = new ArrayList<>();
                 for(PostStack postStack : postStacks){
@@ -84,7 +84,6 @@ public class PostService {
                 Post userPosting = userPost.getPost();
                 userPostings.add(userPosting);
             }
-
             //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
             for (Post post : posts) {
                 Long postId = post.getId();
@@ -96,50 +95,6 @@ public class PostService {
                     //객체 안의 특정 타입 id, nickname 등으로 비교하여 문제 해결
                     // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
                     if (postId.equals(userPostId))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                     {
                         bookMarkStatus = true;
                         break; //true일 경우 탈출
@@ -147,7 +102,6 @@ public class PostService {
                         bookMarkStatus = false;
                     }
                 }
-                //다솔다솔이(민지민지) 추가한 부분
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
             for(PostStack postStack : postStacks){
