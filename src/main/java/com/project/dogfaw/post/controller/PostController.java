@@ -76,7 +76,6 @@ public class PostController {
     @PostMapping("/api/post")
     public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
         User user = commonService.getUser();
-
         return postService.postPost(postRequestDto, user);
     }
 

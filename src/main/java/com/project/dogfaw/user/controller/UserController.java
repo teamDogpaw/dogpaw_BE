@@ -74,10 +74,8 @@ public class UserController {
     @GetMapping("/user/userinfo")
     @ResponseBody
     public UserInfo Session(){
-//    public com.project.dogfaw.user.model.User Session(){
         User user = commonService.getUser();
         return new UserInfo(user.getUsername(), user.getNickname(),user.getProfileImg(), user.getStacks());
-//        return user;
     }
 
     // 카카오 로그인 API
@@ -93,13 +91,6 @@ public class UserController {
         userRepository.deleteById(userId);
         return new ResponseEntity<>(new StatusResponseDto("회원 탈퇴 성공", ""), HttpStatus.OK);
     }
-
-    // 구글 로그인 API
-//    @GetMapping("/user/google/login")
-//    public ResponseEntity<Object> googleLogin(@RequestParam String code) throws JsonProcessingException {
-//        GoogleUserInfo googleUserInfo = googleUserService.googleLogin(code);
-//        return new ResponseEntity<>(userService.SignupUserCheck(googleUserInfo.getId()), HttpStatus.OK);
-//    }
 
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")

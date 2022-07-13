@@ -24,12 +24,9 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-//    @Column(nullable = false)
     @Column
-//    @JsonIgnore
     private String password;
 
-//    @Column(nullable = false, unique = true)
     @Column
     private String nickname;
 
@@ -43,12 +40,6 @@ public class User {
 
     @Column
     private Long kakaoId;
-
-//    @Column
-//    private String googleId;
-
-//    @Column
-//    private String googleId;
 
     @OneToMany
     @JoinColumn(name = "stack_id")
