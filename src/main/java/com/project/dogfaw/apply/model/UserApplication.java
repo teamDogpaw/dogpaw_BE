@@ -20,7 +20,7 @@ public class UserApplication {
     private User user;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "P_ID")
     private Post post;
 
     public UserApplication(User user, Post post) {

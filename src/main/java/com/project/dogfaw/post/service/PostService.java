@@ -1,14 +1,13 @@
 package com.project.dogfaw.post.service;
 
 
+import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
-
 import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
-
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
@@ -24,7 +23,6 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-
 import java.util.*;
 
 @Service
@@ -71,9 +69,9 @@ public class PostService {
                     stringPostStacks.add(postStack.getStack());
                 }
                 //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-                PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                PostResponseDto mainDTO = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
                 //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
-                postList.add(postDto);
+                postList.add(mainDTO);
             }
         }else {
             //유저가 북마크한 것을 리스트로 모두 불러옴
@@ -109,9 +107,9 @@ public class PostService {
             }
 
             //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-            PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            PostResponseDto mainDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
-            postList.add(postDto);
+            postList.add(mainDto);
             }
         }
         Map<String, Object> data = new HashMap<>();
@@ -128,6 +126,7 @@ public class PostService {
 //        PostResponseDto postResponseDto = new PostResponseDto(post,false, user);
         // 저장된 Post -> PostResponseDto에 담아 리턴
 //        return postResponseDto;
+
         List<String> stacks = postRequestDto.getStacks();
         for(String stack : stacks){
             PostStack postStack = new PostStack(post.getId(), stack);
@@ -146,6 +145,10 @@ public class PostService {
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
         );
+
+        //참여신청자 수
+        List<UserApplication> applicationList =post.getUserApplications();
+        int applierCnt = applicationList.size();
 
 //        String checkName = user.getUsername();
 //        String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
@@ -166,7 +169,7 @@ public class PostService {
         }
         //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
 
-        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applyStatus);
+        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applierCnt,applyStatus);
     }
 
     //게시글 수정

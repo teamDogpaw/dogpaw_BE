@@ -1,6 +1,5 @@
 package com.project.dogfaw.post.dto;
 
-import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
 import lombok.AllArgsConstructor;
@@ -10,8 +9,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @Getter
-public class PostResponseDto {
-
+public class DetailResponseDto {
     private Long postId;
     private String title;
     private String online;
@@ -32,8 +30,9 @@ public class PostResponseDto {
 
     private boolean bookMarkStatus;
 
+    private int applierCnt;
 
-    public PostResponseDto(Post post, List<String> stacks, boolean bookMarkStatus, User writer){
+    public DetailResponseDto(Post post, List<String> stacks, boolean bookMarkStatus, User writer, int applierCnt){
         this.postId = post.getId();
         this.title = post.getTitle();
         this.online = post.getOnline();
@@ -47,6 +46,7 @@ public class PostResponseDto {
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();
         this.bookMarkStatus = bookMarkStatus;
+        this.applierCnt = applierCnt;
 
     }
 }

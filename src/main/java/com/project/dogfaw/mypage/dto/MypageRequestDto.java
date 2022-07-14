@@ -12,5 +12,4 @@ public class MypageRequestDto {
     private String nickname;
     private List<StackDto> stacks = new ArrayList<>();
 
-
 }
