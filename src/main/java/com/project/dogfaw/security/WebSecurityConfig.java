@@ -77,7 +77,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net");
+        configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net"); //https 주소
+        configuration.addAllowedOrigin("http://scatch.s3-website.ap-northeast-2.amazonaws.com"); //http 주소
 //        configuration.addAllowedOrigin(""); // local 테스트 시
 //        configuration.addAllowedOrigin("https://amplify.d3ifjxscizr42x.amplifyapp.com"); // 배포 시
 //        configuration.addAllowedOrigin("https://www.everymohum.com");
