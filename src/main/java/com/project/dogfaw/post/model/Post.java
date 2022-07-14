@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.model;
 
 
+import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.user.model.Stack;
@@ -19,6 +20,7 @@ import java.util.List;
 @Setter
 public class Post extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "P_ID")
     @Id
     private Long id;
 
@@ -59,6 +61,9 @@ public class Post extends Timestamped {
 
     @Column
     private int commentCnt;
+
+    @OneToMany(mappedBy = "post")
+    private List<UserApplication> userApplications = new ArrayList<UserApplication>();
 
 //    @OneToMany
 //    @JoinColumn(name = "poststack_id")
