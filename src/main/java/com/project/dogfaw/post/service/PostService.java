@@ -64,7 +64,7 @@ public class PostService {
             for(Post post:posts){
                 Long postId = post.getId();
                 User writer = post.getUser();
-                //다솔다솔이(민지민지) 추가한 부분
+                //Stacks(기술스택) 가져오기
                 List<PostStack> postStacks = postStackRepository.findByPostId(postId);
                 List<String> stringPostStacks = new ArrayList<>();
                 for(PostStack postStack : postStacks){
@@ -84,7 +84,6 @@ public class PostService {
                 Post userPosting = userPost.getPost();
                 userPostings.add(userPosting);
             }
-
             //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
             for (Post post : posts) {
                 Long postId = post.getId();
@@ -103,7 +102,6 @@ public class PostService {
                         bookMarkStatus = false;
                     }
                 }
-                //다솔다솔이(민지민지) 추가한 부분
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
             for(PostStack postStack : postStacks){
