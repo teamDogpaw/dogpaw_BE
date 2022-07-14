@@ -29,7 +29,9 @@ public class PostDetailResponseDto {
 
     private Boolean applyStatus;
 
-    public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus, boolean applyStatus){
+    private int applierCnt;
+
+    public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus,int applierCnt, boolean applyStatus){
         this.id = post.getId();
         this.title = post.getTitle();
         this.onLine = post.getOnline();
@@ -43,6 +45,7 @@ public class PostDetailResponseDto {
         this.deadline = post.getDeadline();
         this.bookMarkStatus = bookMarkStatus;
         this.currentMember = post.getCurrentMember();
+        this.applierCnt = applierCnt;
         this.applyStatus = applyStatus;
     }
 }
