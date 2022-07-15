@@ -1,6 +1,5 @@
 package com.project.dogfaw.comment.service;
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.project.dogfaw.comment.dto.CmtReplyPutDto;
 import com.project.dogfaw.comment.dto.CmtReplyReqeustDto;
 import com.project.dogfaw.comment.dto.CmtReplyResponseDto;
@@ -11,13 +10,8 @@ import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;

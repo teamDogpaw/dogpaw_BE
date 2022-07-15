@@ -1,15 +1,11 @@
 package com.project.dogfaw.comment.model;
 
 import com.project.dogfaw.comment.dto.CommentPutDto;
-import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.Timestamped;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
 import lombok.Setter;
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.*;
