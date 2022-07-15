@@ -61,7 +61,6 @@ public class CommentService {
                 () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
         );
         Post post = postRepository.findById(postId).orElseThrow(RuntimeException::new);
-
         Long writerId = comment.getUser().getId();
         Long userId = user.getId();
         if (!writerId.equals(userId)) {
