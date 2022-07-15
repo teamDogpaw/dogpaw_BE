@@ -269,8 +269,8 @@ public class MypageService {
             }
         }
         Long userId = user.getId();
-        user.setNickname(requestDto.getNickname());
         stackRepository.deleteAllByUserId(userId);
+        user.setNickname(requestDto.getNickname());
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
         user.updateStack(stack);
     }
