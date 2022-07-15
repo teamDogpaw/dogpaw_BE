@@ -114,7 +114,7 @@ public class PostService {
         }
         Map<String, Object> data = new HashMap<>();
         data.put("postList", postList);
-        data.put("posts.isLast", posts.isLast());
+        data.put("isLast", posts.isLast());
         return data;
     }
 

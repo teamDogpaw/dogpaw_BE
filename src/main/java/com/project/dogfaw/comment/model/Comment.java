@@ -10,8 +10,6 @@ import lombok.Setter;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @NoArgsConstructor
@@ -33,8 +31,7 @@ public class Comment extends Timestamped {
     @Column
     private String profileImg;
 
-    // FK로 USER_ID 들어옴.
-    @ManyToOne //ID 유저네임? 그 이아디?
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
@@ -51,6 +48,7 @@ public class Comment extends Timestamped {
         this.profileImg = profileImg;
         this.user = user;
         this.post = post;
+
     }
 
     //코멘트 수정
@@ -58,4 +56,5 @@ public class Comment extends Timestamped {
         this.content = requestDto.getContent();
 
     }
+
 }
