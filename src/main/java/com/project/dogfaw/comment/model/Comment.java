@@ -30,9 +30,7 @@ public class Comment extends Timestamped {
 
     @Column
     private String profileImg;
-    //responseDto에 빼놓기
 
-    // FK로 USER_ID 들어옴.
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
