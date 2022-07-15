@@ -2,9 +2,7 @@ package com.project.dogfaw.post.model;
 
 
 import com.project.dogfaw.apply.model.UserApplication;
-import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.post.dto.PostRequestDto;
-import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -50,11 +48,6 @@ public class Post extends Timestamped {
     @Column
     private Boolean deadline = false;
 
-//    @Column
-//    private String nickname;
-//
-//    @Column
-//    private String profileImg;
 
     @Column
     private int bookmarkCnt;
@@ -64,10 +57,6 @@ public class Post extends Timestamped {
 
     @OneToMany(mappedBy = "post")
     private List<UserApplication> userApplications = new ArrayList<UserApplication>();
-
-//    @OneToMany
-//    @JoinColumn(name = "poststack_id")
-//    private List<PostStack> stacks = new ArrayList<>();
 
 
 
@@ -79,7 +68,6 @@ public class Post extends Timestamped {
         this.startAt = postRequestDto.getStartAt();
         this.maxCapacity = postRequestDto.getMaxCapacity();
         this.content = postRequestDto.getContent();
-//        this.profileImg = getProfileImg();
         this.user = user;
         }
 
