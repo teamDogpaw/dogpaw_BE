@@ -28,25 +28,24 @@ public class CommentController {
     // 댓글 생성
     @PostMapping("/api/posts/{postId}/comments")
     public ResponseEntity<Void> registComment(@PathVariable Long postId, @RequestBody CommentRequestDto requestDto) {
-        //@AuthenticationPrincipal은 null로 받아온다. Authentication으로 받아오기.
         User user = commonService.getUser();
-        // 세션 가져오기...
+
         commentService.saveNewComments(postId, user, requestDto);
+
         return ResponseEntity.ok().build();
     }
 
     // 댓글 조회
     @GetMapping("/api/posts/{postId}/comments")
     public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long postId) {
+
         return ResponseEntity.ok().body(commentService.getCommentsByPostId(postId));
     }
 
     // 댓글 삭제
     @DeleteMapping("/api/posts/{postId}/comments/{commentId}")
     public Boolean deleteComment(@PathVariable Long commentId, @PathVariable Long postId) {
-        //@AuthenticationPrincipal은 null로 받아온다. Authentication으로 받아오기.
         User user = commonService.getUser();
-        //사용자의 id가 null값인지 검증
 
         return commentService.deleteComment(commentId, user, postId);
     }
@@ -54,7 +53,6 @@ public class CommentController {
     // 댓글 수정
     @PutMapping("/api/posts/{postId}/comments/{commentId}")
     public Boolean updateComment(@PathVariable Long commentId, @RequestBody CommentPutDto requestDto) {
-        //@AuthenticationPrincipal은 null로 받아온다. Authentication으로 받아오기.
         User user = commonService.getUser();
 
         return commentService.updateComment(commentId, user, requestDto);

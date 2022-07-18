@@ -5,8 +5,10 @@ import com.project.dogfaw.comment.dto.CmtReplyReqeustDto;
 import com.project.dogfaw.comment.dto.CmtReplyResponseDto;
 import com.project.dogfaw.comment.service.CommentReplyService;
 import com.project.dogfaw.common.CommonService;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
