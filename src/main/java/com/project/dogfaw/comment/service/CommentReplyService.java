@@ -34,13 +34,13 @@ public class CommentReplyService {
                 .orElseThrow(RuntimeException::new);
         String profileImg = user.getProfileImg();
         String nickname = user.getNickname();
-        String content = comment.getContent();
+        String content = requestDto.getContent();
         CommentReply cmtReply = new CommentReply(content, nickname, profileImg, user, comment);
 
         commentReplyRepository.save(cmtReply);
     }
 
-    //댓글조회
+    //대댓글조회
     @Transactional
     public List<CmtReplyResponseDto> getCommentReplyByCommentId(Long commentId) {
         List<CommentReply> commentReplyListByCommentId = commentReplyRepository.findByCommentId(commentId);
@@ -55,7 +55,7 @@ public class CommentReplyService {
         return cmtReplyResponseDtoList;
     }
 
-        //댓글삭제
+        //대댓글삭제
         public Boolean deleteCommentReply(Long commentReplyId, User user, Long commentId) {
             CommentReply commentReply = commentReplyRepository.findById(commentReplyId).orElseThrow(() -> new IllegalArgumentException("존재하지않는 댓글입니다")
             );
@@ -70,7 +70,7 @@ public class CommentReplyService {
             return true;
         }
 
-        //댓글수정
+        //대댓글수정
         public Boolean updateCommentReply(Long commentReplyId, User user, CmtReplyPutDto requestDto) {
             CommentReply commentReply = commentReplyRepository.findById(commentReplyId).orElseThrow(
                     () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")

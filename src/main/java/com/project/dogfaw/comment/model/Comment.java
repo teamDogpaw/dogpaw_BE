@@ -43,7 +43,7 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "POST_ID")
     private Post post;
 
-    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+    @OneToMany(mappedBy = "comment", orphanRemoval = true) //대댓글 딸려오는거 다 지워주기
     @JsonManagedReference(value="commentReply-comment-FK")
     private List<CommentReply> commentReplyList;
 
