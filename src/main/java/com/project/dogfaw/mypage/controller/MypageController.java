@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
@@ -74,13 +76,14 @@ public class MypageController {
     @Transactional
     @PutMapping ("/api/user/info")
     public ResponseEntity<Object> updateInfo(
-            @RequestPart("image") MultipartFile multipartFile,
+            @RequestPart(value = "image",required = false) MultipartFile multipartFile,
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
         User user = commonService.getUser();
 
-        if (multipartFile!=null){
-            s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
+        String image = multipartFile.getContentType();
 
+        if (image != null){
+            s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
         }else {
             mypageService.updateProfile(requestDto,user);
         }
