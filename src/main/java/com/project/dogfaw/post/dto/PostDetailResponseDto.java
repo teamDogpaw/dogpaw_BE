@@ -45,6 +45,7 @@ public class PostDetailResponseDto {
         this.currentMember = post.getCurrentMember();
         this.applierCnt = applierCnt;
         this.userStatus = userStatus;
+        
     }
 }
 
