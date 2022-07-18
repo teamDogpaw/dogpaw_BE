@@ -80,9 +80,7 @@ public class MypageController {
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
         User user = commonService.getUser();
 
-        String image = multipartFile.getContentType();
-
-        if (image != null){
+        if (multipartFile != null){
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
         }else {
             mypageService.updateProfile(requestDto,user);
