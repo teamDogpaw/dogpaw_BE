@@ -1,5 +1,6 @@
 package com.project.dogfaw.mypage.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.project.dogfaw.acceptance.Acceptance;
 import com.project.dogfaw.acceptance.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
@@ -22,6 +23,7 @@ import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,6 +41,11 @@ public class MypageService {
     private final AcceptanceRepository acceptanceRepository;
     private final StackRepository stackRepository;
     private final UserRepository userRepository;
+
+    private final AmazonS3Client amazonS3Client;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     /*내가 북마크한 글 조회*/
     public ArrayList<MypageResponseDto> myBookmark(User user) {
@@ -278,6 +285,12 @@ public class MypageService {
     @Transactional
     /*프로필 기본이미지로 변경 요청*/
     public void basicImg(User user) {
+        //아마존 S3에 저장된 이미지 삭제
+        if(user.getProfileImg()!=null) {
+            String imgKey = user.getImgkey();
+            amazonS3Client.deleteObject(bucket,imgKey);
+        }
+
         user.setImgkey(null);
         user.setProfileImg(null);
     }
