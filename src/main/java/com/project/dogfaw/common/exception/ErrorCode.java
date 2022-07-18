@@ -28,6 +28,7 @@ public enum ErrorCode {
     SIGNUP_MEMBERID_DUPLICATE(HttpStatus.BAD_REQUEST, "400", "해당 아이디가 이미 존재합니다"),
     SIGNUP_MEMBERID_CORRECT(HttpStatus.OK, "200", "사용할 수 있는 아이디입니다"),
     SIGNUP_NICKNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "400", "해당 닉네임이 이미 존재합니다"),
+    SIGNUP_NICKNAME_OK(HttpStatus.BAD_REQUEST, "400", "해당 닉네임은 사용가능합니다"),
     SIGNUP_NICKNAME_CORRECT(HttpStatus.OK, "200", "사용할 수 있는 닉네임입니다"),
 
     // Token
