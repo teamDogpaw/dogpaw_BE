@@ -5,8 +5,6 @@ import com.project.dogfaw.comment.model.CommentReply;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +19,6 @@ public class CommentResponseDto {
     private Long userId;
     private String nickname;
     private String profileImg;
-
     private List<CommentReply> commentReplyList;
 
     public CommentResponseDto(Comment comment) {
