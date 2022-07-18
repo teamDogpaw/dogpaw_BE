@@ -26,6 +26,7 @@ public class CommentReplyController {
     public ResponseEntity<List<CmtReplyResponseDto>>
             getCommentReplyListByCommentId(@PathVariable Long commentId) {return ResponseEntity.ok().body(commentReplyService.getCommentReplyByCommentId(commentId));
     }
+
     //대댓글생성
     @PostMapping("/api/comments/{commentId}/ReplyComment")
     public ResponseEntity<Void> registCommentReply(@PathVariable Long commentId, @RequestBody CmtReplyReqeustDto requestDto) {
