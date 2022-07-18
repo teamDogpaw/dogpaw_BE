@@ -78,10 +78,11 @@ public class MypageController {
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
         User user = commonService.getUser();
 
-        if (multipartFile.getSize()==0){
-            mypageService.updateProfile(requestDto,user);
-        }else {
+        if (multipartFile!=null){
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
+
+        }else {
+            mypageService.updateProfile(requestDto,user);
         }
         return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",""), HttpStatus.OK);
     }
