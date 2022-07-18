@@ -163,14 +163,14 @@ public class PostService {
         Boolean acceptedStatus = acceptanceRepository.existsByUserAndPost(user,post);
 
         /*
-        1.모집글을 쓴 유저와 로그인한 유저가 같을 경우 : userStatus = writer
+        1.모집글을 쓴 유저와 로그인한 유저가 같을 경우 : userStatus = author
         2.로그인한 유저가 수락된 유저일 경우 : userStatus = participant
         3.로그인한 유저가 지원한 유저일 경우 : userStatus = applicant
         4.로그인한 유저가 지원하지 않은 유저일 경우 : userStatus = member
         */
         String userStatus;
         if(checkName.equals(nickname)){
-            userStatus = UserStatus.USER_STATUS_WRITER.getUserStatus();
+            userStatus = UserStatus.USER_STATUS_AUTHOR.getUserStatus();
         } else if (Boolean.TRUE.equals(acceptedStatus)){
             userStatus = UserStatus.USER_STATUS_PARTICIPANT.getUserStatus();
         } else if (Boolean.TRUE.equals(applyingStatus)){
