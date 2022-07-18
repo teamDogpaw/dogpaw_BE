@@ -1,15 +1,19 @@
 package com.project.dogfaw.comment.service;
 
+import com.amazonaws.services.networkfirewall.model.Header;
 import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.comment.dto.CommentRequestDto;
 import com.project.dogfaw.comment.dto.CommentResponseDto;
 import com.project.dogfaw.comment.model.Comment;
 import com.project.dogfaw.comment.repository.CommentRepository;
+import com.project.dogfaw.common.exception.CustomException;
+import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +33,7 @@ public class CommentService {
     @Transactional
     public void saveNewComments(Long postId, User user, CommentRequestDto requestDto) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(RuntimeException::new);
+                .orElseThrow(()->new CustomException(ErrorCode.COMMENT_WRONG_INPUT));
         String profileImg = user.getProfileImg();
         String nickname = user.getNickname();
         String content = requestDto.getContent();
@@ -57,10 +61,13 @@ public class CommentService {
 
     // 댓글 삭제
     public Boolean deleteComment(Long commentId, User user, Long postId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
-        );
-        Post post = postRepository.findById(postId).orElseThrow(RuntimeException::new);
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(()->new CustomException(ErrorCode.COMMENT_NOT_FOUND)
+                );
+
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.COMMENT_DELETE_WRONG_ACCESS)
+                );
         Long writerId = comment.getUser().getId();
         Long userId = user.getId();
         if (!writerId.equals(userId)) {
@@ -75,17 +82,15 @@ public class CommentService {
 
     // 댓글 수정
     public Boolean updateComment(Long commentId, User user, CommentPutDto requestDto) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(
-                () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(()->new CustomException(ErrorCode.COMMENT_NOT_FOUND)
         );
-        // comment내의 memberid와 로그인한 member아이디 일치하는지 확인
-        Long writerId = comment.getUser().getId();
-        Long userId = user.getId();
         String cmt = requestDto.getContent();
-        if (!writerId.equals(userId)) {
+        //유저 확인 로직
+        if (!comment.getUser().getId().equals(user.getId())) {
             return false;
         } else {
-            comment.setContent(cmt);
+            comment.updateComment(cmt);
             commentRepository.save(comment);
         }
         return true;

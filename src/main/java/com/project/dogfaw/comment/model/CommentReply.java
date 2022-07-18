@@ -1,5 +1,7 @@
 package com.project.dogfaw.comment.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.post.model.Timestamped;
 import com.project.dogfaw.user.model.User;
@@ -23,6 +25,7 @@ public class CommentReply extends Timestamped {
 
     @ManyToOne
     @JoinColumn(name = "COMMENT_ID")
+    @JsonBackReference(value = "commentReply-comment-FK")
     private Comment comment;
 
     @Column(nullable = false)
@@ -37,9 +40,10 @@ public class CommentReply extends Timestamped {
 
     @ManyToOne //ID 유저네임? 그 이아디?
     @JoinColumn(name = "USER_ID")
+    @JsonIgnore
     private User user;
 
-//    // FK로 POST_ID 들어옴.
+    // FK로 POST_ID 들어옴.
 //    @ManyToOne
 //    @JoinColumn(name = "POST_ID")
 //    private Post post;

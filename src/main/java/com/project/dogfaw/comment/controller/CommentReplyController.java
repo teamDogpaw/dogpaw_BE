@@ -21,14 +21,14 @@ public class CommentReplyController {
 
     private final CommonService commonService;
 
-    //대댓글조회
-    @GetMapping("/api/comments/{commentId}/{ReplyCommentId}")
-    public ResponseEntity<List<CmtReplyResponseDto>>
-            getCommentReplyListByCommentId(@PathVariable Long commentId) {return ResponseEntity.ok().body(commentReplyService.getCommentReplyByCommentId(commentId));
-    }
+//    //대댓글조회
+//    @GetMapping("/api/comments/{commentId}/{ReplyCommentId}")
+//    public ResponseEntity<List<CmtReplyResponseDto>>
+//            getCommentReplyListByCommentId(@PathVariable Long commentId) {return ResponseEntity.ok().body(commentReplyService.getCommentReplyByCommentId(commentId));
+//    }
 
     //대댓글생성
-    @PostMapping("/api/comments/{commentId}/ReplyComment")
+    @PostMapping("/api/comments/{commentId}/commentReply")
     public ResponseEntity<Void> registCommentReply(@PathVariable Long commentId, @RequestBody CmtReplyReqeustDto requestDto) {
         User user = commonService.getUser();
         commentReplyService.saveCmtReply(commentId, user, requestDto);
