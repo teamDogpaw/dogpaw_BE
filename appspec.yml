@@ -1,0 +1,19 @@
+version: 0.0
+os: linux
+
+files:
+  - source: /
+    destination: /home/ubuntu/dog-flow
+
+permissions: #권한 허용
+  - object: /home/ubuntu/app/
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+
+hooks:
+  AfterInstall:
+    # location은 프로젝트의 root경로를 기준
+    - location: deploy.sh
+      timeout: 60
+      runas: root
