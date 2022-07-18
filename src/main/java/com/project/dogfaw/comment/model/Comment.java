@@ -1,5 +1,7 @@
 package com.project.dogfaw.comment.model;
 
+import com.amazonaws.services.dynamodbv2.xspec.L;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.Timestamped;
@@ -10,6 +12,7 @@ import lombok.Setter;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.*;
+import java.util.List;
 
 @RestController
 @NoArgsConstructor
@@ -40,7 +43,9 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "POST_ID")
     private Post post;
 
-
+    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+    @JsonManagedReference(value="commentReply-comment-FK")
+    private List<CommentReply> commentReplyList;
 
     public Comment(String content, String nickname, String profileImg, User user, Post post) {
         this.content = content;
@@ -52,8 +57,8 @@ public class Comment extends Timestamped {
     }
 
     //코멘트 수정
-    public void updateComment(CommentPutDto requestDto) {
-        this.content = requestDto.getContent();
+    public void updateComment(String cmt) {
+        this.content = cmt;
 
     }
 

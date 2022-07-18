@@ -265,7 +265,7 @@ public class MypageService {
         //현재 사용하고 있는 닉네임은 사용가능
         if(!user.getNickname().equals(nickname)){
             if (userRepository.existsByNickname(nickname)) {
-                throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
+                throw new CustomException(ErrorCode.SIGNUP_NICKNAME_OK);
             }
         }
         Long userId = user.getId();

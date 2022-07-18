@@ -45,6 +45,7 @@ public class Post extends Timestamped {
 
     @Column
     private int currentMember;
+
     @Column
     private Boolean deadline = false;
 

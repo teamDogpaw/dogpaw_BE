@@ -82,11 +82,9 @@ public class PostController {
     /*post 상세조회 (디테일 페이지)*/
     @GetMapping("/api/post/detail/{postId}")
     public PostDetailResponseDto getPostDetail(@PathVariable Long postId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        String username = principal.getUser().getUsername();
+        User user = commonService.getUser();
 
-        return postService.getPostDetail(postId, username, postId);
+        return postService.getPostDetail(postId,user);
     }
 
 

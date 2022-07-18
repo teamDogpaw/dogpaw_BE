@@ -10,6 +10,7 @@ import com.project.dogfaw.mypage.service.S3Uploader;
 import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
+import jdk.nashorn.internal.runtime.Undefined;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -77,7 +78,7 @@ public class MypageController {
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
         User user = commonService.getUser();
 
-        if (multipartFile.isEmpty()){
+        if (multipartFile==null){
             mypageService.updateProfile(requestDto,user);
         }else {
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
