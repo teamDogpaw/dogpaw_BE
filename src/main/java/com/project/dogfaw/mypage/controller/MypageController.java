@@ -78,7 +78,7 @@ public class MypageController {
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
         User user = commonService.getUser();
 
-        if (multipartFile==null){
+        if (multipartFile.isEmpty()){
             mypageService.updateProfile(requestDto,user);
         }else {
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
