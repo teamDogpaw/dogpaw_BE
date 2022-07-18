@@ -1,11 +1,13 @@
 package com.project.dogfaw.mypage.dto;
 
 import com.project.dogfaw.post.model.Post;
+import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -48,4 +50,6 @@ public class MypageResponseDto {
         this.commentCnt = post.getCommentCnt();
 
     }
+
+
 }

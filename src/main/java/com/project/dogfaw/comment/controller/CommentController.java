@@ -7,6 +7,7 @@ import com.project.dogfaw.comment.model.Comment;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.comment.service.CommentService;
 import com.project.dogfaw.common.CommonService;
+import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ import java.util.List;
 public class CommentController {
 
     private final CommentService commentService;
+
     private final CommonService commonService;
 
 

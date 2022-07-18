@@ -1,4 +1,4 @@
-package com.project.dogfaw.mypage.img;
+package com.project.dogfaw.mypage.config;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;

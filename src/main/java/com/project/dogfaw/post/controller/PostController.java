@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -38,21 +39,24 @@ public class PostController {
     private final PostService postService;
     private final CommonService commonService;
 
-//    post 전체조회 (메인)
+    /*post 전체조회 (메인)*/
     @GetMapping("/api/allpost")
-    public ArrayList<PostResponseDto> postPosts() {
+    public Map<String, Object> postPosts(HttpServletRequest httpServletRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getDetails() != null){
             User user = null;
-            return postService.allPost(user);
+            long page = Long.parseLong(httpServletRequest.getParameter("page"));
+            return postService.allPost(user,page);
         }else {
             UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
             User user = principal.getUser();
-            return postService.allPost(user);
+            long page = Long.parseLong(httpServletRequest.getParameter("page"));
+            return postService.allPost(user,page);
         }
     }
 
-    // 북마크 랭킹 조회
+
+    /*북마크 랭킹 조회*/
     @GetMapping("/api/bookMark/rank")
     public ArrayList<PostResponseDto> bookMarkRank(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -66,32 +70,25 @@ public class PostController {
         }
     }
 
-    @GetMapping("/api/allposts")
-    public Slice<PostResponseDto> allposts(HttpServletRequest httpServletRequest){
-        int page = Integer.parseInt(httpServletRequest.getParameter("page"));
-        return postService.allposts(page);
-    }
 
-    //post 생성(메인)
+    /*post 생성(메인)*/
     @PostMapping("/api/post")
     public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
         User user = commonService.getUser();
-
         return postService.postPost(postRequestDto, user);
     }
 
-   //post 상세조회 (디테일 페이지)
+
+    /*post 상세조회 (디테일 페이지)*/
     @GetMapping("/api/post/detail/{postId}")
     public PostDetailResponseDto getPostDetail(@PathVariable Long postId){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        String username = principal.getUser().getUsername();
+        User user = commonService.getUser();
 
-        return postService.getPostDetail(postId, username, postId);
+        return postService.getPostDetail(postId,user);
     }
 
 
-    //post 수정 (디테일 페이지)
+    /*post 수정 (디테일 페이지)*/
     @PutMapping("/api/post/{postId}")
     public Long updatePost(@PathVariable Long postId,
                            @RequestBody PostRequestDto postRequestDto){
@@ -103,7 +100,8 @@ public class PostController {
         return postId;
     }
 
-    //post 삭제 (디테일 페이지)
+
+    /*post 삭제 (디테일 페이지)*/
     @DeleteMapping("/api/post/{postId}")
     public ResponseEntity<StatusResponseDto> deletePost(@PathVariable Long postId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

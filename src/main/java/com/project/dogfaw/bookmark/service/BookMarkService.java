@@ -3,6 +3,8 @@ package com.project.dogfaw.bookmark.service;
 import com.project.dogfaw.bookmark.dto.BookMarkRequestDto;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
+import com.project.dogfaw.common.exception.CustomException;
+import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.model.Post;
 
 import com.project.dogfaw.post.repository.PostRepository;
@@ -22,16 +24,12 @@ public class BookMarkService {
     private final UserRepository userRepository;
 
 
-
+    /*북마크저장*/
     @Transactional // Transactinal을 사용함으로써 set 내용이 dirtyCheck를 하고 통과되면 db에 반영이 됨
     public Boolean bookMarkUp(Long postId, User user) {
-        //user와 post Id 찾아옴
 
-//        User user = userRepository.findByUsername(username).orElseThrow(
-//                ()-> new NullPointerException("해당 ID가 존재하지 않음")
-//        );
         Post post = postRepository.findById(postId).orElseThrow(
-                ()-> new NullPointerException("해당 게시물이 존재하지 않음")
+                ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
 
         //북마크 db에 해당 userId와 PostId 가 존재하지 않으면 db에 저장(북마크 등록) 및 post의 북마크 총 갯수 +1
@@ -48,10 +46,5 @@ public class BookMarkService {
             return false;
         }
 
-//         if (bookMarkRepository.existsByUserAndPost(user,post)){
-//             boolean bookMarkCheck = true;
-//         } else {
-//             boolean bookMarkCheck = false;
-//         }
     }
 }

@@ -1,5 +1,7 @@
 package com.project.dogfaw.comment.model;
 
+import com.amazonaws.services.dynamodbv2.xspec.L;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.Timestamped;
@@ -10,7 +12,6 @@ import lombok.Setter;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -33,8 +34,7 @@ public class Comment extends Timestamped {
     @Column
     private String profileImg;
 
-    // FK로 USER_ID 들어옴.
-    @ManyToOne //ID 유저네임? 그 이아디?
+    @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
@@ -43,7 +43,9 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "POST_ID")
     private Post post;
 
-
+    @OneToMany(mappedBy = "comment", orphanRemoval = true)
+    @JsonManagedReference(value="commentReply-comment-FK")
+    private List<CommentReply> commentReplyList;
 
     public Comment(String content, String nickname, String profileImg, User user, Post post) {
         this.content = content;
@@ -51,11 +53,13 @@ public class Comment extends Timestamped {
         this.profileImg = profileImg;
         this.user = user;
         this.post = post;
+
     }
 
     //코멘트 수정
-    public void updateComment(CommentPutDto requestDto) {
-        this.content = requestDto.getContent();
+    public void updateComment(String cmt) {
+        this.content = cmt;
 
     }
+
 }

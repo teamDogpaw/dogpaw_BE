@@ -1,4 +1,4 @@
-package com.project.dogfaw.mypage.img;
+package com.project.dogfaw.mypage.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -56,8 +56,9 @@ public class S3Uploader {
         }
         String fileName = filePath + "/" + UUID.randomUUID() + uploadFile.getName();   // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
-        String imgKey = fileName; //http경로 없는 fileName 따로저장(이유: getURL에서 한글이름 파일 깨짐=삭제불가)
+        String imgKey = fileName; //파일 확장자 fileName 따로저장(이유: getURL에서 한글이름 파일 깨짐=삭제불가)
         removeNewFile(uploadFile);
+
 
 
         return updateUser(uploadImageUrl,imgKey,requestDto,user);

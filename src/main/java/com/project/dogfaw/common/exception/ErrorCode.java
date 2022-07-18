@@ -28,6 +28,7 @@ public enum ErrorCode {
     SIGNUP_MEMBERID_DUPLICATE(HttpStatus.BAD_REQUEST, "400", "해당 아이디가 이미 존재합니다"),
     SIGNUP_MEMBERID_CORRECT(HttpStatus.OK, "200", "사용할 수 있는 아이디입니다"),
     SIGNUP_NICKNAME_DUPLICATE(HttpStatus.BAD_REQUEST, "400", "해당 닉네임이 이미 존재합니다"),
+    SIGNUP_NICKNAME_OK(HttpStatus.BAD_REQUEST, "400", "해당 닉네임은 사용가능합니다"),
     SIGNUP_NICKNAME_CORRECT(HttpStatus.OK, "200", "사용할 수 있는 닉네임입니다"),
 
     // Token
@@ -88,6 +89,11 @@ public enum ErrorCode {
     EXCEED_APPLY_USER_NUMBER(HttpStatus.INTERNAL_SERVER_ERROR,"500","전공 모집인원이 초과되었습니다."),
 
     NO_DIFFERENCE_STATUS(HttpStatus.FORBIDDEN,"403", "Status 변경 사항이 없습니다"),
+
+    //mypage
+    MYPAGE_INQUIRY_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "모집글 작성자만 조회가 가능합니다"),
+    MYPAGE_REJECTION_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "신청 거절은 작성자만 가능합니다"),
+    MYPAGE_ACCEPTANCE_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "신청 수락은 작성자만 가능합니다"),
 
     // mail
     EMAIL_WRONG_PATTERN(HttpStatus.BAD_REQUEST, "400", "이메일 형식을 맞춰주세요"),
