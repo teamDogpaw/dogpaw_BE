@@ -144,6 +144,8 @@ public class PostService {
 
 
     //post 상세조회
+
+
     public PostDetailResponseDto getPostDetail(Long postId,User user) {
         //게시글 존재유무
         Post post = postRepository.findById(postId).orElseThrow(
@@ -226,13 +228,13 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
-        List<PostStack> stackList = new ArrayList<>();
-        for(StackDto stackdto : requestDto){
-            stackList.add(new PostStack(stackdto, post ));
-        }
-        return stackList;
-    }
+//    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
+//        List<PostStack> stackList = new ArrayList<>();
+//        for(StackDto stackdto : requestDto){
+//            stackList.add(new PostStack(stackdto, post ));
+//        }
+//        return stackList;
+//    }
 
 
 
