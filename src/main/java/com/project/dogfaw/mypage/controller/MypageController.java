@@ -4,6 +4,7 @@ package com.project.dogfaw.mypage.controller;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.mypage.dto.AllApplicantsDto;
+import com.project.dogfaw.mypage.dto.AllTeammateDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.mypage.service.MypageService;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
@@ -92,5 +94,26 @@ public class MypageController {
         User user = commonService.getUser();
         mypageService.basicImg(user);
         return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",""), HttpStatus.OK);
+    }
+
+    /*내 팀원보기*/
+    @GetMapping("/api/user/team/{postId}")
+    public ArrayList<AllTeammateDto> checkTeammate(@PathVariable Long postId){
+        User user = commonService.getUser();
+        return mypageService.checkTeammate(postId);
+    }
+
+    /*팀원 추방하기*/
+    @DeleteMapping("/api/expulsion/{userId}/teammate/{postId}")
+    public ResponseEntity<Object> expulsionTeammate(@PathVariable Long userId, @PathVariable Long postId){
+        User user = commonService.getUser();
+        return mypageService.expulsionTeammate(userId,postId,user);
+    }
+
+    /*참가자 자진 팀 탈퇴*/
+    @DeleteMapping("/api/withdraw/team/{postId}")
+    public ResponseEntity<Object> withdrawTeam(@PathVariable Long postId) {
+        User user = commonService.getUser();
+        return mypageService.withdrawTeam(postId, user);
     }
 }

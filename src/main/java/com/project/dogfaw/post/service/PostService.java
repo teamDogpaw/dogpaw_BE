@@ -228,13 +228,13 @@ public class PostService {
         postRepository.deleteById(postId);
     }
 
-    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
-        List<PostStack> stackList = new ArrayList<>();
-        for(StackDto stackdto : requestDto){
-            stackList.add(new PostStack(stackdto, post ));
-        }
-        return stackList;
-    }
+//    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
+//        List<PostStack> stackList = new ArrayList<>();
+//        for(StackDto stackdto : requestDto){
+//            stackList.add(new PostStack(stackdto, post ));
+//        }
+//        return stackList;
+//    }
 
 
 

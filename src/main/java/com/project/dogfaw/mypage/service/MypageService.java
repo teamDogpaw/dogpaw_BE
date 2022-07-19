@@ -9,7 +9,9 @@ import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.mypage.dto.AllApplicantsDto;
+import com.project.dogfaw.mypage.dto.AllTeammateDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
@@ -24,6 +26,8 @@ import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -305,4 +309,62 @@ public class MypageService {
     }
 
 
+    /*내 팀원보기*/
+    public ArrayList<AllTeammateDto> checkTeammate(Long postId) {
+        //모집글 존재여부 확인
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        //해당 게시글 수락 리스트 가져오기
+        List<Acceptance> teammates = acceptanceRepository.findAllByPost(post);
+        List<String> stackList = new ArrayList<>();
+        ArrayList<AllTeammateDto> users = new ArrayList<>();
+
+        for(Acceptance teammate:teammates){
+            User teammateUser = teammate.getUser();
+            List<Stack> stacks = teammateUser.getStacks();
+            for (Stack stack: stacks){
+                stackList.add(stack.getStack());
+            }
+            AllTeammateDto allTeammateDto =new AllTeammateDto(teammateUser,stackList);
+            users.add(allTeammateDto);
+        }
+        return users;
+    }
+
+    /*팀원 추방하기*/
+    @Transactional
+    public ResponseEntity<Object> expulsionTeammate(Long userId, Long postId,User user) {
+        //추방하려는 유저정보 찾기
+        User teammate = userRepository.findById(userId)
+                .orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
+        //해당게식글 찾기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        //모집글 작성자 확인
+        if(!user.getId().equals(postId)){
+            throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
+        }
+        //수락정보 존재 확인
+        acceptanceRepository.findByUserAndPost(teammate,post)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
+        //추방하려는 유저,게시글 객체로 찾아 삭제
+        acceptanceRepository.deleteByUserAndPost(teammate,post);
+
+        return new ResponseEntity(new StatusResponseDto(teammate.getNickname()+"님 추방이 완료되었습니다",""), HttpStatus.OK);
+    }
+    @Transactional
+    /*참가자 자진 팀 탈퇴*/
+    public ResponseEntity<Object> withdrawTeam(Long postId, User user) {
+        //해당게식글 찾기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        //수락정보 존재 확인
+        acceptanceRepository.findByUserAndPost(user,post)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
+        //참여수락db에서 삭제
+        acceptanceRepository.deleteByUserAndPost(user,post);
+
+        return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
+    }
 }
