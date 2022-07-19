@@ -144,19 +144,12 @@ public class PostService {
 
 
     //post 상세조회
-<<<<<<< HEAD
-    public PostDetailResponseDto getPostDetail(Long id, String username, Long postId) {
-        Post post = postRepository.findById(id).orElseThrow(
-                ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
-        );
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
-=======
+
+
     public PostDetailResponseDto getPostDetail(Long postId,User user) {
         //게시글 존재유무
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
->>>>>>> efddcd17d9dd2d26a0d672d87f44011d44ef1efd
         );
 
         //신청자 수
