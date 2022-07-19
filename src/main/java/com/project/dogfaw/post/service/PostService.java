@@ -39,8 +39,9 @@ public class PostService {
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-
     private final AcceptanceRepository acceptanceRepository;
+
+
 
 
     //전체조회
@@ -219,6 +220,7 @@ public class PostService {
             throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
         }
         userApplicationRepository.deleteAllByPost(post);
+        acceptanceRepository.deleteAllByPost(post);
         bookMarkRepository.deleteAllByPost(post);
         commentRepository.deleteAllByPost(post);
         postRepository.deleteById(postId);
