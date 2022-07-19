@@ -345,7 +345,7 @@ public class MypageService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
         //모집글 작성자 확인
-        if(!user.getId().equals(postId)){
+        if(!user.getId().equals(post.getUser().getId())){
             throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
         }
         //수락정보 존재 확인
@@ -353,6 +353,13 @@ public class MypageService {
                 .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
         //추방하려는 유저,게시글 객체로 찾아 삭제
         acceptanceRepository.deleteByUserAndPost(teammate,post);
+        //현재모집인원 -1
+        post.decreaseCnt();
+        //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
+        Boolean deadline = false;
+        if(post.getCurrentMember()>post.getMaxCapacity()){
+            post.updateDeadline(deadline);
+        }
 
         return new ResponseEntity(new StatusResponseDto(teammate.getNickname()+"님 추방이 완료되었습니다",""), HttpStatus.OK);
     }
@@ -365,8 +372,15 @@ public class MypageService {
         //수락정보 존재 확인
         acceptanceRepository.findByUserAndPost(user,post)
                 .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
-        //참여수락db에서 삭제
+        //참여수락된 상태 db에서 삭제
         acceptanceRepository.deleteByUserAndPost(user,post);
+        //현재모집인원 -1
+        post.decreaseCnt();
+        //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
+        Boolean deadline = false;
+        if(post.getCurrentMember()>post.getMaxCapacity()){
+            post.updateDeadline(deadline);
+        }
 
         return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
     }

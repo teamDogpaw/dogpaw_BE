@@ -100,10 +100,8 @@ public class Post extends Timestamped {
     public void increaseCmCount(){this.commentCnt += 1;}
     public void decreaseCmCount(){this.commentCnt -= 1;}
 
-    //모집마감 || 모집중
-    public void isDeadline(){this.deadline = true;}
-    public void isOngoing(){this.deadline = false;}
-
+    //모집마감,모집마감취소(deadLine)
+    public void updateDeadline(Boolean deadline) {this.deadline = deadline;}
 
 }
 
