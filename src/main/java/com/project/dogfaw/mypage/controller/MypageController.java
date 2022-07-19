@@ -6,8 +6,8 @@ import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.mypage.dto.AllApplicantsDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
-import com.project.dogfaw.mypage.service.S3Uploader;
 import com.project.dogfaw.mypage.service.MypageService;
+import com.project.dogfaw.mypage.service.S3Uploader;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
@@ -73,14 +73,14 @@ public class MypageController {
     @Transactional
     @PutMapping ("/api/user/info")
     public ResponseEntity<Object> updateInfo(
-            @RequestPart("image") MultipartFile multipartFile,
+            @RequestPart(value = "image",required = false) MultipartFile multipartFile,
             @RequestPart("body") MypageRequestDto requestDto) throws IOException {
         User user = commonService.getUser();
 
-        if (multipartFile.isEmpty()){
-            mypageService.updateProfile(requestDto,user);
-        }else {
+        if (multipartFile != null){
             s3Uploader.uploadFiles(multipartFile, "static",requestDto,user);
+        }else {
+            mypageService.updateProfile(requestDto,user);
         }
         return new ResponseEntity(new StatusResponseDto("프로필 편집이 완료되었습니다",""), HttpStatus.OK);
     }

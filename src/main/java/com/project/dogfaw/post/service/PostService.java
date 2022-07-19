@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.service;
 
 
+import com.project.dogfaw.acceptance.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
@@ -14,6 +15,7 @@ import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
+import com.project.dogfaw.post.model.UserStatus;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
 import com.project.dogfaw.user.dto.StackDto;
@@ -37,8 +39,10 @@ public class PostService {
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
+    private final AcceptanceRepository acceptanceRepository;
 
-    private final CommonService commonService;
+
+
 
     //전체조회
     public Map<String, Object> allPost(User user, long page) {
@@ -140,29 +144,55 @@ public class PostService {
 
 
     //post 상세조회
+<<<<<<< HEAD
     public PostDetailResponseDto getPostDetail(Long id, String username, Long postId) {
         Post post = postRepository.findById(id).orElseThrow(
                 ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
+=======
+    public PostDetailResponseDto getPostDetail(Long postId,User user) {
+        //게시글 존재유무
+        Post post = postRepository.findById(postId).orElseThrow(
+                ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
+>>>>>>> efddcd17d9dd2d26a0d672d87f44011d44ef1efd
         );
 
-        //참여신청자 수
+        //신청자 수
         List<UserApplication> applicationList =post.getUserApplications();
         int applierCnt = applicationList.size();
 
-//        String checkName = user.getUsername();
-//        String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
-//
-//        if(checkName.equals(nickname)){
-//            //같은경우 = 작성자가 맞음 = enum을 writer로
-//        } else {
-//            //작성자가 아님 = enum을 member로
-//        }
+        //userStatus 판별
+        String checkName = user.getUsername();
+        String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
 
+        //지원유무
+        Boolean applyingStatus = userApplicationRepository.existsByUserAndPost(user,post);
+        //참여수락유무
+        Boolean acceptedStatus = acceptanceRepository.existsByUserAndPost(user,post);
+
+        /*
+        1.모집글을 쓴 유저와 로그인한 유저가 같을 경우 : userStatus = author
+        2.로그인한 유저가 수락된 유저일 경우 : userStatus = participant
+        3.로그인한 유저가 지원한 유저일 경우 : userStatus = applicant
+        4.로그인한 유저가 지원하지 않은 유저일 경우 : userStatus = member
+        */
+        String userStatus;
+        if(checkName.equals(nickname)){
+            userStatus = UserStatus.USER_STATUS_AUTHOR.getUserStatus();
+        } else if (Boolean.TRUE.equals(acceptedStatus)){
+            userStatus = UserStatus.USER_STATUS_PARTICIPANT.getUserStatus();
+        } else if (Boolean.TRUE.equals(applyingStatus)){
+            userStatus = UserStatus.USER_STATUS_APPLICANT.getUserStatus();
+        } else {
+            userStatus = UserStatus.USER_STATUS_MEMBER.getUserStatus();
+        }
+
+        //북마크유무
         Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
-        Boolean applyStatus = userApplicationRepository.existsByUserAndPost(user,post);
+//        //신청유무
+//        Boolean applyStatus = userApplicationRepository.existsByUserAndPost(user,post);
 
         List<PostStack> postStacks = postStackRepository.findByPostId(postId);
         List<String> stringPostStacks = new ArrayList<>();
@@ -171,7 +201,7 @@ public class PostService {
         }
         //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
 
-        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applierCnt,applyStatus);
+        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applierCnt,userStatus);
     }
 
     //게시글 수정
@@ -199,6 +229,7 @@ public class PostService {
             throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
         }
         userApplicationRepository.deleteAllByPost(post);
+        acceptanceRepository.deleteAllByPost(post);
         bookMarkRepository.deleteAllByPost(post);
         commentRepository.deleteAllByPost(post);
         postRepository.deleteById(postId);
