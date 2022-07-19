@@ -8,6 +8,7 @@ import com.project.dogfaw.comment.model.Comment;
 import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.user.model.User;
@@ -46,7 +47,7 @@ public class CommentService {
 
     // 댓글 조회
     @Transactional(readOnly = true)
-    public List<CommentResponseDto> getCommentsByPostId(Long postId) {
+    public StatusResponseDto getCommentsByPostId(Long postId) {
         List<Comment> commentListByPostId = commentRepository.findAllByPostId(postId);
 
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
@@ -55,8 +56,7 @@ public class CommentService {
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
             commentResponseDtoList.add(commentResponseDto);
         }
-
-        return commentResponseDtoList;
+        return new StatusResponseDto("댓글 조회에 성공하였습니다", commentResponseDtoList);
     }
 
     // 댓글 삭제
