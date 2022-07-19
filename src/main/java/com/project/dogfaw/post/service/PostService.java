@@ -7,6 +7,8 @@ import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.CommonService;
+import com.project.dogfaw.common.exception.CustomException;
+import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
@@ -140,7 +142,7 @@ public class PostService {
     //post 상세조회
     public PostDetailResponseDto getPostDetail(Long id, String username, Long postId) {
         Post post = postRepository.findById(id).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+                ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
         User user = userRepository.findByUsername(username).orElseThrow(
                 () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
