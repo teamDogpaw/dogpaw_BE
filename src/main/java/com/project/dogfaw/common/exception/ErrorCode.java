@@ -61,6 +61,8 @@ public enum ErrorCode {
 
     // Post
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "404", "해당 게시물을 찾을 수 없습니다"),
+    POST_INQUIRY_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "모집글 작성자만 가능합니다"),
+    POST_PEOPLE_SET_CLOSED(HttpStatus.BAD_REQUEST, "400", "모집인원이 모두 찼을 경우 모집마감취소가 불가능합니다. 모집인원을 늘리거나 팀원 조정이 필요합니다."),
     POST_UPDATE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인의 게시물만 수정할 수 있습니다"),
     POST_DELETE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인의 게시물만 삭제할 수 있습니다"),
     POST_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "비어있는 항목을 채워주세요"),
@@ -93,7 +95,7 @@ public enum ErrorCode {
 
     //acceptance
     ACCEPTANCE_NOT_FOUND(HttpStatus.FORBIDDEN,"404", "참여 수락정보가 존재하지 않습니다"),
-
+    ACCEPTANCE_PEOPLE_SET_CLOSED(HttpStatus.BAD_REQUEST, "400", "모집인원이 모두 차 더이상 팀원을 받을 수 없습니다. 모집인원을 늘리거나 팀원 조정이 필요합니다."),
     //mypage
     MYPAGE_INQUIRY_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "모집글 작성자만 가능합니다"),
     MYPAGE_REJECTION_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "신청 거절은 작성자만 가능합니다"),

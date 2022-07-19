@@ -111,4 +111,12 @@ public class PostController {
         String data = null;
         return new ResponseEntity(new StatusResponseDto("게시글 삭제가 완료되었습니다",data),HttpStatus.OK);
     }
+
+    /*모집마감,모집마감 취소(작성자만)*/
+    @PostMapping("/api/post/{postId}/deadline")
+    public ResponseEntity<Object> updateDeadline(@PathVariable Long postId){
+        User user = commonService.getUser();
+        return postService.updateDeadline(postId,user);
+    }
+
 }
