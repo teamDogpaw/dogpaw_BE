@@ -3,6 +3,7 @@ package com.project.dogfaw.post.model;
 
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.post.dto.PostRequestDto;
+import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,17 +50,15 @@ public class Post extends Timestamped {
     @Column
     private Boolean deadline = false;
 
-
     @Column
     private int bookmarkCnt;
 
     @Column
     private int commentCnt;
 
+
     @OneToMany(mappedBy = "post")
     private List<UserApplication> userApplications = new ArrayList<UserApplication>();
-
-
 
 
     public Post(PostRequestDto postRequestDto, User user) {
@@ -73,8 +72,6 @@ public class Post extends Timestamped {
         }
 
 
-
-
     public void update(PostRequestDto postRequestDto, Long id) {
         this.title = postRequestDto.getTitle();
         this.online = postRequestDto.getOnline();
@@ -82,8 +79,8 @@ public class Post extends Timestamped {
         this.startAt = postRequestDto.getStartAt();
         this.maxCapacity = postRequestDto.getMaxCapacity();
         this.content = postRequestDto.getContent();
-
     }
+
 
 
     //참여신청시 +1, 참여취소시 -1(건영)
