@@ -25,7 +25,6 @@ import javax.transaction.Transactional;
 public class UserApplicationService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final AcceptanceRepository acceptanceRepository;
     private final UserApplicationRepository userApplicationRepository;
 
