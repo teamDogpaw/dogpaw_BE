@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 
 public class PostDetailResponseDto {
-    private Long id;
+    private Long postId;
     private String title;
     private String onLine;
     private List<String> stacks;
@@ -30,7 +30,7 @@ public class PostDetailResponseDto {
     private String userStatus;
 
     public PostDetailResponseDto(Post post, List<String> stacks, User user, boolean bookMarkStatus,int applierCnt, String userStatus){
-        this.id = post.getId();
+        this.postId = post.getId();
         this.title = post.getTitle();
         this.onLine = post.getOnline();
         this.stacks = stacks;
