@@ -53,6 +53,11 @@ public class AcceptanceService {
         acceptanceRepository.save(acceptance);
         //현재인원+1
         post.increaseCnt(); //post.decreaseCnt = 수락된 신청자가 상세페이지에서 참여취소 하였을 때 acceptanceRepo에서 삭제하고 -1 해야함
+        //모집정원이 모두 찼을 경우 모집마감
+        if(post.getCurrentMember()==post.getMaxCapacity()){
+            Boolean deadline = true;
+            post.updateDeadline(deadline);
+        }
 
     }
     @Transactional

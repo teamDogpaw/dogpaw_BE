@@ -357,7 +357,7 @@ public class MypageService {
         post.decreaseCnt();
         //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
         Boolean deadline = false;
-        if(post.getCurrentMember()>post.getMaxCapacity()){
+        if(post.getCurrentMember()<post.getMaxCapacity()){
             post.updateDeadline(deadline);
         }
 
@@ -378,7 +378,7 @@ public class MypageService {
         post.decreaseCnt();
         //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
         Boolean deadline = false;
-        if(post.getCurrentMember()>post.getMaxCapacity()){
+        if(post.getCurrentMember()<post.getMaxCapacity()){
             post.updateDeadline(deadline);
         }
 
