@@ -212,6 +212,11 @@ public class PostService {
         if (!Objects.equals(username, post.getUser().getUsername())){
             throw new IllegalArgumentException("본인의 게시글만 수정할 수 있습니다.");
         }
+        postStackRepository.deleteByPostId(postId);
+        for (String stack : postRequestDto.getStacks()){
+            postStackRepository.save(new PostStack(postId,stack));
+        }
+
         post.update(postRequestDto, user.getId());
     }
 
