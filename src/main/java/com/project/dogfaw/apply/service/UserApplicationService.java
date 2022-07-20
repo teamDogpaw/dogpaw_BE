@@ -9,6 +9,8 @@ import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.repository.PostRepository;
+import com.project.dogfaw.sse.model.NotificationType;
+import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ public class UserApplicationService {
     private final AcceptanceRepository acceptanceRepository;
     private final UserApplicationRepository userApplicationRepository;
 
+    private final NotificationService notificationService;
+
     @Transactional
     public ResponseEntity<Object> userApply(Long postId, User user) {
 
@@ -46,8 +50,19 @@ public class UserApplicationService {
         if(!userApplicationRepository.existsByUserAndPost(user,post)){
             UserApplication userApplication = new UserApplication(user,post);
             userApplicationRepository.save(userApplication);
+
+            //알림
+            // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
+            //해당 댓글로 이동하는 url
+//            String Url = "https://www.everymohum.com/applied/"+post.getId();
+//            //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
+//            String content = post.getUser().getNickname()+"님! 프로젝트 신청 알림이 도착했어요!";
+//            notificationService.send(post.getUser(), NotificationType.APPLY,content,Url);
+            //알림
+
             Boolean data = true;
             return new  ResponseEntity<>(new StatusResponseDto("신청이 완료되었습니다.", data), HttpStatus.OK);
+
         }else{
             UserApplication userApplication = userApplicationRepository.getUserApplicationByUserAndPost(user,post);
             userApplicationRepository.delete(userApplication);
