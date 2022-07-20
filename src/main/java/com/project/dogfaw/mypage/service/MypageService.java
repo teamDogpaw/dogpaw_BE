@@ -19,6 +19,8 @@ import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
+import com.project.dogfaw.sse.model.NotificationType;
+import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
@@ -47,6 +49,8 @@ public class MypageService {
     private final UserRepository userRepository;
 
     private final AmazonS3Client amazonS3Client;
+
+    private final NotificationService notificationService;
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
@@ -380,7 +384,13 @@ public class MypageService {
         Boolean deadline = false;
         if(post.getCurrentMember()<post.getMaxCapacity()){
             post.updateDeadline(deadline);
-        }
+        }// 스테이터스는 진행중으로 유지한다.
+
+        //알림
+//        String Url = "https://www.everymohum.com/user/"+userApply.getUser().getId();
+//        String content = userApply.getUser().getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
+//        notificationService.send(userApply.getUser(), NotificationType.REJECT,content,Url);
+        //알림
 
         return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
     }

@@ -147,6 +147,8 @@ public class PostService {
 
 
     //post 상세조회
+
+
     public PostDetailResponseDto getPostDetail(Long postId,User user) {
         //게시글 존재유무
         Post post = postRepository.findById(postId).orElseThrow(
