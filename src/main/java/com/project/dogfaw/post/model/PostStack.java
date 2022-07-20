@@ -1,5 +1,6 @@
 package com.project.dogfaw.post.model;
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.project.dogfaw.user.dto.StackDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @AllArgsConstructor
@@ -24,9 +26,8 @@ public class PostStack {
     @Column
     private String stack;
 
+    @Column
     private Long postId;
-
-
 
 
     public PostStack(Long postId, String stack) {
@@ -34,9 +35,10 @@ public class PostStack {
         this.stack = stack;
     }
 
-    public PostStack(StackDto stackdto, Post post) {
-        this.stack = stackdto.getStack();
-        this.postId = post.getId();
+    public void updatePostStack(String stack, Long postId) {
+        this.stack = stack;
+        this.postId = postId;
     }
+
 
 }
