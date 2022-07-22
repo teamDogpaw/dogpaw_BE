@@ -5,7 +5,7 @@ import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
-import com.project.dogfaw.post.dto.PostResponseDto;
+import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.post.service.PostService;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
@@ -48,7 +48,7 @@ public class PostController {
 
     /*북마크 랭킹 조회*/
     @GetMapping("/api/bookMark/rank")
-    public ArrayList<PostResponseDto> bookMarkRank(){
+    public ArrayList<MyApplyingResponseDto> bookMarkRank(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getDetails() != null){
             User user = null;
@@ -63,7 +63,7 @@ public class PostController {
 
     /*post 생성(메인)*/
     @PostMapping("/api/post")
-    public PostResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
+    public MyApplyingResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
         User user = commonService.getUser();
         return postService.postPost(postRequestDto, user);
     }
