@@ -18,6 +18,7 @@ import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
 import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.dto.StackDto;
+import com.project.dogfaw.user.dto.UserInfo;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.StackRepository;
@@ -393,16 +394,89 @@ public class MypageService {
     }
 
     /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
-    public ArrayList<MyApplyingResponseDto> mypageInfo(Long userId) {
-        User user = userRepository.findById(userId)
+    public OtherUserMypageResponseDto mypageInfo(Long userId, User user) {
+        User otherUser = userRepository.findById(userId)
                 .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
-        //해당 유저가 참여한 프로젝트 리스트
-        List<Acceptance> acceptedList = acceptanceRepository.findAllByUser(user);
-        ArrayList<> userAccepted = new ArrayList<>();
-        for (Acceptance accepted:acceptedList){
-            Post acceptedPost = accepted.getPost();
+
+        //반환할 ArrayList 생성
+
+        /*다른유저의 프로필정보*/
+        UserInfo userInfo = new UserInfo(otherUser.getUsername(), otherUser.getNickname(),otherUser.getProfileImg(), otherUser.getStacks());
+
+        /*다른유저의 참여중인 프로젝트 리스트*/
+        //다른 유저의 참여완료된(수락된) 리스트
+        List<Acceptance> acceptances = acceptanceRepository.findAllByUser(otherUser);
+        //현재 로그인한 유저의 북마크 리스트
+        List<BookMark> bookMarks = bookMarkRepository.findAllByUser(user);
+        //게시물 객체를 담아줄 ArrayList 생성
+        ArrayList<MyAcceptanceResponseDto> acceptancePostList = new ArrayList<>();
+        ArrayList<Post> acceptedList = new ArrayList<>();
+        ArrayList<Post> bookMarkedList = new ArrayList<>();
+
+        Boolean bookMarkStatus = false;
+
+        //해당 유저의 참여완료된 모집글 객체를 하나씩 ArrayList에 담아줌
+        for(Acceptance acceptance:acceptances){
+            Post post = acceptance.getPost();
+            acceptedList.add(post);
+        }
+        //로그인한 유저가 북마크한 모집글 객체를 하나씩 ArrayList에 담아줌
+        for(BookMark bookMark:bookMarks){
+            Post post = bookMark.getPost();
+            bookMarkedList.add(post);
         }
 
+        for(Post acceptedPost : acceptedList){
+            Long acceptedPostId = acceptedPost.getId();
+            User writer = acceptedPost.getUser();
+            for(Post bookMarkedPost:bookMarkedList){
+                Long bookMarkedId = bookMarkedPost.getId();
 
+                if (acceptedPostId.equals(bookMarkedId)){
+                    bookMarkStatus = true;
+                    break;
+                }else {
+                    bookMarkStatus = false;
+                }
+            }
+            List<PostStack> postStacks = postStackRepository.findByPostId(acceptedPostId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+            MyAcceptanceResponseDto acceptanceDto = new MyAcceptanceResponseDto(acceptedPost, stringPostStacks, bookMarkStatus, writer);
+            acceptancePostList.add(acceptanceDto);
+        }
+
+        /*다른유저의 작성글 리스트*/
+        //다른 유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
+        List<Post> posts = postRepository.findByUser(otherUser);
+
+        ArrayList<MyPostResponseDto> postList = new ArrayList<>();
+
+        //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
+        for (Post post : posts) {
+            Long UserPostId = post.getId();
+            User writer = post.getUser();
+            for (Post bookMarkedPost: bookMarkedList ) {
+                Long bookMarkedPostId = bookMarkedPost.getId();
+                //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
+                // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
+                if (UserPostId.equals(bookMarkedPostId)) {
+                    bookMarkStatus = true;
+                    break; //true일 경우 탈출
+                } else {
+                    bookMarkStatus = false;
+                }
+            }
+            List<PostStack> postStacks = postStackRepository.findByPostId(UserPostId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+            MyPostResponseDto postDto = new MyPostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            postList.add(postDto);
+        }
+        return new OtherUserMypageResponseDto(userInfo,acceptancePostList,postList);
     }
 }
