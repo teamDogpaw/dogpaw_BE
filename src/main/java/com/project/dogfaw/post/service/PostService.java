@@ -7,19 +7,17 @@ import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.comment.repository.CommentRepository;
-import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
-import com.project.dogfaw.post.dto.PostResponseDto;
+import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.model.UserStatus;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
-import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +60,7 @@ public class PostService {
         Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageRequest);
 
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
-        ArrayList<PostResponseDto> postList = new ArrayList<>();
+        ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
         Boolean bookMarkStatus = false;
 
@@ -78,7 +76,7 @@ public class PostService {
                     stringPostStacks.add(postStack.getStack());
                 }
                 //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-                PostResponseDto mainDTO = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                MyApplyingResponseDto mainDTO = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
                 //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
                 postList.add(mainDTO);
             }
@@ -116,7 +114,7 @@ public class PostService {
             }
 
             //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-            PostResponseDto mainDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            MyApplyingResponseDto mainDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(mainDto);
             }
@@ -129,7 +127,7 @@ public class PostService {
 
     // post 등록
     @Transactional
-    public PostResponseDto postPost(PostRequestDto postRequestDto, User user) {
+    public MyApplyingResponseDto postPost(PostRequestDto postRequestDto, User user) {
         // 게시글 작성자 저장 (편의 메서드 -> user에도 post에 해당 post add)
         Post post = postRepository.save(new Post(postRequestDto, user));
 //        PostResponseDto postResponseDto = new PostResponseDto(post,false, user);
@@ -141,7 +139,7 @@ public class PostService {
             PostStack postStack = new PostStack(post.getId(), stack);
             postStackRepository.save(postStack);
         }
-        return new PostResponseDto(post, stacks, false, user);
+        return new MyApplyingResponseDto(post, stacks, false, user);
 
     }
 
@@ -247,11 +245,11 @@ public class PostService {
 
 
     //북마크 랭킹
-    public ArrayList<PostResponseDto> bookMarkRank(User user) {
+    public ArrayList<MyApplyingResponseDto> bookMarkRank(User user) {
         PageRequest pageRequest = PageRequest.of(0, 3);
 
         List<Post> posts = postRepository.findByOrderByBookmarkCntDesc(pageRequest);
-        ArrayList<PostResponseDto> postList = new ArrayList<>();
+        ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
 
         Boolean bookMarkStatus = false;
 
@@ -265,7 +263,7 @@ public class PostService {
                 for(PostStack postStack : postStacks){
                     stringPostStacks.add(postStack.getStack());
                 }
-                PostResponseDto postDto = new PostResponseDto(post,stringPostStacks, bookMarkStatus, writer);
+                MyApplyingResponseDto postDto = new MyApplyingResponseDto(post,stringPostStacks, bookMarkStatus, writer);
                 postList.add(postDto);
             }
         }else {
@@ -294,7 +292,7 @@ public class PostService {
                 for(PostStack postStack : postStacks){
                     stringPostStacks.add(postStack.getStack());
                 }
-                PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                MyApplyingResponseDto postDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
                 postList.add(postDto);
             }
         }

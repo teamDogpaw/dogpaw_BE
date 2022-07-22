@@ -4,8 +4,6 @@ import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.common.validator.UserValidator;
-import com.project.dogfaw.mypage.dto.MypageResponseDto;
-import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
