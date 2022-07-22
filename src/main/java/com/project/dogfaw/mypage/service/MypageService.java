@@ -10,18 +10,15 @@ import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.mypage.dto.AllApplicantsDto;
-import com.project.dogfaw.mypage.dto.AllTeammateDto;
-import com.project.dogfaw.mypage.dto.MypageRequestDto;
-import com.project.dogfaw.mypage.dto.MypageResponseDto;
-import com.project.dogfaw.post.dto.PostResponseDto;
+import com.project.dogfaw.mypage.dto.*;
+import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
-import com.project.dogfaw.sse.model.NotificationType;
 import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.dto.StackDto;
+import com.project.dogfaw.user.dto.UserInfo;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.StackRepository;
@@ -56,7 +53,7 @@ public class MypageService {
     private String bucket;
 
     /*내가 북마크한 글 조회*/
-    public ArrayList<MypageResponseDto> myBookmark(User user) {
+    public ArrayList<MyBookmarkResponseDto> myBookmark(User user) {
 
         //유저가 북마크한 것을 리스트로 모두 불러옴
         List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
@@ -65,7 +62,7 @@ public class MypageService {
         ArrayList<Post> userPostings = new ArrayList<>();
 
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
-        ArrayList<MypageResponseDto> postList = new ArrayList<>();
+        ArrayList<MyBookmarkResponseDto> postList = new ArrayList<>();
 
         //로그인한 유저가 북마크한 게시글들을 ArrayList에 담아줌
         for (BookMark userPost:userPosts){
@@ -85,7 +82,7 @@ public class MypageService {
             }
 
             //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-            MypageResponseDto postDto = new MypageResponseDto(post, stringPostStacks, writer);
+            MyBookmarkResponseDto postDto = new MyBookmarkResponseDto(post, stringPostStacks, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
         }
@@ -93,7 +90,7 @@ public class MypageService {
     }
 
     /*내가 작성한 글 조회*/
-    public ArrayList<PostResponseDto> myPost(User user) {
+    public ArrayList<MyPostResponseDto> myPost(User user) {
 
         //유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
         List<Post> posts = postRepository.findByUser(user);
@@ -103,7 +100,7 @@ public class MypageService {
         //유저가 북마크한 게시글을 찾아 리스트에 담아주기 위해 ArrayList 생성
         ArrayList<Post> userPostings = new ArrayList<>();
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
-        ArrayList<PostResponseDto> postList = new ArrayList<>();
+        ArrayList<MyPostResponseDto> postList = new ArrayList<>();
 
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
         Boolean bookMarkStatus = false ;
@@ -134,15 +131,15 @@ public class MypageService {
             for(PostStack postStack : postStacks){
                 stringPostStacks.add(postStack.getStack());
             }
-            PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            MyPostResponseDto postDto = new MyPostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
         }
         return postList;
     }
 
-    /*내가 참여신청한 프로젝트 조회*/
-    public ArrayList<PostResponseDto> myApply(User user) {
+    /*내가 지원한 프로젝트 조회*/
+    public ArrayList<MyApplyingResponseDto> myApply(User user) {
 
         //유저가 참여신청한 것을 리스트로 모두 불러옴
         List<UserApplication> userApply = userApplicationRepository.findAllByUser(user);
@@ -154,7 +151,7 @@ public class MypageService {
         //유저가 북마크한 게시글을 찾아 리스트에 담아주기 위해 ArrayList 생성
         ArrayList<Post> userPostings = new ArrayList<>();
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
-        ArrayList<PostResponseDto> postList = new ArrayList<>();
+        ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
 
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
         Boolean bookMarkStatus = false;
@@ -189,7 +186,7 @@ public class MypageService {
             for(PostStack postStack : postStacks){
                 stringPostStacks.add(postStack.getStack());
             }
-            PostResponseDto postDto = new PostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            MyApplyingResponseDto postDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
             //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
             postList.add(postDto);
         }
@@ -197,7 +194,7 @@ public class MypageService {
     }
 
     /*참여수락된프로젝트조회*/
-    public ArrayList<PostResponseDto> participation(User user) {
+    public ArrayList<MyAcceptanceResponseDto> participation(User user) {
         //해당 유저의 참여완료된(수락된) 리스트
         List<Acceptance> acceptances = acceptanceRepository.findAllByUser(user);
         //해당 유저의 북마크 리스트
@@ -206,7 +203,7 @@ public class MypageService {
         ArrayList<Post> acceptedList = new ArrayList<>();
         ArrayList<Post> bookMarkedList = new ArrayList<>();
         //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
-        ArrayList<PostResponseDto> postList = new ArrayList<>();
+        ArrayList<MyAcceptanceResponseDto> postList = new ArrayList<>();
 
         Boolean bookMarkStatus = false;
 
@@ -238,8 +235,9 @@ public class MypageService {
             for(PostStack postStack : postStacks){
                 stringPostStacks.add(postStack.getStack());
             }
-            PostResponseDto postDto = new PostResponseDto(accepted, stringPostStacks, bookMarkStatus, writer);
+            MyAcceptanceResponseDto postDto = new MyAcceptanceResponseDto(accepted, stringPostStacks, bookMarkStatus, writer);
             postList.add(postDto);
+
         }
         return postList;
     }
@@ -393,5 +391,92 @@ public class MypageService {
         //알림
 
         return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
+    }
+
+    /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
+    public OtherUserMypageResponseDto mypageInfo(Long userId, User user) {
+        User otherUser = userRepository.findById(userId)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
+
+        //반환할 ArrayList 생성
+
+        /*다른유저의 프로필정보*/
+        UserInfo userInfo = new UserInfo(otherUser.getUsername(), otherUser.getNickname(),otherUser.getProfileImg(), otherUser.getStacks());
+
+        /*다른유저의 참여중인 프로젝트 리스트*/
+        //다른 유저의 참여완료된(수락된) 리스트
+        List<Acceptance> acceptances = acceptanceRepository.findAllByUser(otherUser);
+        //현재 로그인한 유저의 북마크 리스트
+        List<BookMark> bookMarks = bookMarkRepository.findAllByUser(user);
+        //게시물 객체를 담아줄 ArrayList 생성
+        ArrayList<MyAcceptanceResponseDto> acceptancePostList = new ArrayList<>();
+        ArrayList<Post> acceptedList = new ArrayList<>();
+        ArrayList<Post> bookMarkedList = new ArrayList<>();
+
+        Boolean bookMarkStatus = false;
+
+        //해당 유저의 참여완료된 모집글 객체를 하나씩 ArrayList에 담아줌
+        for(Acceptance acceptance:acceptances){
+            Post post = acceptance.getPost();
+            acceptedList.add(post);
+        }
+        //로그인한 유저가 북마크한 모집글 객체를 하나씩 ArrayList에 담아줌
+        for(BookMark bookMark:bookMarks){
+            Post post = bookMark.getPost();
+            bookMarkedList.add(post);
+        }
+
+        for(Post acceptedPost : acceptedList){
+            Long acceptedPostId = acceptedPost.getId();
+            User writer = acceptedPost.getUser();
+            for(Post bookMarkedPost:bookMarkedList){
+                Long bookMarkedId = bookMarkedPost.getId();
+
+                if (acceptedPostId.equals(bookMarkedId)){
+                    bookMarkStatus = true;
+                    break;
+                }else {
+                    bookMarkStatus = false;
+                }
+            }
+            List<PostStack> postStacks = postStackRepository.findByPostId(acceptedPostId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+            MyAcceptanceResponseDto acceptanceDto = new MyAcceptanceResponseDto(acceptedPost, stringPostStacks, bookMarkStatus, writer);
+            acceptancePostList.add(acceptanceDto);
+        }
+
+        /*다른유저의 작성글 리스트*/
+        //다른 유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
+        List<Post> posts = postRepository.findByUser(otherUser);
+
+        ArrayList<MyPostResponseDto> postList = new ArrayList<>();
+
+        //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
+        for (Post post : posts) {
+            Long UserPostId = post.getId();
+            User writer = post.getUser();
+            for (Post bookMarkedPost: bookMarkedList ) {
+                Long bookMarkedPostId = bookMarkedPost.getId();
+                //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
+                // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
+                if (UserPostId.equals(bookMarkedPostId)) {
+                    bookMarkStatus = true;
+                    break; //true일 경우 탈출
+                } else {
+                    bookMarkStatus = false;
+                }
+            }
+            List<PostStack> postStacks = postStackRepository.findByPostId(UserPostId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+            MyPostResponseDto postDto = new MyPostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+            postList.add(postDto);
+        }
+        return new OtherUserMypageResponseDto(userInfo,acceptancePostList,postList);
     }
 }
