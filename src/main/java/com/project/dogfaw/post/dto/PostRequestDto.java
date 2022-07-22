@@ -19,7 +19,7 @@ public class PostRequestDto {
     private int maxCapacity;
     private String content;
 
-    private String profileImg;
+    private String profileImg; 
 
 
     public PostRequestDto(String title, String online, String period, String startAt, int maxCapacity, String content) {
