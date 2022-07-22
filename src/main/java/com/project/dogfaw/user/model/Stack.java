@@ -21,7 +21,7 @@ public class Stack {
 
     @Column
     private String stack;
-
+    @Column
     private Long userId;
 
 

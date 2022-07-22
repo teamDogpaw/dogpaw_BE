@@ -32,6 +32,13 @@ public class PostResponseDto {
 
     private boolean bookMarkStatus;
 
+    private int currentMember;
+
+    private int maxCapacity;
+
+    private int applierCnt;
+
+
 
     public PostResponseDto(Post post, List<String> stacks, boolean bookMarkStatus, User writer){
         this.postId = post.getId();
@@ -47,6 +54,9 @@ public class PostResponseDto {
         this.bookmarkCnt = post.getBookmarkCnt();
         this.commentCnt = post.getCommentCnt();
         this.bookMarkStatus = bookMarkStatus;
+        this.currentMember = post.getCurrentMember();
+        this.maxCapacity = post.getMaxCapacity();
+        this.applierCnt = post.getUserApplications().size();
 
     }
 }

@@ -10,6 +10,7 @@ import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
@@ -24,6 +25,8 @@ import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,8 +42,9 @@ public class PostService {
     private final UserApplicationRepository userApplicationRepository;
     private final UserRepository userRepository;
     private final CommentRepository commentRepository;
-
     private final AcceptanceRepository acceptanceRepository;
+
+
 
 
     //전체조회
@@ -143,6 +147,8 @@ public class PostService {
 
 
     //post 상세조회
+
+
     public PostDetailResponseDto getPostDetail(Long postId,User user) {
         //게시글 존재유무
         Post post = postRepository.findById(postId).orElseThrow(
@@ -206,6 +212,11 @@ public class PostService {
         if (!Objects.equals(username, post.getUser().getUsername())){
             throw new IllegalArgumentException("본인의 게시글만 수정할 수 있습니다.");
         }
+        postStackRepository.deleteByPostId(postId);
+        for (String stack : postRequestDto.getStacks()){
+            postStackRepository.save(new PostStack(postId,stack));
+        }
+
         post.update(postRequestDto, user.getId());
     }
 
@@ -219,18 +230,19 @@ public class PostService {
             throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
         }
         userApplicationRepository.deleteAllByPost(post);
+        acceptanceRepository.deleteAllByPost(post);
         bookMarkRepository.deleteAllByPost(post);
         commentRepository.deleteAllByPost(post);
         postRepository.deleteById(postId);
     }
 
-    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
-        List<PostStack> stackList = new ArrayList<>();
-        for(StackDto stackdto : requestDto){
-            stackList.add(new PostStack(stackdto, post ));
-        }
-        return stackList;
-    }
+//    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
+//        List<PostStack> stackList = new ArrayList<>();
+//        for(StackDto stackdto : requestDto){
+//            stackList.add(new PostStack(stackdto, post ));
+//        }
+//        return stackList;
+//    }
 
 
 
@@ -288,8 +300,31 @@ public class PostService {
         }
         return postList;
     }
+    @Transactional
+    /*모집마감,모집마감 취소(작성자만)*/
+    public ResponseEntity<Object> updateDeadline(Long postId, User user) {
+        //게시글
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+        //모집글 작성자 확인
+        if (!user.getNickname().equals(post.getUser().getNickname())) {
+            throw new CustomException(ErrorCode.POST_INQUIRY_NO_AUTHORITY);
+        }
+        if (post.getDeadline() == false) {
+            Boolean deadline = true;
+            post.updateDeadline(deadline);
+            return new ResponseEntity(new StatusResponseDto("모집이 마감되었습니다",true), HttpStatus.OK);
+        } else {
+            //만약 모집인원수가 모두 찼을 경우 모집취소 불가
+            if (post.getCurrentMember() >= post.getMaxCapacity()) {
+                throw new CustomException(ErrorCode.POST_PEOPLE_SET_CLOSED);
+            }
+            Boolean deadline = false;
+            post.updateDeadline(deadline);
+            return new ResponseEntity(new StatusResponseDto("모집 마감이 취소되었습니다",false), HttpStatus.OK);
+        }
+    }
 }
 
-    //댓글
 
 

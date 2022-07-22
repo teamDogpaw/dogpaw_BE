@@ -1,5 +1,6 @@
 package com.project.dogfaw.mypage.service;
 
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.project.dogfaw.acceptance.Acceptance;
 import com.project.dogfaw.acceptance.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
@@ -8,7 +9,9 @@ import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.mypage.dto.AllApplicantsDto;
+import com.project.dogfaw.mypage.dto.AllTeammateDto;
 import com.project.dogfaw.mypage.dto.MypageRequestDto;
 import com.project.dogfaw.mypage.dto.MypageResponseDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
@@ -16,12 +19,17 @@ import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
+import com.project.dogfaw.sse.model.NotificationType;
+import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -39,6 +47,13 @@ public class MypageService {
     private final AcceptanceRepository acceptanceRepository;
     private final StackRepository stackRepository;
     private final UserRepository userRepository;
+
+    private final AmazonS3Client amazonS3Client;
+
+    private final NotificationService notificationService;
+
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
 
     /*내가 북마크한 글 조회*/
     public ArrayList<MypageResponseDto> myBookmark(User user) {
@@ -229,7 +244,7 @@ public class MypageService {
         return postList;
     }
 
-    @Transactional
+
     /*지원자 전체조회(작성자만)*/
     public ArrayList<AllApplicantsDto> allApplicants(Long postId, User user) {
         //모집글 존재여부 확인
@@ -242,11 +257,13 @@ public class MypageService {
         }
         //해당 게시글의 참여신청을 정보를 다 가져오고 해당 유저 정보를 뽑아와 dto에 담아 리스트로 반환
         List<UserApplication> applicants = userApplicationRepository.findAllByPost(post);
-        List<String> stackList = new ArrayList<>();
+
         ArrayList<AllApplicantsDto> users = new ArrayList<>();
+
 
         for(UserApplication applicant:applicants){
             User applier = applicant.getUser();
+            List<String> stackList = new ArrayList<>();
             List<Stack> stacks = applier.getStacks();
             for (Stack stack: stacks){
                 stackList.add(stack.getStack());
@@ -278,6 +295,12 @@ public class MypageService {
     @Transactional
     /*프로필 기본이미지로 변경 요청*/
     public void basicImg(User user) {
+        //아마존 S3에 저장된 이미지 삭제
+        if(user.getProfileImg()!=null) {
+            String imgKey = user.getImgkey();
+            amazonS3Client.deleteObject(bucket,imgKey);
+        }
+
         user.setImgkey(null);
         user.setProfileImg(null);
     }
@@ -292,4 +315,83 @@ public class MypageService {
     }
 
 
+    /*내 팀원보기*/
+    public ArrayList<AllTeammateDto> checkTeammate(Long postId) {
+        //모집글 존재여부 확인
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        //해당 게시글 수락 리스트 가져오기
+        List<Acceptance> teammates = acceptanceRepository.findAllByPost(post);
+
+        ArrayList<AllTeammateDto> users = new ArrayList<>();
+
+        for(Acceptance teammate:teammates){
+            User teammateUser = teammate.getUser();
+            List<String> stackList = new ArrayList<>();
+            List<Stack> stacks = teammateUser.getStacks();
+            for (Stack stack: stacks){
+                stackList.add(stack.getStack());
+            }
+            AllTeammateDto allTeammateDto =new AllTeammateDto(teammateUser,stackList);
+            users.add(allTeammateDto);
+        }
+        return users;
+    }
+
+    /*팀원 추방하기*/
+    @Transactional
+    public ResponseEntity<Object> expulsionTeammate(Long userId, Long postId,User user) {
+        //추방하려는 유저정보 찾기
+        User teammate = userRepository.findById(userId)
+                .orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
+        //해당게식글 찾기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        //모집글 작성자 확인
+        if(!user.getId().equals(post.getUser().getId())){
+            throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
+        }
+        //수락정보 존재 확인
+        acceptanceRepository.findByUserAndPost(teammate,post)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
+        //추방하려는 유저,게시글 객체로 찾아 삭제
+        acceptanceRepository.deleteByUserAndPost(teammate,post);
+        //현재모집인원 -1
+        post.decreaseCnt();
+        //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
+        Boolean deadline = false;
+        if(post.getCurrentMember()<post.getMaxCapacity()){
+            post.updateDeadline(deadline);
+        }
+
+        return new ResponseEntity(new StatusResponseDto(teammate.getNickname()+"님 추방이 완료되었습니다",""), HttpStatus.OK);
+    }
+    @Transactional
+    /*참가자 자진 팀 탈퇴*/
+    public ResponseEntity<Object> withdrawTeam(Long postId, User user) {
+        //해당게식글 찾기
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        //수락정보 존재 확인
+        acceptanceRepository.findByUserAndPost(user,post)
+                .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
+        //참여수락된 상태 db에서 삭제
+        acceptanceRepository.deleteByUserAndPost(user,post);
+        //현재모집인원 -1
+        post.decreaseCnt();
+        //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
+        Boolean deadline = false;
+        if(post.getCurrentMember()<post.getMaxCapacity()){
+            post.updateDeadline(deadline);
+        }// 스테이터스는 진행중으로 유지한다.
+
+        //알림
+//        String Url = "https://www.everymohum.com/user/"+userApply.getUser().getId();
+//        String content = userApply.getUser().getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
+//        notificationService.send(userApply.getUser(), NotificationType.REJECT,content,Url);
+        //알림
+
+        return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
+    }
 }

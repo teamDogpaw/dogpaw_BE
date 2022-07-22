@@ -1,33 +1,23 @@
 package com.project.dogfaw.post.controller;
 
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
 import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.PostResponseDto;
-import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.service.PostService;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.security.SecurityUtil;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 
@@ -111,4 +101,12 @@ public class PostController {
         String data = null;
         return new ResponseEntity(new StatusResponseDto("게시글 삭제가 완료되었습니다",data),HttpStatus.OK);
     }
+
+    /*모집마감,모집마감 취소(작성자만)*/
+    @PostMapping("/api/post/{postId}/deadline")
+    public ResponseEntity<Object> updateDeadline(@PathVariable Long postId){
+        User user = commonService.getUser();
+        return postService.updateDeadline(postId,user);
+    }
+
 }

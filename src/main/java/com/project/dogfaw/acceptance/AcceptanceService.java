@@ -42,6 +42,10 @@ public class AcceptanceService {
         //신청자확인
         userApplicationRepository.findByUserAndPost(applier,post)
                 .orElseThrow(()-> new CustomException(ErrorCode.APPLY_NOT_FOUND));
+        //수락완료 저장 전 현재모집인원 체크
+        if(post.getCurrentMember()>=post.getMaxCapacity()){
+            throw new CustomException(ErrorCode.ACCEPTANCE_PEOPLE_SET_CLOSED);
+        }
         //신청상태 삭제
         userApplicationRepository.deleteByUserAndPost(applier,post)
                 .orElseThrow(()-> new CustomException(ErrorCode.APPLY_NOT_FOUND));
@@ -49,17 +53,24 @@ public class AcceptanceService {
         acceptanceRepository.save(acceptance);
         //현재인원+1
         post.increaseCnt(); //post.decreaseCnt = 수락된 신청자가 상세페이지에서 참여취소 하였을 때 acceptanceRepo에서 삭제하고 -1 해야함
+        //모집정원이 모두 찼을 경우 모집마감
+        if(post.getCurrentMember()==post.getMaxCapacity()){
+            Boolean deadline = true;
+            post.updateDeadline(deadline);
+        }
 
     }
     @Transactional
     /*신청거절하기*/
     public void rejection(Long userId, Long postId, User user) {
+        //신청자
         User applier = userRepository.findById(userId)
                 .orElseThrow(()->new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND));
+        //게시글
         Post post = postRepository.findById(postId)
                 .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+        //작성자
         Long writer = post.getUser().getId();
-
 
         //작성자확인
         if(!writer.equals(user.getId())){

@@ -4,6 +4,7 @@ import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.comment.dto.CommentRequestDto;
 import com.project.dogfaw.comment.dto.CommentResponseDto;
 import com.project.dogfaw.comment.model.Comment;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.comment.service.CommentService;
 import com.project.dogfaw.common.CommonService;
@@ -37,7 +38,7 @@ public class CommentController {
 
     // 댓글 조회
     @GetMapping("/api/posts/{postId}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getCommentsByPostId(@PathVariable Long postId) {
+    public ResponseEntity<StatusResponseDto> getCommentsByPostId(@PathVariable Long postId) {
 
         return ResponseEntity.ok().body(commentService.getCommentsByPostId(postId));
     }

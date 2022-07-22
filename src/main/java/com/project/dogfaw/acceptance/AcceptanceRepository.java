@@ -6,11 +6,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AcceptanceRepository extends JpaRepository<Acceptance, Long> {
 
     List<Acceptance> findAllByUser(User user);
+    List<Acceptance> findAllByPost(Post post);
     Boolean existsByUserAndPost(User user, Post post);
+
+    Optional<Acceptance>deleteByUserAndPost(User user, Post post);
+    Optional<Acceptance>findByUserAndPost(User user, Post post);
+
+    Optional<Acceptance> deleteAllByPost(Post post);
 
 }
