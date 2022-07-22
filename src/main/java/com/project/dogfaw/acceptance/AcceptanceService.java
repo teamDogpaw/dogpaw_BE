@@ -59,6 +59,7 @@ public class AcceptanceService {
             post.updateDeadline(deadline);
         }
 
+
     }
     @Transactional
     /*신청거절하기*/
@@ -81,6 +82,7 @@ public class AcceptanceService {
                 .orElseThrow(()-> new CustomException(ErrorCode.APPLY_NOT_FOUND));
         //신청거절 = 신청상태 삭제
         userApplicationRepository.deleteByUserAndPost(applier,post);
+
 
     }
 }

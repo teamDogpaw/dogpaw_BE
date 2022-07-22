@@ -3,13 +3,10 @@ package com.project.dogfaw.mypage.controller;
 
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.mypage.dto.AllApplicantsDto;
-import com.project.dogfaw.mypage.dto.AllTeammateDto;
-import com.project.dogfaw.mypage.dto.MypageRequestDto;
-import com.project.dogfaw.mypage.dto.MypageResponseDto;
+import com.project.dogfaw.mypage.dto.*;
 import com.project.dogfaw.mypage.service.MypageService;
 import com.project.dogfaw.mypage.service.S3Uploader;
-import com.project.dogfaw.post.dto.PostResponseDto;
+import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 @RequiredArgsConstructor
@@ -33,7 +29,7 @@ public class MypageController {
 
     /*북마크한 게시물 불러오기*/
     @GetMapping("/api/user/mypage/bookmark")
-    public ArrayList<MypageResponseDto> myBookmark() {
+    public ArrayList<MyBookmarkResponseDto> myBookmark() {
         User user = commonService.getUser();
         return mypageService.myBookmark(user);
     }
@@ -41,7 +37,7 @@ public class MypageController {
 
     /*내가 작성한 글 불러오기*/
     @GetMapping("/api/user/mypage/post")
-    public ArrayList<PostResponseDto> myPost() {
+    public ArrayList<MyPostResponseDto> myPost() {
         User user = commonService.getUser();
         return mypageService.myPost(user);
     }
@@ -49,7 +45,7 @@ public class MypageController {
 
     /*내가 지원한 프로젝트 불러오기*/
     @GetMapping("/api/user/mypage/apply")
-    public ArrayList<PostResponseDto> myApply() {
+    public ArrayList<MyApplyingResponseDto> myApply() {
         User user = commonService.getUser();
         return mypageService.myApply(user);
     }
@@ -57,7 +53,7 @@ public class MypageController {
 
     /*내가 참여한 프로젝트 불러오기*/
     @GetMapping("/api/user/participation")
-    public ArrayList<PostResponseDto> participation(){
+    public ArrayList<MyAcceptanceResponseDto> participation(){
         User user = commonService.getUser();
         return mypageService.participation(user);
     }
@@ -115,5 +111,12 @@ public class MypageController {
     public ResponseEntity<Object> withdrawTeam(@PathVariable Long postId) {
         User user = commonService.getUser();
         return mypageService.withdrawTeam(postId, user);
+    }
+
+    /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
+    @GetMapping("/api/user/{userId}/mypage/info")
+    public OtherUserMypageResponseDto mypageInfo(@PathVariable Long userId){
+        User user = commonService.getUser();
+        return mypageService.mypageInfo(userId,user);
     }
 }

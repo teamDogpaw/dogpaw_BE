@@ -20,4 +20,5 @@ public interface AcceptanceRepository extends JpaRepository<Acceptance, Long> {
 
     Optional<Acceptance> deleteAllByPost(Post post);
 
+
 }
