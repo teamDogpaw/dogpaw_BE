@@ -158,7 +158,8 @@ public class UserService {
     }
 
     // 카카오 로그인 유저 상태 확인
-    public StatusResponseDto SignupUserCheck(Long kakaoId) {
+    // 카카오 로그인 유저 상태 확인
+    public String SignupUserCheck(Long kakaoId) {
 
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
@@ -171,27 +172,51 @@ public class UserService {
 
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
-            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
+//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
+            String accesstoken = tokenDto.getAccessToken();
+            return "redirect:/token/" + accesstoken;
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
-            return new StatusResponseDto("로그인 성공", tokenDto);
+            //return new StatusResponseDto("로그인 성공", tokenDto);
+            String accesstoken = tokenDto.getAccessToken();
+            return "redirect:/token/" + accesstoken;
         }
     }
 
+
+
+
+
+//    public StatusResponseDto SignupUserCheck(Long kakaoId) {
+//
+//        User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+//
+//        if (loginUser.getNickname().equals("default")) {
+//            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
+//                    .userId(loginUser.getId())
+//                    .kakaoId(kakaoId)
+//                    .build();
+//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", kakaoUserInfo);
+//        } else {
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//            return new StatusResponseDto("로그인 성공", tokenDto);
+//        }
+//    }
+
     @Transactional
-    public TokenDto addInfo(SignupRequestDto requestDto) {
+    public TokenDto addInfo(SignupRequestDto requestDto, User user) {
         // 닉네임 중복 확인
         String nickname = requestDto.getNickname();
         if (userRepository.existsByNickname(nickname)) {
             throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
         }
 
-        // DB에서 유저 정보를 찾음
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
-        );
+//        // DB에서 유저 정보를 찾음
+//        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
+//                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
+//        );
 
         user.addInfo(requestDto);
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
