@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.model;
 
 
+import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.user.model.Stack;
@@ -55,6 +56,9 @@ public class Post extends Timestamped {
 
     @Column
     private int commentCnt;
+
+    @OneToMany
+    private List<PostStack> postStacks;
 
 
     @OneToMany(mappedBy = "post")
