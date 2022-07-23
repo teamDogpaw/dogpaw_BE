@@ -16,6 +16,7 @@ import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.model.PostStack;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
+import com.project.dogfaw.sse.model.NotificationType;
 import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.dto.UserInfo;
@@ -347,9 +348,6 @@ public class MypageService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(user, post).orElseThrow(
-                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
-        );
         //모집글 작성자 확인
         if (!user.getId().equals(post.getUser().getId())) {
             throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
@@ -369,9 +367,9 @@ public class MypageService {
 
         //지원자한테 알람 가야함
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
-        String content = userApply.getUser().getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
-        notificationService.send(userApply.getUser(),NotificationType.REJECT,content,Url);
+        String Url = "https://www.dogpaw.kr/user/"+teammate.getId();
+        String content = teammate.getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
+        notificationService.send(teammate,NotificationType.REJECT,content,Url);
 
         return new ResponseEntity(new StatusResponseDto(teammate.getNickname()+"님 추방이 완료되었습니다",""), HttpStatus.OK);
     }
@@ -381,10 +379,10 @@ public class MypageService {
         //해당게식글 찾기
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
-        //해당유저의게시글과포스트찾기
-        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(user, post).orElseThrow(
-                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
-        );
+//        //해당유저의게시글과포스트찾기
+//        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(user, post).orElseThrow(
+//                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
+//        );
         //수락정보 존재 확인
         acceptanceRepository.findByUserAndPost(user,post)
                 .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
@@ -401,10 +399,10 @@ public class MypageService {
         //작성자에게 알람
         // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/applied/"+userApply.getId();
+        String Url = "https://www.dogpaw.kr/applied/"+user.getId();
         //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
-        String notificationContent = userApply.getUser().getNickname()+"님! 팀원이 탈퇴하였습니다";
-        notificationService.send(userApply.getUser(),NotificationType.REJECT,notificationContent,Url);
+        String notificationContent = user.getNickname()+"님! 팀원이 탈퇴하였습니다";
+        notificationService.send(user, NotificationType.REJECT,notificationContent,Url);
 
         return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
     }
