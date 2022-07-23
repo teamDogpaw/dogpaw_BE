@@ -1,6 +1,6 @@
 package com.project.dogfaw.apply.service;
 
-
+//작성자한테 알람이 가야함
 import com.project.dogfaw.acceptance.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
@@ -39,6 +39,7 @@ public class UserApplicationService {
                 ()-> new CustomException(ErrorCode.POST_NOT_FOUND)
         );
 
+
         //DB를 조회하여 참여신청 이력이 없으면 DB에 저장후 해당 게시글의 현재 모집인원 +1
         //참여 취소 버튼 클릭 시 DB를 조회하여 참여신청 이력이 있을경우 DB에서 삭제후 현재 모집인원 -1
 
@@ -51,16 +52,17 @@ public class UserApplicationService {
             UserApplication userApplication = new UserApplication(user,post);
             userApplicationRepository.save(userApplication);
 
-            //알림
+            Boolean data = true;
+
+            // 알림
             // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
             //해당 댓글로 이동하는 url
-//            String Url = "https://www.everymohum.com/applied/"+post.getId();
-//            //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
-//            String content = post.getUser().getNickname()+"님! 프로젝트 신청 알림이 도착했어요!";
-//            notificationService.send(post.getUser(), NotificationType.APPLY,content,Url);
-            //알림
+            String Url = "https://www.everymohum.com/applied/"+post.getId();
+            //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
+            String notificationContent = post.getUser().getNickname()+"님! 프로젝트 신청 알림이 도착했어요!";
+            notificationService.send(post.getUser(),NotificationType.APPLY,notificationContent,Url);
 
-            Boolean data = true;
+
             return new  ResponseEntity<>(new StatusResponseDto("신청이 완료되었습니다.", data), HttpStatus.OK);
 
         }else{

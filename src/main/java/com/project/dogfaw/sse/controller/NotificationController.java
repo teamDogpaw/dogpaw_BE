@@ -21,7 +21,7 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    // MIME TYPE - text/event-stream 형태로 받아야함.
+    // MIME TYPE - text/event-stream 형태로 받아야함. EventStream의 생성은 최초 클라이언트 요청으로 발생한다. EventStream이 생성되면 서버는 원하는 시점에 n개의 EventStream에 Event 데이터를 전송할 수 있다.
     // 클라이어트로부터 오는 알림 구독 요청을 받는다.
     // 로그인한 유저는 SSE 연결
     // lAST_EVENT_ID = 이전에 받지 못한 이벤트가 존재하는 경우 [ SSE 시간 만료 혹은 종료 ]

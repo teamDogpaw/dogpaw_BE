@@ -13,12 +13,12 @@ import lombok.NoArgsConstructor;
 @Builder
 public class NotificationDto {
     private Long id;
-    private String content;
+    private String notificationContent;
     private String url;
     private Boolean status;
 
     public static NotificationDto create(Notification notification) {
-        return new NotificationDto(notification.getId(), notification.getContent(),
+        return new NotificationDto(notification.getId(), notification.getNotificationContent(),
                 notification.getUrl(), notification.getIsRead());
     }
 

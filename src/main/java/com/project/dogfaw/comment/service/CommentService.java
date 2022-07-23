@@ -11,6 +11,8 @@ import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.post.repository.PostRepository;
+import com.project.dogfaw.sse.model.NotificationType;
+import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final NotificationService notificationService;
 
     // 댓글 등록
     @Transactional
@@ -39,6 +42,18 @@ public class CommentService {
         String nickname = user.getNickname();
         String content = requestDto.getContent();
         Comment cmt = new Comment(content, nickname, profileImg, user, post);
+
+        //알림
+        //해당 댓글로 이동하는 url
+        String Url = "http://www.localhost/detail/"+post.getId();
+        //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
+        String notificationContent = post.getUser().getNickname()+"님! 댓글 알림이 도착했어요!";
+
+        //본인의 게시글에 댓글을 남길때는 알림을 보낼 필요가 없다.
+        if(!Objects.equals(user.getId(), post.getUser().getId())) {
+            notificationService.send(post.getUser(), NotificationType.REPLY, notificationContent, Url);
+        }
+
         post.increaseCmCount();
 
         commentRepository.save(cmt);
