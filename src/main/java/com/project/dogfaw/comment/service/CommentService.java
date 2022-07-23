@@ -45,7 +45,7 @@ public class CommentService {
 
         //알림
         //해당 댓글로 이동하는 url
-        String Url = "http://www.localhost/detail/"+post.getId();
+        String Url = "https://www.dogpaw.kr/detail/"+post.getId();
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = post.getUser().getNickname()+"님! 댓글 알림이 도착했어요!";
 

@@ -64,7 +64,7 @@ public class AcceptanceService {
 
         // 알림
         //해당 댓글로 이동하는 url
-        String Url = "https://www.everymohum.com/user/"+userApply.getUser().getId();
+        String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
         //신청 수락 시 신청 유저에게 실시간 알림 전송 ,
         String content = userApply.getUser().getNickname()+"님! 프로젝트 매칭 알림이 도착했어요!";
         notificationService.send(userApply.getUser(),NotificationType.ACCEPT,content,Url);
@@ -107,7 +107,7 @@ public class AcceptanceService {
 
         //프로젝트 매칭 실패 알림
         //해당 댓글로 이동하는 url
-        String Url = "http://localhost8080/user/"+userApply.getUser().getId();
+        String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
         String notificationContent = userApply.getUser().getNickname()+"님! 프로젝트 매칭 실패 알림이 도착했어요!";
         notificationService.send(userApply.getUser(),NotificationType.REJECT,notificationContent,Url);
 
