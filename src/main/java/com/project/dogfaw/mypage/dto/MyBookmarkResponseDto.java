@@ -1,19 +1,16 @@
 package com.project.dogfaw.mypage.dto;
 
 import com.project.dogfaw.post.model.Post;
-import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
 @NoArgsConstructor
 @Getter
-public class MypageResponseDto {
+public class MyBookmarkResponseDto {
 
     private Long postId;
     private String title;
@@ -34,7 +31,7 @@ public class MypageResponseDto {
     private int commentCnt;
 
 
-    public MypageResponseDto(Post post, List<String> stacks, User writer){
+    public MyBookmarkResponseDto(Post post, List<String> stacks, User writer){
 
         this.postId = post.getId();
         this.title = post.getTitle();

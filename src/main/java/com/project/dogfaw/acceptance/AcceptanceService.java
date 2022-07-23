@@ -77,6 +77,7 @@ public class AcceptanceService {
             post.updateDeadline(deadline);
         }
 
+
     }
     @Transactional
     /*신청거절하기*/
@@ -110,6 +111,7 @@ public class AcceptanceService {
         String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
         String notificationContent = userApply.getUser().getNickname()+"님! 프로젝트 매칭 실패 알림이 도착했어요!";
         notificationService.send(userApply.getUser(),NotificationType.REJECT,notificationContent,Url);
+
 
     }
 }

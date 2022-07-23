@@ -1,7 +1,6 @@
 package com.project.dogfaw.post.repository;
 
-import com.project.dogfaw.post.dto.BookmarkRankResponseDto;
-import com.project.dogfaw.post.dto.PostResponseDto;
+import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +15,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     Slice<Post> findAllByOrderByCreatedAtDesc(PageRequest pageRequest);
 
-    Slice<PostResponseDto> findByOrderByCreatedAtDesc(PageRequest pageRequest);
+    Slice<MyApplyingResponseDto> findByOrderByCreatedAtDesc(PageRequest pageRequest);
 
     List<Post> findTop20ByOrderByModifiedAtDesc();
 

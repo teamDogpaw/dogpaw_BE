@@ -1,16 +1,15 @@
-package com.project.dogfaw.post.dto;
+package com.project.dogfaw.mypage.dto;
 
-import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
-public class PostResponseDto {
+public class MyApplyingResponseDto {
 
     private Long postId;
     private String title;
@@ -40,7 +39,7 @@ public class PostResponseDto {
 
 
 
-    public PostResponseDto(Post post, List<String> stacks, boolean bookMarkStatus, User writer){
+    public MyApplyingResponseDto(Post post, List<String> stacks, boolean bookMarkStatus, User writer){
         this.postId = post.getId();
         this.title = post.getTitle();
         this.online = post.getOnline();
@@ -57,6 +56,5 @@ public class PostResponseDto {
         this.currentMember = post.getCurrentMember();
         this.maxCapacity = post.getMaxCapacity();
         this.applierCnt = post.getUserApplications().size();
-
     }
 }
