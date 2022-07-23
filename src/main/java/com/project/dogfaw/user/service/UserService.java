@@ -4,6 +4,7 @@ import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.common.validator.UserValidator;
+import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
@@ -171,20 +172,16 @@ public class UserService {
             refreshTokenRepository.save(refreshToken);
 //            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
             String accesstoken = tokenDto.getAccessToken();
-            return "redirect:/token/" + accesstoken;
+            return accesstoken;
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
             //return new StatusResponseDto("로그인 성공", tokenDto);
             String accesstoken = tokenDto.getAccessToken();
-            return "redirect:/token/" + accesstoken;
+            return accesstoken;
         }
     }
-
-
-
-
 
 //    public StatusResponseDto SignupUserCheck(Long kakaoId) {
 //
@@ -227,8 +224,6 @@ public class UserService {
         return tokenDto;
     }
 
-
-
     // 회원가입 추가 정보 등록
 //    @Transactional
 //    public void addInfo(SignupRequestDto requestDto, User user) {
@@ -258,7 +253,6 @@ public class UserService {
 //        return stacks;
 //    }
 
-
     private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
         List<Stack> stackList = new ArrayList<>();
         for(StackDto stackdto : requestDto){
@@ -267,7 +261,23 @@ public class UserService {
         return stackList;
     }
 
-//    public UserInfo userInfo(User user) {
-//
-//    }
+    // 회원 탈퇴 메소드 (회원삭제가 아니라 회원정보를 삭제)
+    public void deleteUser(UserDetailsImpl userDetails) {
+        User foundUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+
+        if (foundUser != null) {
+            String username = "deleteUser_"+foundUser.getId();
+            String password = passwordEncoder.encode(UUID.randomUUID().toString());
+            String nickname = "알수없음";
+            foundUser.setUsername(username);
+            foundUser.setNickname(nickname);
+            foundUser.setPassword(password);
+            foundUser.setProfileImg(null);
+            foundUser.setImgkey(null);
+            foundUser.setRole(UserRoleEnum.USER);
+            foundUser.setStacks(null);
+            foundUser.setKakaoId(null);
+            userRepository.save(foundUser);
+        }
+    }
 }
