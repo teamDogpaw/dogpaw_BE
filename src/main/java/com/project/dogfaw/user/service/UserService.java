@@ -156,7 +156,6 @@ public class UserService {
     }
 
     // 카카오 로그인 유저 상태 확인
-    // 카카오 로그인 유저 상태 확인
     public String SignupUserCheck(Long kakaoId) {
 
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);

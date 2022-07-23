@@ -86,7 +86,7 @@ public class UserController {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
 //        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
         String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String url = "http://localhost:8080/user/kakao/login/?token=" + accesstoken;
+        String url = "http://localhost:3000/user/kakao/login/?token=" + accesstoken;
         response.sendRedirect(url);
     }
 
