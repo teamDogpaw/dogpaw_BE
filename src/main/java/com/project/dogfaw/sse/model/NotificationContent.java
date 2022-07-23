@@ -17,24 +17,19 @@ import java.util.Objects;
 public class NotificationContent {
     private static final int Max_LENGTH = 50;
 
-    @Column(nullable = false,length = Max_LENGTH)
-    private String content;
+    @Column(nullable = false, length = Max_LENGTH)
+    private String notificationContent;
 
-    public NotificationContent(String content){
-        if(isNotValidNotificationContent(content)){
+    public NotificationContent(String notificationContent) {
+        if (isNotValidNotificationContent(notificationContent)) {
             throw new CustomException(ErrorCode.NOT_VALIDCONTENT);
         }
-        this.content = content;
+        this.notificationContent = notificationContent;
     }
 
-    private boolean isNotValidNotificationContent(String content) {
-        return Objects.isNull(content) || content.length() > Max_LENGTH
-                || content.isEmpty();
+    private boolean isNotValidNotificationContent(String notificationContent) {
+        return Objects.isNull(notificationContent) || notificationContent.length() > Max_LENGTH
+                || notificationContent.isEmpty();
 
-    }
-
-
-    public void setContent(String content) {
-        this.content = content;
     }
 }

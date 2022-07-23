@@ -21,7 +21,7 @@ public class Notification extends Timestamped {
     private Long id;
 
     @Embedded
-    private NotificationContent content;
+    private NotificationContent notificationContent;
     //알림내용 - 50자 이내
 
     @Embedded
@@ -43,10 +43,10 @@ public class Notification extends Timestamped {
     private User receiver;
     //회원정보
     @Builder
-    public Notification(User receiver, NotificationType notificationType, String content, String url, Boolean isRead) {
+    public Notification(User receiver, NotificationType notificationType, String notificationContent, String url, Boolean isRead) {
         this.receiver = receiver;
         this.notificationType = notificationType;
-        this.content = new NotificationContent(content);
+        this.notificationContent = new NotificationContent(notificationContent);
         this.url = new RelatedURL(url);
         this.isRead = isRead;
     }
@@ -56,9 +56,9 @@ public class Notification extends Timestamped {
         isRead = true;
     }
 
-    public String getContent() {
+    public String getNotificationContent() {
 
-        return content.getContent();
+        return notificationContent.getNotificationContent();
     }
 
     public String getUrl() {

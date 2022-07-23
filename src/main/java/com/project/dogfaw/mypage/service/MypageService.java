@@ -65,7 +65,7 @@ public class MypageService {
         ArrayList<MyBookmarkResponseDto> postList = new ArrayList<>();
 
         //로그인한 유저가 북마크한 게시글들을 ArrayList에 담아줌
-        for (BookMark userPost:userPosts){
+        for (BookMark userPost : userPosts) {
             Post userPosting = userPost.getPost();
             userPostings.add(userPosting);
         }
@@ -77,7 +77,7 @@ public class MypageService {
 
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
-            for(PostStack postStack : postStacks){
+            for (PostStack postStack : postStacks) {
                 stringPostStacks.add(postStack.getStack());
             }
 
@@ -103,10 +103,10 @@ public class MypageService {
         ArrayList<MyPostResponseDto> postList = new ArrayList<>();
 
         //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
-        Boolean bookMarkStatus = false ;
+        Boolean bookMarkStatus = false;
 
         //로그인한 유저가 북마크한 게시글들을 ArrayList에 담아줌
-        for (BookMark userPost:userPosts){
+        for (BookMark userPost : userPosts) {
             Post userPosting = userPost.getPost();
             userPostings.add(userPosting);
         }
@@ -115,7 +115,7 @@ public class MypageService {
         for (Post post : posts) {
             Long postId = post.getId();
             User writer = post.getUser();
-            for (Post userPost: userPostings ) {
+            for (Post userPost : userPostings) {
                 Long userPostId = userPost.getId();
                 //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
                 // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
@@ -128,7 +128,7 @@ public class MypageService {
             }
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
-            for(PostStack postStack : postStacks){
+            for (PostStack postStack : postStacks) {
                 stringPostStacks.add(postStack.getStack());
             }
             MyPostResponseDto postDto = new MyPostResponseDto(post, stringPostStacks, bookMarkStatus, writer);
@@ -157,22 +157,22 @@ public class MypageService {
         Boolean bookMarkStatus = false;
 
         //로그인한 유저가 참여신청한 게시글들을 ArrayList에 담아줌
-        for (UserApplication userPost: userApply){
+        for (UserApplication userPost : userApply) {
             Post userApplied = userPost.getPost();
             userApplying.add(userApplied);
         }
 
         //로그인한 유저가 북마크한 게시글을 다 찾아서 ArrayList에 담아줌
-        for (BookMark userBookmark: userBookmarks){
+        for (BookMark userBookmark : userBookmarks) {
             Post userPosting = userBookmark.getPost();
             userPostings.add(userPosting);
         }
 
         //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
-        for (Post post : userApplying ) {
+        for (Post post : userApplying) {
             Long postId = post.getId();
             User writer = post.getUser();
-            for (Post userPost: userPostings ) {
+            for (Post userPost : userPostings) {
                 Long userPostId = userPost.getId();
                 if (postId.equals(userPostId)) {
                     bookMarkStatus = true;
@@ -183,7 +183,7 @@ public class MypageService {
             }
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
-            for(PostStack postStack : postStacks){
+            for (PostStack postStack : postStacks) {
                 stringPostStacks.add(postStack.getStack());
             }
             MyApplyingResponseDto postDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
@@ -208,31 +208,31 @@ public class MypageService {
         Boolean bookMarkStatus = false;
 
         //해당 유저의 참여완료된 모집글 객체를 하나씩 ArrayList에 담아줌
-        for(Acceptance acceptance:acceptances){
+        for (Acceptance acceptance : acceptances) {
             Post post = acceptance.getPost();
             acceptedList.add(post);
         }
         //해당 유저가 북마크한 모집글 객체를 하나씩 ArrayList에 담아줌
-        for(BookMark bookMark:bookMarks){
+        for (BookMark bookMark : bookMarks) {
             Post post = bookMark.getPost();
             bookMarkedList.add(post);
         }
-        for(Post accepted : acceptedList){
+        for (Post accepted : acceptedList) {
             Long acceptedId = accepted.getId();
             User writer = accepted.getUser();
-            for(Post bookMarked:bookMarkedList){
+            for (Post bookMarked : bookMarkedList) {
                 Long bookMarkedId = bookMarked.getId();
 
-                if (acceptedId.equals(bookMarkedId)){
+                if (acceptedId.equals(bookMarkedId)) {
                     bookMarkStatus = true;
                     break;
-                }else {
+                } else {
                     bookMarkStatus = false;
                 }
             }
             List<PostStack> postStacks = postStackRepository.findByPostId(acceptedId);
             List<String> stringPostStacks = new ArrayList<>();
-            for(PostStack postStack : postStacks){
+            for (PostStack postStack : postStacks) {
                 stringPostStacks.add(postStack.getStack());
             }
             MyAcceptanceResponseDto postDto = new MyAcceptanceResponseDto(accepted, stringPostStacks, bookMarkStatus, writer);
@@ -247,10 +247,10 @@ public class MypageService {
     public ArrayList<AllApplicantsDto> allApplicants(Long postId, User user) {
         //모집글 존재여부 확인
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
         Long writer = post.getUser().getId();
         //작성자 일치 확인
-        if(!writer.equals(user.getId())){
+        if (!writer.equals(user.getId())) {
             throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
         }
         //해당 게시글의 참여신청을 정보를 다 가져오고 해당 유저 정보를 뽑아와 dto에 담아 리스트로 반환
@@ -259,14 +259,14 @@ public class MypageService {
         ArrayList<AllApplicantsDto> users = new ArrayList<>();
 
 
-        for(UserApplication applicant:applicants){
+        for (UserApplication applicant : applicants) {
             User applier = applicant.getUser();
             List<String> stackList = new ArrayList<>();
             List<Stack> stacks = applier.getStacks();
-            for (Stack stack: stacks){
+            for (Stack stack : stacks) {
                 stackList.add(stack.getStack());
             }
-            AllApplicantsDto allApplicantsDto =new AllApplicantsDto(applier,stackList);
+            AllApplicantsDto allApplicantsDto = new AllApplicantsDto(applier, stackList);
             users.add(allApplicantsDto);
         }
         return users;
@@ -278,7 +278,7 @@ public class MypageService {
         //*닉네임 중복검사 후 S3업로드 및 편집
         String nickname = requestDto.getNickname();
         //현재 사용하고 있는 닉네임은 사용가능
-        if(!user.getNickname().equals(nickname)){
+        if (!user.getNickname().equals(nickname)) {
             if (userRepository.existsByNickname(nickname)) {
                 throw new CustomException(ErrorCode.SIGNUP_NICKNAME_OK);
             }
@@ -286,7 +286,7 @@ public class MypageService {
         Long userId = user.getId();
         stackRepository.deleteAllByUserId(userId);
         user.setNickname(requestDto.getNickname());
-        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
+        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(), user));
         user.updateStack(stack);
     }
 
@@ -294,9 +294,9 @@ public class MypageService {
     /*프로필 기본이미지로 변경 요청*/
     public void basicImg(User user) {
         //아마존 S3에 저장된 이미지 삭제
-        if(user.getProfileImg()!=null) {
+        if (user.getProfileImg() != null) {
             String imgKey = user.getImgkey();
-            amazonS3Client.deleteObject(bucket,imgKey);
+            amazonS3Client.deleteObject(bucket, imgKey);
         }
 
         user.setImgkey(null);
@@ -306,7 +306,7 @@ public class MypageService {
     /*List<String> 형태로 변환*/
     private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
         List<Stack> stackList = new ArrayList<>();
-        for(StackDto stackdto : requestDto){
+        for (StackDto stackdto : requestDto) {
             stackList.add(new Stack(stackdto, user));
         }
         return stackList;
@@ -317,21 +317,21 @@ public class MypageService {
     public ArrayList<AllTeammateDto> checkTeammate(Long postId) {
         //모집글 존재여부 확인
         Post post = postRepository.findById(postId)
-                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
         //해당 게시글 수락 리스트 가져오기
         List<Acceptance> teammates = acceptanceRepository.findAllByPost(post);
 
         ArrayList<AllTeammateDto> users = new ArrayList<>();
 
-        for(Acceptance teammate:teammates){
+        for (Acceptance teammate : teammates) {
             User teammateUser = teammate.getUser();
             List<String> stackList = new ArrayList<>();
             List<Stack> stacks = teammateUser.getStacks();
-            for (Stack stack: stacks){
+            for (Stack stack : stacks) {
                 stackList.add(stack.getStack());
             }
-            AllTeammateDto allTeammateDto =new AllTeammateDto(teammateUser,stackList);
+            AllTeammateDto allTeammateDto = new AllTeammateDto(teammateUser, stackList);
             users.add(allTeammateDto);
         }
         return users;
@@ -339,29 +339,39 @@ public class MypageService {
 
     /*팀원 추방하기*/
     @Transactional
-    public ResponseEntity<Object> expulsionTeammate(Long userId, Long postId,User user) {
+    public ResponseEntity<Object> expulsionTeammate(Long userId, Long postId, User user) {
         //추방하려는 유저정보 찾기
         User teammate = userRepository.findById(userId)
-                .orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
         //해당게식글 찾기
         Post post = postRepository.findById(postId)
-                .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(user, post).orElseThrow(
+                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
+        );
         //모집글 작성자 확인
-        if(!user.getId().equals(post.getUser().getId())){
+        if (!user.getId().equals(post.getUser().getId())) {
             throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
         }
         //수락정보 존재 확인
-        acceptanceRepository.findByUserAndPost(teammate,post)
-                .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
+        acceptanceRepository.findByUserAndPost(teammate, post)
+                .orElseThrow(() -> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
         //추방하려는 유저,게시글 객체로 찾아 삭제
-        acceptanceRepository.deleteByUserAndPost(teammate,post);
+        acceptanceRepository.deleteByUserAndPost(teammate, post);
         //현재모집인원 -1
         post.decreaseCnt();
         //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
         Boolean deadline = false;
-        if(post.getCurrentMember()<post.getMaxCapacity()){
+        if (post.getCurrentMember() < post.getMaxCapacity()) {
             post.updateDeadline(deadline);
         }
+
+        //지원자한테 알람 가야함
+        //해당 댓글로 이동하는 url
+        String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
+        String content = userApply.getUser().getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
+        notificationService.send(userApply.getUser(),NotificationType.REJECT,content,Url);
 
         return new ResponseEntity(new StatusResponseDto(teammate.getNickname()+"님 추방이 완료되었습니다",""), HttpStatus.OK);
     }
@@ -371,6 +381,10 @@ public class MypageService {
         //해당게식글 찾기
         Post post = postRepository.findById(postId)
                 .orElseThrow(()-> new CustomException(ErrorCode.POST_NOT_FOUND));
+        //해당유저의게시글과포스트찾기
+        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(user, post).orElseThrow(
+                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
+        );
         //수락정보 존재 확인
         acceptanceRepository.findByUserAndPost(user,post)
                 .orElseThrow(()-> new CustomException(ErrorCode.ACCEPTANCE_NOT_FOUND));
@@ -384,11 +398,13 @@ public class MypageService {
             post.updateDeadline(deadline);
         }// 스테이터스는 진행중으로 유지한다.
 
-        //알림
-//        String Url = "https://www.everymohum.com/user/"+userApply.getUser().getId();
-//        String content = userApply.getUser().getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
-//        notificationService.send(userApply.getUser(), NotificationType.REJECT,content,Url);
-        //알림
+        //작성자에게 알람
+        // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
+        //해당 댓글로 이동하는 url
+        String Url = "https://www.dogpaw.kr/applied/"+userApply.getId();
+        //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
+        String notificationContent = userApply.getUser().getNickname()+"님! 팀원이 탈퇴하였습니다";
+        notificationService.send(userApply.getUser(),NotificationType.REJECT,notificationContent,Url);
 
         return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
     }
