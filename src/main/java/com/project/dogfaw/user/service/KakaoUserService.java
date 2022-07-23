@@ -46,7 +46,7 @@ public class KakaoUserService {
         if  (kakaoUser == null) {
             System.out.println("if");
             registerKakaoUser(kakaoUserInfo);
-        }
+        } 
         System.out.println(4);
 
 //        return getKakaoUserInfo(accessToken);

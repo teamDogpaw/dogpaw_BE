@@ -51,8 +51,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 // login 없이 허용
                 .antMatchers("/user/**").permitAll()
-//                .antMatchers(HttpMethod.GET, "/api/**").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/notifications/**").permitAll()
+                .antMatchers("/notification/**").permitAll()
+                .antMatchers("/subscribe/**").permitAll()
 //                .antMatchers("/api/posts").permitAll()
 //                .antMatchers("/api/preview").permitAll()
 //                .antMatchers("/post/filter/**").permitAll()
@@ -60,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/search/**").permitAll()
 //                .antMatchers("/subscribe/**").permitAll()
 //                .antMatchers("/v2/api-docs","/v3/api-docs", "/swagger-resources/**", "**/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger*/**","/swagger-ui","/swagger-ui/**").permitAll()
+
 
 
                 //추가 - 메인 페이지 접근 허용
@@ -79,10 +82,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net"); //https 주소
         configuration.addAllowedOrigin("http://scatch.s3-website.ap-northeast-2.amazonaws.com"); //http 주소
-        //configuration.addAllowedOrigin("https://blog.dasole.shop"); //https주소
-//        configuration.addAllowedOrigin(""); // local 테스트 시
-//        configuration.addAllowedOrigin("https://amplify.d3ifjxscizr42x.amplifyapp.com"); // 배포 시
-//        configuration.addAllowedOrigin("https://www.everymohum.com");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         //configuration.addAllowedHeader("/"); //502에러때문에 추가
