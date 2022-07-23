@@ -20,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -80,10 +82,19 @@ public class UserController {
 
     // 카카오 로그인 API
     @GetMapping("/user/kakao/login")
-    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+        String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
+        String url = "http://localhost:8080/user/kakao/login/?token=" + accesstoken;
+        response.sendRedirect(url);
     }
+
+//    @GetMapping("/user/kakao/login")
+//    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+//        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
+//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+//    }
 
     // 회원 탈퇴 API
     @DeleteMapping("/user/delete/{userId}")
