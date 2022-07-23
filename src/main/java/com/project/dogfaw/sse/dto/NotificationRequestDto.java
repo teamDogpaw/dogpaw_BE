@@ -13,6 +13,6 @@ import lombok.NoArgsConstructor;
 public class NotificationRequestDto {
     private User receiver;
     private NotificationType notificationType;
-    private String content;
+    private String notificationContent;
     private String url;
 }
