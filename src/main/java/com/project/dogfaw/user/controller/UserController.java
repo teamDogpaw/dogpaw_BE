@@ -91,6 +91,7 @@ public class UserController {
         response.sendRedirect(url);
     }
 
+
 //    @GetMapping("/user/kakao/login")
 //    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
 //        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
@@ -108,8 +109,8 @@ public class UserController {
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
     public ResponseEntity<Object> addInfo(@RequestBody SignupRequestDto requestDto) {
-        User user = commonService.getUser();
-        userService.addInfo(requestDto, user);
+//        User user = commonService.getUser();
+        userService.addInfo(requestDto);
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
 
