@@ -30,7 +30,6 @@ public class NotificationController {
     public SseEmitter subscribe(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                 @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
                                 String lastEventId) {
-
         return notificationService.subscribe(userDetails.getUser().getId(), lastEventId);
     }
 
