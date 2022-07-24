@@ -18,7 +18,12 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    //log4j2를 사용할거기 때문에 기존 spring-boot-starter-web 에 내장되어 있는 logback 기능을 제외
+    all {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+    }
 }
+
 
 repositories {
     mavenCentral()
@@ -47,6 +52,8 @@ dependencies {
     //S3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     implementation 'com.amazonaws:aws-java-sdk:1.12.239'
+    //log4j2
+    implementation 'org.springframework.boot:spring-boot-starter-log4j2'
 //
 //    implementation 'com.amazonaws:aws-java-sdk-bom:1.12.239'
 //    implementation 'com.amazonaws:aws-java-sdk-s3'
