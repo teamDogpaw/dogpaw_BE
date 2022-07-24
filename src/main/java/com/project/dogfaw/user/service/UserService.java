@@ -199,35 +199,8 @@ public class UserService {
 //        }
 //    }
 
-//    @Transactional
-//    public TokenDto addInfo(SignupRequestDto requestDto, User user) {
-//        // 닉네임 중복 확인
-//        String nickname = requestDto.getNickname();
-//        if (userRepository.existsByNickname(nickname)) {
-//            throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
-//        }
-//
-////        // DB에서 유저 정보를 찾음
-////        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-////                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
-////        );
-//
-//        user.addInfo(requestDto);
-//        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
-//        user.updateStack(stack);
-//
-//        TokenDto tokenDto = jwtTokenProvider.createToken(user);
-//
-//        RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
-//        refreshTokenRepository.save(refreshToken);
-//
-//        return tokenDto;
-//    }
-
-    // 회원가입 추가 정보 등록
     @Transactional
-    public void addInfo(SignupRequestDto requestDto) {
-
+    public TokenDto addInfo(SignupRequestDto requestDto, User user) {
         // 닉네임 중복 확인
         String nickname = requestDto.getNickname();
         if (userRepository.existsByNickname(nickname)) {
@@ -235,23 +208,50 @@ public class UserService {
         }
 
 //        // DB에서 유저 정보를 찾음
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
-        );
+//        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
+//                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
+//        );
 
         user.addInfo(requestDto);
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
         user.updateStack(stack);
+
+        TokenDto tokenDto = jwtTokenProvider.createToken(user);
+
+        RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
+        refreshTokenRepository.save(refreshToken);
+
+        return tokenDto;
     }
 
+    // 회원가입 추가 정보 등록
+//    @Transactional
+//    public void addInfo(SignupRequestDto requestDto, User user) {
+//
+//        // 닉네임 중복 확인
+//        String nickname = requestDto.getNickname();
+//        if (userRepository.existsByNickname(nickname)) {
+//            throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
+//        }
 
-    public List<Stack> tostack(List<StackDto> stackDtoList)  {
-        List<Stack> stacks = new ArrayList<>();
-        for(StackDto stackdto : stackDtoList){
-            stacks.add(new Stack(stackdto));
-        }
-        return stacks;
-    }
+////        // DB에서 유저 정보를 찾음
+//        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
+//                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
+//        );
+
+//        user.addInfo(requestDto);
+//        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
+//        user.updateStack(stack);
+//    }
+
+
+//    public List<Stack> tostack(List<StackDto> stackDtoList)  {
+//        List<Stack> stacks = new ArrayList<>();
+//        for(StackDto stackdto : stackDtoList){
+//            stacks.add(new Stack(stackdto));
+//        }
+//        return stacks;
+//    }
 
     private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
         List<Stack> stackList = new ArrayList<>();
