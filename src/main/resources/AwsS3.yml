@@ -1,6 +1,0 @@
-#cloud:
-#  aws:
-#    s3:
-#      bucket: 본인 S3 bucket이름
-#    region:
-#      static: ap-northeast-2
