@@ -83,19 +83,19 @@ public class UserController {
     }
 
     // 카카오 로그인 API
-    @GetMapping("/user/kakao/login")
-    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
-        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-        String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String url = "http://localhost:3000/?token=" + accesstoken;
-        response.sendRedirect(url);
-    }
-
 //    @GetMapping("/user/kakao/login")
-//    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+//    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
 //        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+//        String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
+//        String url = "http://localhost:3000/?token=" + accesstoken;
+//        response.sendRedirect(url);
 //    }
+
+    @GetMapping("/user/kakao/login")
+    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
+        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+    }
 
     // 회원 탈퇴 API
 //    @DeleteMapping("/user/delete/{userId}")
