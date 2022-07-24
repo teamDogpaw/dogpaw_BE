@@ -87,7 +87,7 @@ public class UserController {
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String url = "http://localhost:3030/?token=" + accesstoken;
+        String url = "http://localhost:3000/user/signup/addInfo?token=" + accesstoken;
         response.sendRedirect(url);
     }
 
