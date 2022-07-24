@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        
 
         http.cors().configurationSource(corsConfigurationSource());
         http.csrf().disable().sessionManagement()
@@ -52,6 +53,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // login 없이 허용
                 .antMatchers("/user/**").permitAll()
                 .antMatchers("/api/**").permitAll()
+                .antMatchers("/notifications/**").permitAll()
+                .antMatchers("/notification/**").permitAll()
+                .antMatchers("/subscribe/**").permitAll()
+//                .antMatchers("/api/posts").permitAll()
+//                .antMatchers("/api/preview").permitAll()
+//                .antMatchers("/post/filter/**").permitAll()
+//                .antMatchers("/webSocket/**").permitAll()
+//                .antMatchers("/search/**").permitAll()
+//                .antMatchers("/subscribe/**").permitAll()
+//                .antMatchers("/v2/api-docs","/v3/api-docs", "/swagger-resources/**", "**/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger*/**","/swagger-ui","/swagger-ui/**").permitAll()
+
 
 
                 //추가 - 메인 페이지 접근 허용

@@ -104,9 +104,9 @@ public class NotificationService {
      */
 
     @Async
-    public void send(User receiver, NotificationType notificationType, String content, String url) {
+    public void send(User receiver, NotificationType notificationType, String notificationContent, String url) {
 
-        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, content, url));
+        Notification notification = notificationRepository.save(createNotification(receiver, notificationType, notificationContent, url));
 
         String receiverId = String.valueOf(receiver.getId());
         String eventId = receiverId + "_" + System.currentTimeMillis();
@@ -120,11 +120,11 @@ public class NotificationService {
 
 
     }
-    private Notification createNotification(User receiver, NotificationType notificationType, String content, String url) {
+    private Notification createNotification(User receiver, NotificationType notificationType, String notificationContent, String url) {
         return Notification.builder()
                 .receiver(receiver)
                 .notificationType(notificationType)
-                .content(content)
+                .notificationContent(notificationContent)
                 .url(url)
                 .isRead(false) // 현재 읽음상태
                 .build();
