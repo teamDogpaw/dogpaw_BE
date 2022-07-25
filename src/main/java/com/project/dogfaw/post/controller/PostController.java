@@ -161,13 +161,6 @@ public class PostController {
         return ip;
     }
 
-    /*hikariStatus 확인용*/
-    @Bean
-    public HikariPoolMXBean poolProxy() throws MalformedObjectNameException {
-        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-        ObjectName objectName = new ObjectName("com.zaxxer.hikari:type=Pool (hikari)");
-        return JMX.newMBeanProxy(mBeanServer, objectName, HikariPoolMXBean.class);
-    }
 
     @Autowired
     private HikariPoolMXBean poolMXBean;

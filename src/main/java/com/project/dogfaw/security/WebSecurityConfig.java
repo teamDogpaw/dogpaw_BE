@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**")
                 .antMatchers(HttpMethod.GET,"/api/all/**")
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank");
- 
+
     }
 
     @Override
