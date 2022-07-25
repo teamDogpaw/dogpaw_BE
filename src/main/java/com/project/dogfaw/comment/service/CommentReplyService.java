@@ -35,7 +35,7 @@ public class CommentReplyService {
     private final UserRepository userRepository;
     private final NotificationService notificationService;
 
-    //댓글등록
+    //대댓글등록
     @Transactional
     public void saveCmtReply(Long commentId, User user, CmtReplyReqeustDto requestDto) {
         Comment comment = commentRepository.findById(commentId)
@@ -45,8 +45,10 @@ public class CommentReplyService {
         String content = requestDto.getContent();
         CommentReply cmtReply = new CommentReply(content, nickname, profileImg, user, comment);
 
+        commentReplyRepository.save(cmtReply);
+
         //알림
-        String Url = "http://www.localhost/detail/"+comment.getId();
+        String Url = "https://www.dogpaw.kr/post/"+comment.getId();
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = comment.getUser().getNickname()+"님! 댓글 알림이 도착했어요!";
 
@@ -54,8 +56,6 @@ public class CommentReplyService {
         if(!Objects.equals(user.getId(), comment.getUser().getId())) {
             notificationService.send(comment.getUser(), NotificationType.REPLY, notificationContent, Url);
         }
-
-        commentReplyRepository.save(cmtReply);
     }
 
     //대댓글조회

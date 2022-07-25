@@ -109,7 +109,7 @@ public class UserController {
     @PostMapping("/user/signup/addInfo")
     public ResponseEntity<Object> addInfo(@RequestBody SignupRequestDto requestDto) {
         User user = commonService.getUser();
-        userService.addInfo(requestDto,user);
+        userService.addInfo(requestDto, user);
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
 

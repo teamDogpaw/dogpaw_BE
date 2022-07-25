@@ -44,7 +44,6 @@ public class PostService {
 
 
 
-
     //전체조회
     public Map<String, Object> allPost(User user, long page) {
         PageRequest pageRequest = PageRequest.of((int) page,24);
