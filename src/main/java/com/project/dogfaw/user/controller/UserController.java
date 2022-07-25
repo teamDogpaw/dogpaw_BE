@@ -130,10 +130,10 @@ public class UserController {
         String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + tokenDto.getAccessToken() + "&refreshtoken=" + tokenDto.getRefreshToken();
         User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
         if (kakaoUser.getNickname().equals("default")){
-            url = url + "&nickname=default";
+            url = url + "&nickname=default" + "&userId=" + kakaoUser.getId();
         }
         else{
-            url = url + "&nickname=" + kakaoUser.getNickname();
+            url = url + "&nickname=" + kakaoUser.getNickname() + "&userId=" + kakaoUser.getId();
         }
         response.sendRedirect(url);
     }
@@ -198,13 +198,7 @@ public class UserController {
         return ip;
     }
 
-    /*hikariStatus 확인용*/
-    @Bean
-    public HikariPoolMXBean poolProxy() throws MalformedObjectNameException {
-        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-        ObjectName objectName = new ObjectName("com.zaxxer.hikari:type=Pool (hikari)");
-        return JMX.newMBeanProxy(mBeanServer, objectName, HikariPoolMXBean.class);
-    }
+
 
     @Autowired
     private HikariPoolMXBean poolMXBean;
