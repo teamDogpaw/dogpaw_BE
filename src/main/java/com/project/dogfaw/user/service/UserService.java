@@ -167,15 +167,41 @@ public class UserService {
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
             String accesstoken = tokenDto.getAccessToken();
-            return accesstoken;
+            String refreshtoken = tokenDto.getRefreshToken();
+            return accesstoken + refreshtoken;
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
             String accesstoken = tokenDto.getAccessToken();
-            return accesstoken;
+            String refreshtoken = tokenDto.getRefreshToken();
+            return accesstoken + refreshtoken;
         }
     }
+
+
+//    // 카카오 로그인 유저 상태 확인
+//    public StatusResponseDto SignupUserCheck(Long kakaoId) {
+//
+//        User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+//
+//        if (loginUser.getNickname().equals("default")) {
+////            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
+////                    .userId(loginUser.getId())
+////                    .kakaoId(kakaoId)
+////                    .build();
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//
+//            RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
+//            refreshTokenRepository.save(refreshToken);
+//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
+//        } else {
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//            RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
+//            refreshTokenRepository.save(refreshToken);
+//            return new StatusResponseDto("로그인 성공", tokenDto);
+//        }
+//    }
 
 //    public StatusResponseDto SignupUserCheck(Long kakaoId) {
 //
