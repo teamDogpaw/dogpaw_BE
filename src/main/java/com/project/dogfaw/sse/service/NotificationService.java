@@ -158,8 +158,8 @@ public class NotificationService {
     }
 
     @Transactional
-    public void deleteAllByNotifications(UserDetailsImpl userDetails) {
-        Long receiverId = userDetails.getUser().getId();
+    public void deleteAllByNotifications(User user) {
+        Long receiverId = user.getId();
         notificationRepository.deleteAllByReceiverId(receiverId);
 
     }
