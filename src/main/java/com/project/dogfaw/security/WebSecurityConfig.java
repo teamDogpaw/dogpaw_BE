@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/user/login/**")
                 .antMatchers(HttpMethod.GET,"/user/userInfo/**")
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**")
-                .antMatchers(HttpMethod.GET,"/api/allpost/**")
+                .antMatchers(HttpMethod.GET,"/api/all/**")
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank");
 
     }
@@ -64,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/user/login/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/user/userInfo/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**").permitAll()
-                .antMatchers(HttpMethod.GET,"/api/allpost/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/all/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
 
 
