@@ -367,7 +367,7 @@ public class MypageService {
 
         //지원자한테 알람 가야함
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/user/"+teammate.getId();
+        String Url = "https://www.dogpaw.kr/user/mypage/apply";
         String content = teammate.getNickname()+"님! 프로젝트 하차 알림이 도착했어요!";
         notificationService.send(teammate,NotificationType.REJECT,content,Url);
 
@@ -399,7 +399,7 @@ public class MypageService {
         //작성자에게 알람
         // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/applied/"+user.getId();
+        String Url = "https://www.dogpaw.kr/user/mypage/post";
         //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = user.getNickname()+"님! 팀원이 탈퇴하였습니다";
         notificationService.send(user, NotificationType.REJECT,notificationContent,Url);
