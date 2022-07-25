@@ -31,24 +31,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
         web
+
                 .ignoring()
-                .antMatchers("/h2-console/**")
-                .antMatchers(HttpMethod.GET,"/")
-                .antMatchers(HttpMethod.POST,"/user/signup/**")
-                .antMatchers(HttpMethod.POST,"/user/nickname/**")
-                .antMatchers(HttpMethod.POST,"/user/login/**")
-                .antMatchers(HttpMethod.GET,"/user/userInfo/**")
-                .antMatchers(HttpMethod.GET,"/user/kakao/login/**")
-                .antMatchers(HttpMethod.GET,"/api/all/**")
-                .antMatchers(HttpMethod.GET,"/api/bookMark/rank");
+                .antMatchers("/h2-console/**");
+
+
 
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        //formlogin사용 x
+        http.formLogin().disable();
 
         http.cors().configurationSource(corsConfigurationSource());
         http.csrf().disable().sessionManagement()
@@ -66,6 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/all/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
+                .antMatchers(HttpMethod.GET,"/**").permitAll()
 
 
 //                .antMatchers("/api/posts").permitAll()
