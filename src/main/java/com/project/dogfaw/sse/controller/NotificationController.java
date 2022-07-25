@@ -38,6 +38,7 @@ public class NotificationController {
     public SseEmitter subscribe(HttpServletResponse response, @AuthenticationPrincipal UserDetailsImpl userDetails,
                                 @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "")
                                 String lastEventId) {
+
         //추가
         response.setCharacterEncoding("UTF-8");
 
@@ -45,6 +46,7 @@ public class NotificationController {
 
 
         return notificationService.subscribe(userId, lastEventId);
+
     }
 
     //알림조회

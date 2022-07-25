@@ -5,6 +5,7 @@ import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.ExceptionResponse;
 import com.project.dogfaw.common.exception.StatusResponseDto;
+import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
 import com.project.dogfaw.user.dto.KakaoUserInfo;
@@ -18,8 +19,11 @@ import com.project.dogfaw.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -80,17 +84,26 @@ public class UserController {
 
     // 카카오 로그인 API
     @GetMapping("/user/kakao/login")
-    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+    public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+        String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
+        String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + accesstoken;
+        response.sendRedirect(url);
     }
 
+//    @GetMapping("/user/kakao/login")
+//    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
+//        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
+//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
+//    }
+
     // 회원 탈퇴 API
-    @DeleteMapping("/user/delete/{userId}")
-    public ResponseEntity<StatusResponseDto> deleteUser(@PathVariable Long userId){
-        userRepository.deleteById(userId);
-        return new ResponseEntity<>(new StatusResponseDto("회원 탈퇴 성공", ""), HttpStatus.OK);
-    }
+//    @DeleteMapping("/user/delete/{userId}")
+//    public ResponseEntity<StatusResponseDto> deleteUser(@PathVariable Long userId){
+//        userRepository.deleteById(userId);
+//        return new ResponseEntity<>(new StatusResponseDto("회원 탈퇴 성공", ""), HttpStatus.OK);
+//    }
+
 
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
@@ -98,5 +111,12 @@ public class UserController {
         User user = commonService.getUser();
         userService.addInfo(requestDto,user);
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
+    }
+
+    // 회원 정보 삭제 API
+    @PutMapping("/users/delete")
+    public ResponseEntity<Object> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        userService.deleteUser(userDetails);
+        return new ResponseEntity<>(new StatusResponseDto("회원 정보 삭제 성공",""), HttpStatus.CREATED);
     }
 }
