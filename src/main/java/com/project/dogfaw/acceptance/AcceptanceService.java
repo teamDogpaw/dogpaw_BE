@@ -40,9 +40,9 @@ public class AcceptanceService {
         //지원자+게시글
         Acceptance acceptance = new Acceptance(applier,post);
         //해당유저의게시글과포스트찾기
-        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(applier, post).orElseThrow(
-                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
-        );
+//        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(applier, post).orElseThrow(
+//                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
+//        );
 
         //작성자확인
         if(!writer.equals(user.getId())){
@@ -64,10 +64,10 @@ public class AcceptanceService {
 
         // 알림
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
-        //신청 수락 시 신청 유저에게 실시간 알림 전송 ,
-        String content = userApply.getUser().getNickname()+"님! 프로젝트 매칭 알림이 도착했어요!";
-        notificationService.send(userApply.getUser(),NotificationType.ACCEPT,content,Url);
+        String Url = "https://www.dogpaw.kr/post/"+applier.getId();
+//신청 수락 시 신청 유저에게 실시간 알림 전송 ,
+        String content = applier.getNickname()+"님! 프로젝트 매칭 알림이 도착했어요!";
+        notificationService.send(applier,NotificationType.ACCEPT,content,Url);
 
         //현재인원+1
         post.increaseCnt(); //post.decreaseCnt = 수락된 신청자가 상세페이지에서 참여취소 하였을 때 acceptanceRepo에서 삭제하고 -1 해야함
@@ -92,9 +92,9 @@ public class AcceptanceService {
         Long writer = post.getUser().getId();
 
         //해당유저의게시글과포스트찾기
-        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(applier, post).orElseThrow(
-                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
-        );
+//        UserApplication userApply = userApplicationRepository.findUserApplyByUserAndPost(applier, post).orElseThrow(
+//                () -> new CustomException(ErrorCode.APPLY_NOT_FOUND)
+//        );
 
         //작성자확인
         if(!writer.equals(user.getId())){
@@ -108,9 +108,9 @@ public class AcceptanceService {
 
         //프로젝트 매칭 실패 알림
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/user/"+userApply.getUser().getId();
-        String notificationContent = userApply.getUser().getNickname()+"님! 프로젝트 매칭 실패 알림이 도착했어요!";
-        notificationService.send(userApply.getUser(),NotificationType.REJECT,notificationContent,Url);
+        String Url = "https://www.dogpaw.kr/post/"+applier.getId();
+        String notificationContent = applier.getNickname()+"님! 프로젝트 매칭 실패 알림이 도착했어요!";
+        notificationService.send(applier,NotificationType.REJECT,notificationContent,Url);
 
 
     }
