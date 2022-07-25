@@ -86,9 +86,8 @@ public class UserController {
     @GetMapping("/user/kakao/login")
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-        String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String refreshtoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + accesstoken + "&refreshtoken="+ refreshtoken ;
+        TokenDto tokenDto = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
+        String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + tokenDto.getAccessToken() + "&refreshtoken=" + tokenDto.getRefreshToken();
         response.sendRedirect(url);
     }
 

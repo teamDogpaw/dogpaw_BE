@@ -157,26 +157,14 @@ public class UserService {
     }
 
     // 카카오 로그인 유저 상태 확인
-    public String SignupUserCheck(Long kakaoId) {
+    public TokenDto SignupUserCheck(Long kakaoId) {
 
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
-        if (loginUser.getNickname().equals("default")) {
-            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
-
-            RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
-            refreshTokenRepository.save(refreshToken);
-            String accesstoken = tokenDto.getAccessToken();
-            String refreshtoken = tokenDto.getRefreshToken();
-            return accesstoken + refreshtoken;
-        } else {
-            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
-            RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
-            refreshTokenRepository.save(refreshToken);
-            String accesstoken = tokenDto.getAccessToken();
-            String refreshtoken = tokenDto.getRefreshToken();
-            return accesstoken + refreshtoken;
-        }
+        TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+        RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
+        refreshTokenRepository.save(refreshToken);
+        return TokenDto.builder().accessToken(tokenDto.getAccessToken()).refreshToken(refreshToken.getRefreshValue()).build();
     }
 
 
