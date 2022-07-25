@@ -91,7 +91,6 @@ public class CommentService {
             post.decreaseCmCount();
             commentRepository.delete(comment);
         }
-
         return true;
     }
 
