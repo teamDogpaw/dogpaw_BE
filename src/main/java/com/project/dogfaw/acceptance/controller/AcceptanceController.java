@@ -1,5 +1,6 @@
-package com.project.dogfaw.acceptance;
+package com.project.dogfaw.acceptance.controller;
 
+import com.project.dogfaw.acceptance.service.AcceptanceService;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.user.model.User;

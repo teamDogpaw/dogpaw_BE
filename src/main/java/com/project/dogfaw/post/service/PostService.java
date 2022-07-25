@@ -1,7 +1,7 @@
 package com.project.dogfaw.post.service;
 
 
-import com.project.dogfaw.acceptance.AcceptanceRepository;
+import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
@@ -28,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.sql.SQLException;
 import java.util.*;
 
 @Service

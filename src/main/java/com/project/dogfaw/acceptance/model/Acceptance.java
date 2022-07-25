@@ -1,4 +1,4 @@
-package com.project.dogfaw.acceptance;
+package com.project.dogfaw.acceptance.model;
 
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
