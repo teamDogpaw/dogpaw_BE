@@ -34,8 +34,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
         web
                 .ignoring()
-                .antMatchers("/h2-console/**");
-//                .antMatchers("/v2/api-docs","/v3/api-docs", "/swagger-resources/**", "**/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger/**","/swagger-ui","/swagger-ui/**");
+                .antMatchers("/h2-console/**")
+                .antMatchers(HttpMethod.GET,"/")
+                .antMatchers(HttpMethod.POST,"/user/signup/**")
+                .antMatchers(HttpMethod.POST,"/user/nickname/**")
+                .antMatchers(HttpMethod.POST,"/user/login/**")
+                .antMatchers(HttpMethod.GET,"/user/userInfo/**")
+                .antMatchers(HttpMethod.GET,"/user/kakao/login/**")
+                .antMatchers(HttpMethod.GET,"/api/all/**")
+                .antMatchers(HttpMethod.GET,"/api/bookMark/rank");
+
     }
 
     @Override
@@ -51,11 +59,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 // login 없이 허용
-                .antMatchers("/user/**").permitAll()
-                .antMatchers("/api/**").permitAll()
-                .antMatchers("/notifications/**").permitAll()
-                .antMatchers("/notification/**").permitAll()
-                .antMatchers("/subscribe/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/user/signup/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/user/nickname/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/user/login/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/user/userInfo/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/user/kakao/login/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/all/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
+
+
 //                .antMatchers("/api/posts").permitAll()
 //                .antMatchers("/api/preview").permitAll()
 //                .antMatchers("/post/filter/**").permitAll()
@@ -64,13 +76,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .antMatchers("/subscribe/**").permitAll()
 //                .antMatchers("/v2/api-docs","/v3/api-docs", "/swagger-resources/**", "**/swagger-resources/**", "/swagger-ui.html", "/webjars/**", "/swagger*/**","/swagger-ui","/swagger-ui/**").permitAll()
 
-
-
                 //추가 - 메인 페이지 접근 허용
-                .antMatchers("/").permitAll()
+//                .antMatchers("/").permitAll()
 
                 // 그 외 어떤 요청이든 '인증'과정 필요
                 .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().accessDeniedPage("/403").and().httpBasic()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
@@ -92,4 +104,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+
 }
