@@ -49,7 +49,7 @@ public class UserService {
 
         // 닉네임 중복 확인
         String nickname = requestDto.getNickname();
-        if (userRepository.existsByNickname(nickname)) {
+        if (userRepository.existsByNickname(nickname)) { 
             throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
         }
 
