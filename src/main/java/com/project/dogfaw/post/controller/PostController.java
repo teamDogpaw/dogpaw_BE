@@ -10,6 +10,7 @@ import com.project.dogfaw.post.service.PostService;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,13 +18,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Map;
 
 
 @RestController
 @RequiredArgsConstructor
-
+@Slf4j
 public class PostController {
 
     private final PostService postService;
@@ -32,6 +34,9 @@ public class PostController {
     /*post 전체조회 (메인)*/
     @GetMapping("/api/allpost")
     public Map<String, Object> postPosts(HttpServletRequest httpServletRequest) {
+        // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
+        log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getDetails() != null){
             User user = null;
@@ -48,7 +53,10 @@ public class PostController {
 
     /*북마크 랭킹 조회*/
     @GetMapping("/api/bookMark/rank")
-    public ArrayList<MyApplyingResponseDto> bookMarkRank(){
+    public ArrayList<MyApplyingResponseDto> bookMarkRank(HttpServletRequest httpServletRequest){
+        // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
+        log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getDetails() != null){
             User user = null;
@@ -107,6 +115,29 @@ public class PostController {
     public ResponseEntity<Object> updateDeadline(@PathVariable Long postId){
         User user = commonService.getUser();
         return postService.updateDeadline(postId,user);
+    }
+
+
+    public static String getClientIpAddr(HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+
+        return ip;
     }
 
 }
