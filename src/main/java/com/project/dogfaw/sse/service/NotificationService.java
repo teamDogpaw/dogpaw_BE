@@ -130,7 +130,7 @@ public class NotificationService {
                 .build();
     }
 
-    @Transactional
+//    @Transactional
     public List<NotificationDto> findAllNotifications(Long userId) {
         List<Notification> notifications = notificationRepository.findAllByUserId(userId);
         return notifications.stream()
@@ -148,7 +148,7 @@ public class NotificationService {
 
     }
 
-    @Transactional
+//    @Transactional
     public void readNotification(Long notificationId) {
         //알림을 받은 사람의 id 와 알림의 id 를 받아와서 해당 알림을 찾는다.
         Optional<Notification> notification = notificationRepository.findById(notificationId);
@@ -157,13 +157,13 @@ public class NotificationService {
 
     }
 
-    @Transactional
+//    @Transactional
     public void deleteAllByNotifications(User user) {
         Long receiverId = user.getId();
         notificationRepository.deleteAllByReceiverId(receiverId);
 
     }
-    @Transactional
+//    @Transactional
     public void deleteByNotifications(Long notificationId) {
         notificationRepository.deleteById(notificationId);
     }
