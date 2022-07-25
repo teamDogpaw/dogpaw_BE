@@ -87,9 +87,11 @@ public class UserController {
     public void kakaoLogin(@RequestParam String code, HttpServletResponse response) throws IOException {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String url = "https://localhost:3000/?token=" + accesstoken;
+        String refreshtoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
+        String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + accesstoken + "&refreshtoken="+ refreshtoken ;
         response.sendRedirect(url);
     }
+
 
 //    @GetMapping("/user/kakao/login")
 //    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
@@ -108,8 +110,8 @@ public class UserController {
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
     public ResponseEntity<Object> addInfo(@RequestBody SignupRequestDto requestDto) {
-        User user = commonService.getUser();
-        userService.addInfo(requestDto, user);
+//        User user = commonService.getUser();
+        userService.addInfo(requestDto);
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
 

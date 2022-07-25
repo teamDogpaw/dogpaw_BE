@@ -162,26 +162,46 @@ public class UserService {
         User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
 
         if (loginUser.getNickname().equals("default")) {
-//            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
-//                    .userId(loginUser.getId())
-//                    .kakaoId(kakaoId)
-//                    .build();
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
 
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
-//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
             String accesstoken = tokenDto.getAccessToken();
-            return accesstoken;
+            String refreshtoken = tokenDto.getRefreshToken();
+            return accesstoken + refreshtoken;
         } else {
             TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
             RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
             refreshTokenRepository.save(refreshToken);
-            //return new StatusResponseDto("로그인 성공", tokenDto);
             String accesstoken = tokenDto.getAccessToken();
-            return accesstoken;
+            String refreshtoken = tokenDto.getRefreshToken();
+            return accesstoken + refreshtoken;
         }
     }
+
+
+//    // 카카오 로그인 유저 상태 확인
+//    public StatusResponseDto SignupUserCheck(Long kakaoId) {
+//
+//        User loginUser = userRepository.findByKakaoId(kakaoId).orElse(null);
+//
+//        if (loginUser.getNickname().equals("default")) {
+////            KakaoUserInfo kakaoUserInfo = KakaoUserInfo.builder()
+////                    .userId(loginUser.getId())
+////                    .kakaoId(kakaoId)
+////                    .build();
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//
+//            RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
+//            refreshTokenRepository.save(refreshToken);
+//            return new StatusResponseDto("추가 정보 작성이 필요한 유저입니다", tokenDto);
+//        } else {
+//            TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
+//            RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
+//            refreshTokenRepository.save(refreshToken);
+//            return new StatusResponseDto("로그인 성공", tokenDto);
+//        }
+//    }
 
 //    public StatusResponseDto SignupUserCheck(Long kakaoId) {
 //
@@ -200,7 +220,7 @@ public class UserService {
 //    }
 
     @Transactional
-    public TokenDto addInfo(SignupRequestDto requestDto, User user) {
+    public TokenDto addInfo(SignupRequestDto requestDto) {
         // 닉네임 중복 확인
         String nickname = requestDto.getNickname();
         if (userRepository.existsByNickname(nickname)) {
@@ -208,17 +228,17 @@ public class UserService {
         }
 
 //        // DB에서 유저 정보를 찾음
-//        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(
-//                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
-//        );
+        User users = userRepository.findById(requestDto.getUserId()).orElseThrow(
+                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
+        );
 
-        user.addInfo(requestDto);
-        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
-        user.updateStack(stack);
+        users.addInfo(requestDto);
+        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),users));
+        users.updateStack(stack);
 
-        TokenDto tokenDto = jwtTokenProvider.createToken(user);
+        TokenDto tokenDto = jwtTokenProvider.createToken(users);
 
-        RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
+        RefreshToken refreshToken = new RefreshToken(users.getUsername(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
