@@ -88,6 +88,13 @@ public class UserController {
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         TokenDto tokenDto = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
         String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + tokenDto.getAccessToken() + "&refreshtoken=" + tokenDto.getRefreshToken();
+        User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
+        if (kakaoUser.getNickname().equals("default")){
+            url = url + "&nickname=default";
+        }
+        else{
+            url = url + "&nickname=" + kakaoUser.getNickname();
+        }
         response.sendRedirect(url);
     }
 

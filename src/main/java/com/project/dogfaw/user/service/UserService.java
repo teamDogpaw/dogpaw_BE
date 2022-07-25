@@ -164,7 +164,10 @@ public class UserService {
         TokenDto tokenDto = jwtTokenProvider.createToken(loginUser);
         RefreshToken refreshToken = new RefreshToken(loginUser.getUsername(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
-        return TokenDto.builder().accessToken(tokenDto.getAccessToken()).refreshToken(refreshToken.getRefreshValue()).build();
+        return TokenDto.builder()
+                .accessToken(tokenDto.getAccessToken())
+                .refreshToken(refreshToken.getRefreshValue())
+                .build();
     }
 
 
