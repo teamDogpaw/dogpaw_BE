@@ -1,6 +1,5 @@
 package com.project.dogfaw.user.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.ExceptionResponse;
@@ -101,10 +100,18 @@ public class UserController {
 
 
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-        String accesstoken = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
-        String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + accesstoken;
+        TokenDto tokenDto = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
+        String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + tokenDto.getAccessToken() + "&refreshtoken=" + tokenDto.getRefreshToken();
+        User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
+        if (kakaoUser.getNickname().equals("default")){
+            url = url + "&nickname=default";
+        }
+        else{
+            url = url + "&nickname=" + kakaoUser.getNickname();
+        }
         response.sendRedirect(url);
     }
+
 
 //    @GetMapping("/user/kakao/login")
 //    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
@@ -122,12 +129,13 @@ public class UserController {
 
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
+
     public ResponseEntity<Object> addInfo(HttpServletRequest httpServletRequest,@RequestBody SignupRequestDto requestDto) {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
 
-        User user = commonService.getUser();
-        userService.addInfo(requestDto, user);
+        userService.addInfo(requestDto);
+
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
 
