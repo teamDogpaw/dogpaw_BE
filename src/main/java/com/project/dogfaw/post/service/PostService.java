@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.sql.SQLException;
 import java.util.*;
 
 @Service
@@ -137,7 +138,9 @@ public class PostService {
         for(String stack : stacks){
             PostStack postStack = new PostStack(post.getId(), stack);
             postStackRepository.save(postStack);
+
         }
+
         return new MyApplyingResponseDto(post, stacks, false, user);
 
     }

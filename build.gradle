@@ -44,6 +44,9 @@ dependencies {
 
     implementation 'org.springframework.security:spring-security-test'
 
+    /*추가*/
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 
     // JWT
