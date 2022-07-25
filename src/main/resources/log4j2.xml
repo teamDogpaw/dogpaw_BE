@@ -3,8 +3,12 @@
     <Properties>
         <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Property>
         <property name="LOGS_PATH">/home/ubuntu/logs</property>
+
     </Properties>
     <Appenders>
+        <logger name="com.zaxxer.hikari" level="TRACE" />
+        <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
+
         <Console name="ConsoleLog" target="SYSTEM_OUT">
             <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
         </Console>
@@ -20,8 +24,9 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="debug">
             <AppenderRef ref="ConsoleLog" />
+            <AppenderRef ref="com.zaxxer.hikari" />
             <AppenderRef ref="FileLog" />
         </Root>
     </Loggers>
