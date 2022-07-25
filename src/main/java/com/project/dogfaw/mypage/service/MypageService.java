@@ -1,8 +1,8 @@
 package com.project.dogfaw.mypage.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.project.dogfaw.acceptance.Acceptance;
-import com.project.dogfaw.acceptance.AcceptanceRepository;
+import com.project.dogfaw.acceptance.model.Acceptance;
+import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.bookmark.model.BookMark;
