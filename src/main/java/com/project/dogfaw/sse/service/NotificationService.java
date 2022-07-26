@@ -10,6 +10,7 @@ package com.project.dogfaw.sse.service;
 
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
+import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.sse.dto.NotificationCountDto;
 import com.project.dogfaw.sse.dto.NotificationDto;
 import com.project.dogfaw.sse.model.Notification;
@@ -19,6 +20,8 @@ import com.project.dogfaw.sse.repository.EmitterRepositoryImpl;
 import com.project.dogfaw.sse.repository.NotificationRepository;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -161,13 +164,26 @@ public class NotificationService {
     }
 
     @Transactional
-    public void deleteAllByNotifications(User user) {
+    public ResponseEntity<Object> deleteAllByNotifications(User user) {
         Long receiverId = user.getId();
-        notificationRepository.deleteAllByReceiverId(receiverId);
+        Optional<Notification> existNotification = notificationRepository.findByReceiver(user);
+       if (existNotification.isPresent()){
+           notificationRepository.deleteAllByReceiverId(receiverId);
+           return new ResponseEntity<>(new StatusResponseDto("알림 목록 전체삭제 성공", true), HttpStatus.OK);
+       }else {
+           return new ResponseEntity<>(new StatusResponseDto("삭제할 알림이 존재하지 않습니다",false ), HttpStatus.BAD_REQUEST);
+       }
 
     }
     @Transactional
-    public void deleteByNotifications(Long notificationId) {
-        notificationRepository.deleteById(notificationId);
+    public ResponseEntity<Object> deleteByNotifications(Long notificationId) {
+        Optional<Notification> notification = notificationRepository.findById(notificationId);
+        if(notification.isPresent()){
+            notificationRepository.deleteById(notificationId);
+            return new ResponseEntity<>(new StatusResponseDto("알림 삭제 완료", true), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new StatusResponseDto("존재하지 않는 알림입니다",false ), HttpStatus.BAD_REQUEST);
+        }
+
     }
 }
