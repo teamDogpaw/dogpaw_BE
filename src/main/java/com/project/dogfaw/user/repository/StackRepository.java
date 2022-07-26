@@ -13,4 +13,5 @@ public interface StackRepository extends JpaRepository<Stack, Long> {
     List<Stack> findByUserId(Long userId);
 
 
+    void deleteByUserId(Long id);
 }

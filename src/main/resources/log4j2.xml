@@ -24,7 +24,7 @@
         </RollingFile>
     </Appenders>
     <Loggers>
-        <Root level="debug">
+        <Root level="DEBUG">
             <AppenderRef ref="ConsoleLog" />
             <AppenderRef ref="com.zaxxer.hikari" />
             <AppenderRef ref="FileLog" />
