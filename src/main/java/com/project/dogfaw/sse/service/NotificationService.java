@@ -10,7 +10,6 @@ package com.project.dogfaw.sse.service;
 
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
-import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.sse.dto.NotificationCountDto;
 import com.project.dogfaw.sse.dto.NotificationDto;
 import com.project.dogfaw.sse.model.Notification;
@@ -22,7 +21,6 @@ import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
