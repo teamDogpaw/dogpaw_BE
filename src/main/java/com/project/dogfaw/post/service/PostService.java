@@ -46,82 +46,84 @@ public class PostService {
 
     //전체조회
     public Map<String, Object> allPost(User user, long page) {
-        PageRequest pageRequest = PageRequest.of((int) page,24);
-        //BookmarkStatus를 true || false를 담아주기 위해 for문을 두번 돌리기 때문에
-        //모든 게시글을 다 찾아와서 for문을 돌렸을 때 서버 부하가 어느정도 올지 모르겠음(만약 게시글이 많을 경우)
-        //게시글이 많을 경우 이중 for문때문에 부하가 상당할 것으로 예상이 되므로 메인페이지에서 최신 게시글 Top20정도만
-        //보여주는 것도 하나의 방법이 될 것 같음.
+        try {
+            PageRequest pageRequest = PageRequest.of((int) page, 24);
+            //BookmarkStatus를 true || false를 담아주기 위해 for문을 두번 돌리기 때문에
+            //모든 게시글을 다 찾아와서 for문을 돌렸을 때 서버 부하가 어느정도 올지 모르겠음(만약 게시글이 많을 경우)
+            //게시글이 많을 경우 이중 for문때문에 부하가 상당할 것으로 예상이 되므로 메인페이지에서 최신 게시글 Top20정도만
+            //보여주는 것도 하나의 방법이 될 것 같음.
 
-        //내림차순으로 Top 20만 내림차순으로
-        //List<Post> posts = postRepository.findTop20ByOrderByModifiedAtDesc();
+            //내림차순으로 Top 20만 내림차순으로
+            //List<Post> posts = postRepository.findTop20ByOrderByModifiedAtDesc();
+            //모든 게시글 내림차순으로(startAt으로 변경 필요)
+            Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageRequest);
 
-        //모든 게시글 내림차순으로(startAt으로 변경 필요)
-        Slice<Post> posts = postRepository.findAllByOrderByCreatedAtDesc(pageRequest);
+            //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
+            ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
+            //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
+            Boolean bookMarkStatus = false;
 
-        //BookMarkStatus를 추가적으로 담아줄 ArrayList 생성
-        ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
-        //true || false 값을 담아줄 Boolean type의 bookMarkStatus 변수를 하나 생성
-        Boolean bookMarkStatus = false;
-
-        //로그인한 유저가 아닐때는 모든게시글을 불러와주고 bookMarkStatus는 모두 false로 리턴
-        if(user == null){
-            for(Post post:posts){
-                Long postId = post.getId();
-                User writer = post.getUser();
-                //Stacks(기술스택) 가져오기
-                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
-                List<String> stringPostStacks = new ArrayList<>();
-                for(PostStack postStack : postStacks){
-                    stringPostStacks.add(postStack.getStack());
-                }
-                //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-                MyApplyingResponseDto mainDTO = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
-                //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
-                postList.add(mainDTO);
-            }
-        }else {
-            //유저가 북마크한 것을 리스트로 모두 불러옴
-            List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
-            //유저가 북마크한 게시글을 찾아 리스트에 담아주기 위해 ArrayList 생성
-            ArrayList<Post> userPostings = new ArrayList<>();
-            for (BookMark userPost : userPosts) {
-                Post userPosting = userPost.getPost();
-                userPostings.add(userPosting);
-            }
-            //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
-            for (Post post : posts) {
-                Long postId = post.getId();
-                User writer = post.getUser();
-                for (Post userPost : userPostings) {
-                    Long userPostId = userPost.getId();
-                    //객체대 객체일경우 if문으로 동일 비교 불가?
-                    //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
-                    //객체 안의 특정 타입 id, nickname 등으로 비교하여 문제 해결
-                    // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
-                    if (postId.equals(userPostId))
-                    {
-                        bookMarkStatus = true;
-                        break; //true일 경우 탈출
-                    } else {
-                        bookMarkStatus = false;
+            //로그인한 유저가 아닐때는 모든게시글을 불러와주고 bookMarkStatus는 모두 false로 리턴
+            if (user == null) {
+                for (Post post : posts) {
+                    Long postId = post.getId();
+                    User writer = post.getUser();
+                    //Stacks(기술스택) 가져오기
+                    List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                    List<String> stringPostStacks = new ArrayList<>();
+                    for (PostStack postStack : postStacks) {
+                        stringPostStacks.add(postStack.getStack());
                     }
+                    //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
+                    MyApplyingResponseDto mainDTO = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                    //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
+                    postList.add(mainDTO);
                 }
-            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
-            List<String> stringPostStacks = new ArrayList<>();
-            for(PostStack postStack : postStacks){
-                stringPostStacks.add(postStack.getStack());
-            }
+            } else {
+                //유저가 북마크한 것을 리스트로 모두 불러옴
+                List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
+                //유저가 북마크한 게시글을 찾아 리스트에 담아주기 위해 ArrayList 생성
+                ArrayList<Post> userPostings = new ArrayList<>();
+                for (BookMark userPost : userPosts) {
+                    Post userPosting = userPost.getPost();
+                    userPostings.add(userPosting);
+                }
+                //일치하면 bookMarkStatus = true 아니면 false를 bookMarkStatus에 담아줌
+                for (Post post : posts) {
+                    Long postId = post.getId();
+                    User writer = post.getUser();
+                    for (Post userPost : userPostings) {
+                        Long userPostId = userPost.getId();
+                        //객체대 객체일경우 if문으로 동일 비교 불가?
+                        //객체를 불러올경우 메모리에 할당되는 주소값으로 불려지기 때문에 비교시 다를 수 밖에 없음
+                        //객체 안의 특정 타입 id, nickname 등으로 비교하여 문제 해결
+                        // 객체 안에있는 특정 데이터 타입으로 비교해줘야 함
+                        if (postId.equals(userPostId)) {
+                            bookMarkStatus = true;
+                            break; //true일 경우 탈출
+                        } else {
+                            bookMarkStatus = false;
+                        }
+                    }
+                    List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                    List<String> stringPostStacks = new ArrayList<>();
+                    for (PostStack postStack : postStacks) {
+                        stringPostStacks.add(postStack.getStack());
+                    }
 
-            //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
-            MyApplyingResponseDto mainDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
-            //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
-            postList.add(mainDto);
+                    //PostResponseDto를 이용해 게시글과, 북마크 상태,writer 는 해당 게시글 유저의 프로필 이미지를 불러오기 위함
+                    MyApplyingResponseDto mainDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                    //아까 생성한 ArrayList에 새로운 모양의 값을 담아줌
+                    postList.add(mainDto);
+                }
             }
+            Map<String, Object> data = new HashMap<>();
+            data.put("postList", postList);
+            data.put("isLast", posts.isLast());
+            return data;
+        }catch (Exception e){
+         throw new CustomException(ErrorCode.POST_ALL_LOAD_FAIL);
         }
-        Map<String, Object> data = new HashMap<>();
-        data.put("postList", postList);
-        data.put("isLast", posts.isLast());
-        return data;
     }
 
     // post 등록
@@ -247,57 +249,61 @@ public class PostService {
 
     //북마크 랭킹
     public ArrayList<MyApplyingResponseDto> bookMarkRank(User user) {
-        PageRequest pageRequest = PageRequest.of(0, 3);
+        try {
+            PageRequest pageRequest = PageRequest.of(0, 3);
 
-        List<Post> posts = postRepository.findByOrderByBookmarkCntDesc(pageRequest);
-        ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
+            List<Post> posts = postRepository.findByOrderByBookmarkCntDesc(pageRequest);
+            ArrayList<MyApplyingResponseDto> postList = new ArrayList<>();
 
-        Boolean bookMarkStatus = false;
+            Boolean bookMarkStatus = false;
 
-        if(user == null){
-            for(Post post:posts){
-                Long postId = post.getId();
-                User writer = post.getUser();
-                //다솔다솔이(민지민지) 추가한 부분
-                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
-                List<String> stringPostStacks = new ArrayList<>();
-                for(PostStack postStack : postStacks){
-                    stringPostStacks.add(postStack.getStack());
-                }
-                MyApplyingResponseDto postDto = new MyApplyingResponseDto(post,stringPostStacks, bookMarkStatus, writer);
-                postList.add(postDto);
-            }
-        }else {
-            List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
-            ArrayList<Post> userPostings = new ArrayList<>();
-            for (BookMark userPost : userPosts) {
-                Post userPosting = userPost.getPost();
-                userPostings.add(userPosting);
-            }
-
-            for (Post post : posts) {
-                Long postId = post.getId();
-                User writer = post.getUser();
-                for (Post userPost : userPostings) {
-                    Long userPostId = userPost.getId();
-
-                    if (postId.equals(userPostId)) {
-                        bookMarkStatus = true;
-                        break;
-                    } else {
-                        bookMarkStatus = false;
+            if (user == null) {
+                for (Post post : posts) {
+                    Long postId = post.getId();
+                    User writer = post.getUser();
+                    //다솔다솔이(민지민지) 추가한 부분
+                    List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                    List<String> stringPostStacks = new ArrayList<>();
+                    for (PostStack postStack : postStacks) {
+                        stringPostStacks.add(postStack.getStack());
                     }
+                    MyApplyingResponseDto postDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                    postList.add(postDto);
                 }
-                List<PostStack> postStacks = postStackRepository.findByPostId(postId);
-                List<String> stringPostStacks = new ArrayList<>();
-                for(PostStack postStack : postStacks){
-                    stringPostStacks.add(postStack.getStack());
+            } else {
+                List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
+                ArrayList<Post> userPostings = new ArrayList<>();
+                for (BookMark userPost : userPosts) {
+                    Post userPosting = userPost.getPost();
+                    userPostings.add(userPosting);
                 }
-                MyApplyingResponseDto postDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
-                postList.add(postDto);
+
+                for (Post post : posts) {
+                    Long postId = post.getId();
+                    User writer = post.getUser();
+                    for (Post userPost : userPostings) {
+                        Long userPostId = userPost.getId();
+
+                        if (postId.equals(userPostId)) {
+                            bookMarkStatus = true;
+                            break;
+                        } else {
+                            bookMarkStatus = false;
+                        }
+                    }
+                    List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+                    List<String> stringPostStacks = new ArrayList<>();
+                    for (PostStack postStack : postStacks) {
+                        stringPostStacks.add(postStack.getStack());
+                    }
+                    MyApplyingResponseDto postDto = new MyApplyingResponseDto(post, stringPostStacks, bookMarkStatus, writer);
+                    postList.add(postDto);
+                }
             }
+            return postList;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.POST_RANK_LOAD_FAIL);
         }
-        return postList;
     }
     @Transactional
     /*모집마감,모집마감 취소(작성자만)*/
