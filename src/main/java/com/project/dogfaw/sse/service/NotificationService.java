@@ -5,7 +5,6 @@ package com.project.dogfaw.sse.service;
     -> 구독자가 생성한 Emitter를 불러와 이벤트에 대한 응답을 전송
     -> 어떤 회원이 어떤 Emitter를 사용하느지에 대한 구분이 필요
 
-
  */
 
 import com.project.dogfaw.common.exception.CustomException;
