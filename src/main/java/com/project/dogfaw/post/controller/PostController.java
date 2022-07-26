@@ -100,9 +100,16 @@ public class PostController {
         //hikariStatus확인용
         printHikariStatus();
 
-        User user = commonService.getUser();
-
-        return postService.getPostDetail(postId,user);
+        //로그인한 유저와 안한유저 구분
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication.getDetails() != null){
+            User user = null;
+            return postService.getPostDetail(postId,user);
+        }else {
+            UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
+            User user = principal.getUser();
+            return postService.getPostDetail(postId,user);
+        }
     }
 
 
