@@ -4,7 +4,6 @@ import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.ExceptionResponse;
 import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
 import com.project.dogfaw.user.dto.KakaoUserInfo;
@@ -21,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -139,13 +137,6 @@ public class UserController {
 //        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
 //    }
 
-    // 회원 탈퇴 API
-//    @DeleteMapping("/user/delete/{userId}")
-//    public ResponseEntity<StatusResponseDto> deleteUser(@PathVariable Long userId){
-//        userRepository.deleteById(userId);
-//        return new ResponseEntity<>(new StatusResponseDto("회원 탈퇴 성공", ""), HttpStatus.OK);
-//    }
-
 
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
@@ -166,8 +157,8 @@ public class UserController {
 
     // 회원 정보 삭제 API
     @PutMapping("/users/delete")
-    public ResponseEntity<Object> deleteUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        userService.deleteUser(userDetails);
+    public ResponseEntity<Object> deleteUser() {
+        userService.deleteUser();
         return new ResponseEntity<>(new StatusResponseDto("회원 정보 삭제 성공",""), HttpStatus.CREATED);
     }
 
@@ -193,7 +184,6 @@ public class UserController {
 
         return ip;
     }
-
 
 
     @Autowired
