@@ -134,7 +134,8 @@ public class UserController {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
 
-        userService.addInfo(requestDto);
+        User user = commonService.getUser();
+        userService.addInfo(requestDto, user);
 
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }

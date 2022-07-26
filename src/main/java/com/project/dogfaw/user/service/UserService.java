@@ -211,7 +211,7 @@ public class UserService {
 //    }
 
     @Transactional
-    public TokenDto addInfo(SignupRequestDto requestDto) {
+    public TokenDto addInfo(SignupRequestDto requestDto, User user) {
         // 닉네임 중복 확인
         String nickname = requestDto.getNickname();
         if (userRepository.existsByNickname(nickname)) {
@@ -219,17 +219,17 @@ public class UserService {
         }
 
 //        // DB에서 유저 정보를 찾음
-        User users = userRepository.findById(requestDto.getUserId()).orElseThrow(
-                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
-        );
+//        User users = userRepository.findById(requestDto.getUserId()).orElseThrow(
+//                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
+//        );
 
-        users.addInfo(requestDto);
-        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),users));
-        users.updateStack(stack);
+        user.addInfo(requestDto);
+        List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
+        user.updateStack(stack);
 
-        TokenDto tokenDto = jwtTokenProvider.createToken(users);
+        TokenDto tokenDto = jwtTokenProvider.createToken(user);
 
-        RefreshToken refreshToken = new RefreshToken(users.getUsername(), tokenDto.getRefreshToken());
+        RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
 
         return tokenDto;
