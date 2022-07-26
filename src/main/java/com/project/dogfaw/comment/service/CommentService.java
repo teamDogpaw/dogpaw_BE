@@ -73,7 +73,7 @@ public class CommentService {
         }
         return new StatusResponseDto("댓글 조회에 성공하였습니다", commentResponseDtoList);
     }
-
+    @Transactional
     // 댓글 삭제
     public Boolean deleteComment(Long commentId, User user, Long postId) {
         Comment comment = commentRepository.findById(commentId)
