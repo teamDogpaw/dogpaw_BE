@@ -211,7 +211,7 @@ public class UserService {
 //    }
 
     @Transactional
-    public TokenDto addInfo(SignupRequestDto requestDto, User user) {
+    public TokenDto addInfo(SignupRequestDto requestDto, User user1) {
         // 닉네임 중복 확인
         String nickname = requestDto.getNickname();
         if (userRepository.existsByNickname(nickname)) {
@@ -223,6 +223,8 @@ public class UserService {
 //                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
 //        );
 
+        User user = userRepository.findById(user1.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_NOT_FOUNT_MEMBERID));
         user.addInfo(requestDto);
         log.info("===========================" +"addinfo 이후"+ "===============================");
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
