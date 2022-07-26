@@ -156,7 +156,7 @@ public class UserController {
     }
 
     // 회원 정보 삭제 API
-    @PutMapping("/users/delete")
+    @PutMapping("/user/delete")
     public ResponseEntity<Object> deleteUser() {
         userService.deleteUser();
         return new ResponseEntity<>(new StatusResponseDto("회원 정보 삭제 성공",""), HttpStatus.CREATED);
