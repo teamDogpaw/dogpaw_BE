@@ -115,7 +115,9 @@ public enum ErrorCode {
     NOT_EXIST_ROOM(HttpStatus.NOT_FOUND,"404","채팅방이 존재하지 않습니다."),
 
     //sse
-    NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다.");
+    NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다."),
+    FAIL_SUBSCRIBE(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다");
+
 
 
 
