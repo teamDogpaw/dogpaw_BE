@@ -72,16 +72,16 @@ public class NotificationController {
     @DeleteMapping(value = "/notifications/delete")
     public ResponseEntity<Object> deleteNotifications(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = commonService.getUser();
-        notificationService.deleteAllByNotifications(user);
-        return new ResponseEntity<>(new StatusResponseDto("알림 목록 전체삭제 성공", ""), HttpStatus.OK);
+
+        return notificationService.deleteAllByNotifications(user);
+
     }
 
     //단일 알림 삭제
     @DeleteMapping(value = "/notifications/delete/{notificationId}")
     public ResponseEntity<Object> deleteNotification(@PathVariable Long notificationId) {
 
-        notificationService.deleteByNotifications(notificationId);
-        return new ResponseEntity<>(new StatusResponseDto("알림 목록 삭제 성공", ""), HttpStatus.OK);
+        return notificationService.deleteByNotifications(notificationId);
     }
 
 }
