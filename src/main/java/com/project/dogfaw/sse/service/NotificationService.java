@@ -38,28 +38,33 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
-        //emitter 하나하나 에 고유의 값을 주기 위해
-        String emitterId = makeTimeIncludeId(userId);
+        try {
+            //emitter 하나하나 에 고유의 값을 주기 위해
+            String emitterId = makeTimeIncludeId(userId);
 
-        Long timeout = 60L * 1000L * 60L; // 1시간
-        // 생성된 emiiterId를 기반으로 emitter를 저장
-        SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));
+            Long timeout = 60L * 1000L * 60L; // 1시간
+            // 생성된 emiiterId를 기반으로 emitter를 저장
+            SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));
 
-        //emitter의 시간이 만료된 후 레포에서 삭제
-        emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
-        emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
+            //emitter의 시간이 만료된 후 레포에서 삭제
+            emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
+            emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
 
-        // 503 에러를 방지하기 위해 처음 연결 진행 시 더미 데이터를 전달
-        String eventId = makeTimeIncludeId(userId);
-        // 수 많은 이벤트 들을 구분하기 위해 이벤트 ID에 시간을 통해 구분을 해줌
-        sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + userId + "]");
+            // 503 에러를 방지하기 위해 처음 연결 진행 시 더미 데이터를 전달
+            String eventId = makeTimeIncludeId(userId);
+            // 수 많은 이벤트 들을 구분하기 위해 이벤트 ID에 시간을 통해 구분을 해줌
+            sendNotification(emitter, eventId, emitterId, "EventStream Created. [userId=" + userId + "]");
 
-        // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
-        if (hasLostData(lastEventId)) {
-            sendLostData(lastEventId, userId, emitterId, emitter);
+            // 클라이언트가 미수신한 Event 목록이 존재할 경우 전송하여 Event 유실을 예방
+            if (hasLostData(lastEventId)) {
+                sendLostData(lastEventId, userId, emitterId, emitter);
+            }
+
+            return emitter;
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
 
-        return emitter;
     }
 
 
