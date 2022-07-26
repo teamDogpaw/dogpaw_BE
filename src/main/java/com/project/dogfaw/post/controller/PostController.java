@@ -9,16 +9,21 @@ import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.post.service.PostService;
 import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
+import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariPoolMXBean;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.*;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -30,12 +35,16 @@ public class PostController {
 
     private final PostService postService;
     private final CommonService commonService;
+    private HikariDataSource dataSource;
 
     /*post 전체조회 (메인)*/
-    @GetMapping("/api/allpost")
+    @GetMapping("/api/all/post")
     public Map<String, Object> postPosts(HttpServletRequest httpServletRequest) {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
+
+        //hikariStatus확인용
+        printHikariStatus();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getDetails() != null){
@@ -57,6 +66,9 @@ public class PostController {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
 
+        //hikariStatus확인용
+        printHikariStatus();
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication.getDetails() != null){
             User user = null;
@@ -72,6 +84,10 @@ public class PostController {
     /*post 생성(메인)*/
     @PostMapping("/api/post")
     public MyApplyingResponseDto postPosts(@RequestBody PostRequestDto postRequestDto) {
+
+        //hikariStatus확인용
+        printHikariStatus();
+
         User user = commonService.getUser();
         return postService.postPost(postRequestDto, user);
     }
@@ -80,6 +96,10 @@ public class PostController {
     /*post 상세조회 (디테일 페이지)*/
     @GetMapping("/api/post/detail/{postId}")
     public PostDetailResponseDto getPostDetail(@PathVariable Long postId){
+
+        //hikariStatus확인용
+        printHikariStatus();
+
         User user = commonService.getUser();
 
         return postService.getPostDetail(postId,user);
@@ -118,6 +138,7 @@ public class PostController {
     }
 
 
+    /*요청에 대한 ip추적*/
     public static String getClientIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
 
@@ -138,6 +159,16 @@ public class PostController {
         }
 
         return ip;
+    }
+
+
+    @Autowired
+    private HikariPoolMXBean poolMXBean;
+
+
+    private void printHikariStatus(){
+        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
+                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
     }
 
 }

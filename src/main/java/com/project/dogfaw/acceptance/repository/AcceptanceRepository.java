@@ -1,5 +1,6 @@
-package com.project.dogfaw.acceptance;
+package com.project.dogfaw.acceptance.repository;
 
+import com.project.dogfaw.acceptance.model.Acceptance;
 import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;

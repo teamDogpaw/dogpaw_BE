@@ -10,7 +10,6 @@ package com.project.dogfaw.sse.service;
 
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
-import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.sse.dto.NotificationCountDto;
 import com.project.dogfaw.sse.dto.NotificationDto;
 import com.project.dogfaw.sse.model.Notification;
@@ -22,7 +21,6 @@ import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
@@ -130,7 +128,7 @@ public class NotificationService {
                 .build();
     }
 
-    @Transactional
+//    @Transactional
     public List<NotificationDto> findAllNotifications(Long userId) {
         List<Notification> notifications = notificationRepository.findAllByUserId(userId);
         return notifications.stream()
@@ -148,7 +146,7 @@ public class NotificationService {
 
     }
 
-    @Transactional
+//    @Transactional
     public void readNotification(Long notificationId) {
         //알림을 받은 사람의 id 와 알림의 id 를 받아와서 해당 알림을 찾는다.
         Optional<Notification> notification = notificationRepository.findById(notificationId);
@@ -157,13 +155,13 @@ public class NotificationService {
 
     }
 
-    @Transactional
+//    @Transactional
     public void deleteAllByNotifications(User user) {
         Long receiverId = user.getId();
         notificationRepository.deleteAllByReceiverId(receiverId);
 
     }
-    @Transactional
+//    @Transactional
     public void deleteByNotifications(Long notificationId) {
         notificationRepository.deleteById(notificationId);
     }
