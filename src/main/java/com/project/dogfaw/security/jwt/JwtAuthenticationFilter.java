@@ -1,6 +1,7 @@
 package com.project.dogfaw.security.jwt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -39,7 +41,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (token != null && jwtTokenProvider.validateToken(token) == JwtReturn.SUCCESS) {
+            log.info("===========================" +"4번째 if문"+ "===============================");
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            log.info("===========================" +authentication+ "===============================");
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
