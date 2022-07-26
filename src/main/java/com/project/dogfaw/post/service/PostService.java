@@ -160,14 +160,19 @@ public class PostService {
         List<UserApplication> applicationList =post.getUserApplications();
         int applierCnt = applicationList.size();
 
-        //userStatus 판별
-        String checkName = user.getUsername();
-        String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
-
-        //지원유무
-        Boolean applyingStatus = userApplicationRepository.existsByUserAndPost(user,post);
-        //참여수락유무
-        Boolean acceptedStatus = acceptanceRepository.existsByUserAndPost(user,post);
+        /*로그인안한유저와 로그인한 유저구분*/
+        if (user == null) {
+            String userStatus = UserStatus.USER_STATUS_ANONYMOUS.getUserStatus();
+            //로그인하지 않은 유저는 bookmarkStatus 항상 false
+            //북마크유무
+            Boolean bookMarkStatus = false;
+            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for(PostStack postStack : postStacks){
+                stringPostStacks.add(postStack.getStack());
+            }
+            return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applierCnt,userStatus);
+        }else {
 
         /*
         1.모집글을 쓴 유저와 로그인한 유저가 같을 경우 : userStatus = author
@@ -175,30 +180,37 @@ public class PostService {
         3.로그인한 유저가 지원한 유저일 경우 : userStatus = applicant
         4.로그인한 유저가 지원하지 않은 유저일 경우 : userStatus = member
         */
-        String userStatus;
-        if(checkName.equals(nickname)){
-            userStatus = UserStatus.USER_STATUS_AUTHOR.getUserStatus();
-        } else if (Boolean.TRUE.equals(acceptedStatus)){
-            userStatus = UserStatus.USER_STATUS_PARTICIPANT.getUserStatus();
-        } else if (Boolean.TRUE.equals(applyingStatus)){
-            userStatus = UserStatus.USER_STATUS_APPLICANT.getUserStatus();
-        } else {
-            userStatus = UserStatus.USER_STATUS_MEMBER.getUserStatus();
+            //userStatus 판별
+            String checkName = user.getUsername();
+            String nickname = post.getUser().getUsername(); // 해당 게시글 작성자 닉네임
+
+            //지원유무
+            Boolean applyingStatus = userApplicationRepository.existsByUserAndPost(user, post);
+            //참여수락유무
+            Boolean acceptedStatus = acceptanceRepository.existsByUserAndPost(user, post);
+
+            String userStatus;
+            if (checkName.equals(nickname)) {
+                userStatus = UserStatus.USER_STATUS_AUTHOR.getUserStatus();
+            } else if (Boolean.TRUE.equals(acceptedStatus)) {
+                userStatus = UserStatus.USER_STATUS_PARTICIPANT.getUserStatus();
+            } else if (Boolean.TRUE.equals(applyingStatus)) {
+                userStatus = UserStatus.USER_STATUS_APPLICANT.getUserStatus();
+            } else {
+                userStatus = UserStatus.USER_STATUS_MEMBER.getUserStatus();
+            }
+
+            //북마크유무
+            Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
+
+            List<PostStack> postStacks = postStackRepository.findByPostId(postId);
+            List<String> stringPostStacks = new ArrayList<>();
+            for (PostStack postStack : postStacks) {
+                stringPostStacks.add(postStack.getStack());
+            }
+
+            return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus, applierCnt, userStatus);
         }
-
-        //북마크유무
-        Boolean bookMarkStatus = bookMarkRepository.existsByUserAndPost(user, post);
-//        //신청유무
-//        Boolean applyStatus = userApplicationRepository.existsByUserAndPost(user,post);
-
-        List<PostStack> postStacks = postStackRepository.findByPostId(postId);
-        List<String> stringPostStacks = new ArrayList<>();
-        for(PostStack postStack : postStacks){
-            stringPostStacks.add(postStack.getStack());
-        }
-        //int bookMarkCnt = bookMarkRepository.findAllByPost(post).size();
-
-        return new PostDetailResponseDto(post, stringPostStacks, user, bookMarkStatus,applierCnt,userStatus);
     }
 
     //게시글 수정
