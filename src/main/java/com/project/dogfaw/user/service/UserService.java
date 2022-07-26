@@ -218,7 +218,7 @@ public class UserService {
             throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
         }
 
-//        // DB에서 유저 정보를 찾음
+        // DB에서 유저 정보를 찾음
 //        User users = userRepository.findById(requestDto.getUserId()).orElseThrow(
 //                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
 //        );
