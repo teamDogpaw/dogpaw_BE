@@ -2,6 +2,7 @@ package com.project.dogfaw.post.model;
 
 
 import com.project.dogfaw.apply.model.UserApplication;
+import com.project.dogfaw.common.Timestamped;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;

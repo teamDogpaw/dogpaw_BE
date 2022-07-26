@@ -66,7 +66,7 @@ public class NotificationService {
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
- 
+
     }
 
 

@@ -1,6 +1,6 @@
 package com.project.dogfaw.sse.model;
 
-import com.project.dogfaw.post.model.Timestamped;
+import com.project.dogfaw.common.Timestamped;
 import com.project.dogfaw.user.model.User;
 import lombok.Builder;
 import lombok.Getter;
