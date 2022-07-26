@@ -223,7 +223,8 @@ public class UserService {
 //                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
 //        );
 
-        User user=userRepository.findById(user1.getId()).orElseThrow(() -> new CustomException(ErrorCode.LOGIN_NOT_FOUNT_MEMBERID));
+        User user = userRepository.findById(user1.getId())
+                .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_NOT_FOUNT_MEMBERID));
         user.addInfo(requestDto);
         log.info("===========================" +"addinfo 이후"+ "===============================");
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
