@@ -19,7 +19,6 @@ import com.project.dogfaw.sse.repository.EmitterRepositoryImpl;
 import com.project.dogfaw.sse.repository.NotificationRepository;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -38,7 +37,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
-    @Autowired
+
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
@@ -171,14 +170,10 @@ public class NotificationService {
 
     @Transactional
     public ResponseEntity<Object> deleteAllByNotifications(User user) {
+        Long receiverId = user.getId();
         try {
-            Optional<Notification> existNotification = notificationRepository.findByReceiver(user);
-            if (existNotification.isPresent()) {
-                notificationRepository.deleteAllByReceiver(user);
-                return new ResponseEntity<>(new StatusResponseDto("알림 목록 전체삭제 성공", true), HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>(new StatusResponseDto("삭제할 알림이 존재하지 않습니다", false), HttpStatus.BAD_REQUEST);
-            }
+            notificationRepository.deleteAllByReceiverId(receiverId);
+            return new ResponseEntity<>(new StatusResponseDto("알림 목록 전체삭제 성공", true), HttpStatus.OK);
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_DELETE_All_NOTIFICATION);
         }
