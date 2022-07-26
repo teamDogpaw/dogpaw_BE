@@ -116,7 +116,11 @@ public enum ErrorCode {
 
     //sse
     NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다."),
-    FAIL_SUBSCRIBE(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다");
+    FAIL_SUBSCRIBE(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다"),
+
+    FAIL_LOAD_NOTIFICATION(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다");
+
+
 
 
 

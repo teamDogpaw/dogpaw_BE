@@ -224,6 +224,7 @@ public class UserService {
 //        );
 
         user.addInfo(requestDto);
+        log.info("===========================" +"addinfo 이후"+ "===============================");
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
         user.updateStack(stack);
 
@@ -231,7 +232,7 @@ public class UserService {
 
         RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
-
+        log.info("===========================" +"토큰 저장 이후"+ "===============================");
         return tokenDto;
     }
 
