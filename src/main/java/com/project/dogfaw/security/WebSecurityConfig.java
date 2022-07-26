@@ -11,11 +11,18 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Configuration
@@ -31,25 +38,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
+
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
         web
+
                 .ignoring()
-                .antMatchers("/h2-console/**")
-                .antMatchers(HttpMethod.GET,"/")
-                .antMatchers(HttpMethod.POST,"/user/signup/**")
-                .antMatchers(HttpMethod.POST,"/user/nickname/**")
-                .antMatchers(HttpMethod.POST,"/user/login/**")
-                .antMatchers(HttpMethod.GET,"/user/userInfo/**")
-                .antMatchers(HttpMethod.GET,"/user/kakao/login/**")
-                .antMatchers(HttpMethod.GET,"/api/all/**")
-                .antMatchers(HttpMethod.GET,"/api/bookMark/rank");
+                .antMatchers("/h2-console/**");
+
+
 
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-
+        //formlogin사용 x
+//        http.formLogin().disable();
         http.cors().configurationSource(corsConfigurationSource());
         http.csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -65,7 +68,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/userInfo/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/all/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/post/detail/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
+
 
 
 //                .antMatchers("/api/posts").permitAll()
@@ -82,8 +87,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 그 외 어떤 요청이든 '인증'과정 필요
                 .anyRequest().authenticated()
                 .and()
-                .exceptionHandling().accessDeniedPage("/403").and().httpBasic()
-                .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
     }
@@ -94,7 +97,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net"); //https 주소
-        configuration.addAllowedOrigin("http://scatch.s3-website.ap-northeast-2.amazonaws.com"); //http 주소
+        configuration.addAllowedOrigin("https://www.dogpaw.kr"); //https 구매한 도메인 주소
+        configuration.addAllowedOrigin("http://www.dogpaw.kr"); //http 구매한 도메인 주소
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         //configuration.addAllowedHeader("/"); //502에러때문에 추가
@@ -104,6 +108,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 
 
 }

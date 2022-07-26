@@ -61,6 +61,10 @@ public enum ErrorCode {
 
     // Post
     POST_NOT_FOUND(HttpStatus.NOT_FOUND, "404", "해당 게시물을 찾을 수 없습니다"),
+
+    POST_ALL_LOAD_FAIL(HttpStatus.NOT_FOUND, "404", "전체게시물 불러오기를 실패했습니다."),
+    POST_RANK_LOAD_FAIL(HttpStatus.NOT_FOUND, "404", "랭크 게시물 불러오기를 실패했습니다."),
+
     POST_INQUIRY_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "모집글 작성자만 가능합니다"),
     POST_PEOPLE_SET_CLOSED(HttpStatus.BAD_REQUEST, "400", "모집인원이 모두 찼을 경우 모집마감취소가 불가능합니다. 모집인원을 늘리거나 팀원 조정이 필요합니다."),
     POST_UPDATE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인의 게시물만 수정할 수 있습니다"),
@@ -111,7 +115,9 @@ public enum ErrorCode {
     NOT_EXIST_ROOM(HttpStatus.NOT_FOUND,"404","채팅방이 존재하지 않습니다."),
 
     //sse
-    NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다.");
+    NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다."),
+    FAIL_SUBSCRIBE(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다");
+
 
 
 
