@@ -68,6 +68,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/userInfo/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/all/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/api/post/detail/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
 
 
@@ -96,7 +97,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net"); //https 주소
-        configuration.addAllowedOrigin("http://www.dogpaw.kr"); //https 구매한 도메인 주소
+        configuration.addAllowedOrigin("https://www.dogpaw.kr"); //https 구매한 도메인 주소
+        configuration.addAllowedOrigin("http://www.dogpaw.kr"); //http 구매한 도메인 주소
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         //configuration.addAllowedHeader("/"); //502에러때문에 추가
@@ -108,11 +110,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
-    public class NoPopupBasicAuthenticationEntryPoint implements AuthenticationEntryPoint {
-        @Override
-        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
-        }
-    }
 
 }
