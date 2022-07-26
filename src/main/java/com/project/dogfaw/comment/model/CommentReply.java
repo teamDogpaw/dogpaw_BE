@@ -3,7 +3,7 @@ package com.project.dogfaw.comment.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.dogfaw.comment.dto.CommentPutDto;
-import com.project.dogfaw.post.model.Timestamped;
+import com.project.dogfaw.common.Timestamped;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

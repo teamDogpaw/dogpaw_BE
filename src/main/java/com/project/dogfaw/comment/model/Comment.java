@@ -1,10 +1,8 @@
 package com.project.dogfaw.comment.model;
 
-import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.post.model.Post;
-import com.project.dogfaw.post.model.Timestamped;
+import com.project.dogfaw.common.Timestamped;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
