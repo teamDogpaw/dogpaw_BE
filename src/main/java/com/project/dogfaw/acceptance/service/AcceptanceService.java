@@ -65,7 +65,7 @@ public class AcceptanceService {
 
         // 알림
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/post/"+applier.getId();
+        String Url = "https://www.dogpaw.kr/detail/"+applier.getId();
 //신청 수락 시 신청 유저에게 실시간 알림 전송 ,
         String content = applier.getNickname()+"님! 프로젝트 매칭 알림이 도착했어요!";
         notificationService.send(applier,NotificationType.ACCEPT,content,Url);
@@ -109,7 +109,7 @@ public class AcceptanceService {
 
         //프로젝트 매칭 실패 알림
         //해당 댓글로 이동하는 url
-        String Url = "https://www.dogpaw.kr/post/"+applier.getId();
+        String Url = "https://www.dogpaw.kr/detail/"+applier.getId();
         String notificationContent = applier.getNickname()+"님! 프로젝트 매칭 실패 알림이 도착했어요!";
         notificationService.send(applier,NotificationType.REJECT,notificationContent,Url);
 
