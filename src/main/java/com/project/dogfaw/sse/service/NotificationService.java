@@ -19,6 +19,7 @@ import com.project.dogfaw.sse.repository.EmitterRepositoryImpl;
 import com.project.dogfaw.sse.repository.NotificationRepository;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -30,7 +31,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 // No activity within 45000 milliseconds. 59 chars received. Reconnecting.
@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
+    @Autowired
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
