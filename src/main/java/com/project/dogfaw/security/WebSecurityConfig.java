@@ -99,8 +99,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         configuration.setAllowCredentials(true);
         configuration.addAllowedOrigin("http://localhost:3000");
         configuration.addAllowedOrigin("https://d2yxbwsc3za48s.cloudfront.net"); //https 주소
-        configuration.addAllowedOrigin("https://www.dogpaw.kr"); //https 구매한 도메인 주소
-        configuration.addAllowedOrigin("http://www.dogpaw.kr"); //http 구매한 도메인 주소
+        configuration.addAllowedOrigin("https://dogpaw.kr"); //https 구매한 도메인 주소
+        configuration.addAllowedOrigin("http://dogpaw.kr"); //http 구매한 도메인 주소
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
         //configuration.addAllowedHeader("/"); //502에러때문에 추가
