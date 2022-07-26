@@ -44,7 +44,7 @@ public class CommentReplyService {
         commentReplyRepository.save(cmtReply);
 
         //알림
-        String Url = "https://www.dogpaw.kr/post/"+comment.getId();
+        String Url = "https://www.dogpaw.kr/detail"+comment.getId();
         //댓글 생성 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = comment.getUser().getNickname()+"님! 댓글 알림이 도착했어요!";
 
