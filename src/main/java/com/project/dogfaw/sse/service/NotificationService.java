@@ -59,7 +59,6 @@ public class NotificationService {
             if (hasLostData(lastEventId)) {
                 sendLostData(lastEventId, userId, emitterId, emitter);
             }
-
             return emitter;
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
