@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
 // No activity within 45000 milliseconds. 59 chars received. Reconnecting.
@@ -169,25 +170,33 @@ public class NotificationService {
 
     @Transactional
     public ResponseEntity<Object> deleteAllByNotifications(User user) {
-        Long receiverId = user.getId();
-        Optional<Notification> existNotification = notificationRepository.findByReceiver(user);
-       if (existNotification.isPresent()){
-           notificationRepository.deleteAllByReceiverId(receiverId);
-           return new ResponseEntity<>(new StatusResponseDto("알림 목록 전체삭제 성공", true), HttpStatus.OK);
-       }else {
-           return new ResponseEntity<>(new StatusResponseDto("삭제할 알림이 존재하지 않습니다",false ), HttpStatus.BAD_REQUEST);
-       }
+        try {
+            Optional<Notification> existNotification = notificationRepository.findByReceiver(user);
+            if (existNotification.isPresent()) {
+                notificationRepository.deleteAllByReceiver(user);
+                return new ResponseEntity<>(new StatusResponseDto("알림 목록 전체삭제 성공", true), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new StatusResponseDto("삭제할 알림이 존재하지 않습니다", false), HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.FAIL_DELETE_All_NOTIFICATION);
+        }
 
     }
     @Transactional
     public ResponseEntity<Object> deleteByNotifications(Long notificationId) {
-        Optional<Notification> notification = notificationRepository.findById(notificationId);
-        if(notification.isPresent()){
-            notificationRepository.deleteById(notificationId);
-            return new ResponseEntity<>(new StatusResponseDto("알림 삭제 완료", true), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(new StatusResponseDto("존재하지 않는 알림입니다",false ), HttpStatus.BAD_REQUEST);
+        try{
+            Optional<Notification> notification = notificationRepository.findById(notificationId);
+            if(notification.isPresent()){
+                notificationRepository.deleteById(notificationId);
+                return new ResponseEntity<>(new StatusResponseDto("알림 삭제 완료", true), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new StatusResponseDto("존재하지 않는 알림입니다",false ), HttpStatus.BAD_REQUEST);
+            }
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.FAIL_DELETE_NOTIFICATION);
         }
+
 
     }
 }
