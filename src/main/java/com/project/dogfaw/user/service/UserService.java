@@ -1,5 +1,6 @@
 package com.project.dogfaw.user.service;
 
+import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
@@ -35,6 +36,7 @@ public class UserService {
     private final RefreshTokenRepository refreshTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final StackRepository stackRepository;
+    private final CommonService commonService;
 
 
     // 일반 회원가입
@@ -218,13 +220,9 @@ public class UserService {
             throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
         }
 
-        // DB에서 유저 정보를 찾음
-//        User users = userRepository.findById(requestDto.getUserId()).orElseThrow(
-//                () -> new CustomException(ErrorCode.SIGNUP_USERID_NOT_FOUND)
-//        );
-
         User user = userRepository.findById(user1.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_NOT_FOUNT_MEMBERID));
+
         user.addInfo(requestDto);
         log.info("===========================" +"addinfo 이후"+ "===============================");
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
@@ -259,13 +257,6 @@ public class UserService {
 //    }
 
 
-//    public List<Stack> tostack(List<StackDto> stackDtoList)  {
-//        List<Stack> stacks = new ArrayList<>();
-//        for(StackDto stackdto : stackDtoList){
-//            stacks.add(new Stack(stackdto));
-//        }
-//        return stacks;
-//    }
 
     private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
         List<Stack> stackList = new ArrayList<>();
@@ -276,13 +267,20 @@ public class UserService {
     }
 
     // 회원 탈퇴 메소드 (회원삭제가 아니라 회원정보를 삭제)
-    public void deleteUser(UserDetailsImpl userDetails) {
-        User foundUser = userRepository.findByUsername(userDetails.getUsername()).orElse(null);
+    @Transactional
+    public void deleteUser() {
+        User foundUser = commonService.getUser();
 
         if (foundUser != null) {
             String username = "deleteUser_"+foundUser.getId();
             String password = passwordEncoder.encode(UUID.randomUUID().toString());
             String nickname = "알수없음";
+//            stackRepository.deleteByUserId(foundUser.getId());
+            List<Stack> stacks =stackRepository.findByUserId(foundUser.getId());
+            for (Stack stack : stacks){
+                stack.setStack(null);
+                stack.setUserId(0L);
+            }
             foundUser.setUsername(username);
             foundUser.setNickname(nickname);
             foundUser.setPassword(password);
@@ -291,7 +289,7 @@ public class UserService {
             foundUser.setRole(UserRoleEnum.USER);
             foundUser.setStacks(null);
             foundUser.setKakaoId(null);
-            userRepository.save(foundUser);
+//            userRepository.save(foundUser);
         }
     }
 
