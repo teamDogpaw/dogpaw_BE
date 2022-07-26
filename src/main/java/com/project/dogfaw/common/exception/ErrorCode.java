@@ -117,8 +117,10 @@ public enum ErrorCode {
     //sse
     NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다."),
     FAIL_SUBSCRIBE(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다"),
+    FAIL_LOAD_NOTIFICATION(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다"),
 
-    FAIL_LOAD_NOTIFICATION(HttpStatus.NOT_FOUND,"404","알림구독을 실패하였습니다");
+    FAIL_DELETE_All_NOTIFICATION(HttpStatus.INTERNAL_SERVER_ERROR,"500","알 수 없는 오류로 전체알림 삭제를 실패하였습니다."),
+    FAIL_DELETE_NOTIFICATION(HttpStatus.INTERNAL_SERVER_ERROR,"500"," 알 수 없는 오류로 알림 삭제 처리를 실패하였습니다.");
 
 
 
