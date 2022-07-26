@@ -41,8 +41,7 @@ public class NotificationController {
         response.setCharacterEncoding("UTF-8");
 
         Long userId = commonService.getUser().getId();
-
-
+        
         return notificationService.subscribe(userId, lastEventId);
 
     }

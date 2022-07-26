@@ -43,7 +43,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web
 
                 .ignoring()
-                .antMatchers("/h2-console/**");
+                .antMatchers("/h2-console/**")
+                .antMatchers(HttpMethod.GET,"/detail/**");
 
 
 
@@ -72,6 +73,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/posts/{postId}/comments").permitAll()
                 .antMatchers(HttpMethod.POST,"/user/reissue").permitAll()
+
 
 
 
