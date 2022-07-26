@@ -162,8 +162,8 @@ public class UserController {
 
         //hikariStatus확인용
         printHikariStatus();
-
-        userService.addInfo(requestDto);
+        User user = commonService.getUser();
+        userService.addInfo(requestDto, user);
 
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
