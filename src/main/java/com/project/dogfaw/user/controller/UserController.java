@@ -19,20 +19,14 @@ import com.zaxxer.hikari.HikariPoolMXBean;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.JMX;
-import javax.management.MBeanServer;
-import javax.management.MalformedObjectNameException;
-import javax.management.ObjectName;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.management.ManagementFactory;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -159,11 +153,13 @@ public class UserController {
     public ResponseEntity<Object> addInfo(HttpServletRequest httpServletRequest,@RequestBody SignupRequestDto requestDto) {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
+        log.info("===========================1고승유=====================================================");
 
         //hikariStatus확인용
         printHikariStatus();
-
-        userService.addInfo(requestDto);
+        User user = commonService.getUser();
+        log.info("===========================2고승유=====================================================");
+        userService.addInfo(requestDto,user);
 
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
     }
@@ -205,8 +201,8 @@ public class UserController {
 
 
     private void printHikariStatus(){
-        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
-                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
+//        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
+//                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
     }
 
 
