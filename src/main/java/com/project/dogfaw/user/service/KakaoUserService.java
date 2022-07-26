@@ -75,7 +75,7 @@ public class KakaoUserService {
                 kakaoTokenRequest,
                 String.class
         );
-
+ 
         // HTTP 응답 (JSON) -> AccessToken 파싱
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();    // Json 형식 java에서 사용하기 위해 objectMapper 사용
