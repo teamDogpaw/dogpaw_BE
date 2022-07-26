@@ -205,8 +205,8 @@ public class UserController {
 
 
     private void printHikariStatus(){
-        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
-                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
+//        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
+//                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
     }
 
 
