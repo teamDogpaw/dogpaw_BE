@@ -1,10 +1,8 @@
 package com.project.dogfaw.post.model;
 
 
-import com.amazonaws.services.dynamodbv2.xspec.S;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.post.dto.PostRequestDto;
-import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
