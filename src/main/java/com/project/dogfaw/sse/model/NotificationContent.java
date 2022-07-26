@@ -20,7 +20,7 @@ public class NotificationContent {
     @Column(nullable = false, length = Max_LENGTH)
     private String notificationContent;
 
-
+ 
     public NotificationContent(String notificationContent) {
         if (isNotValidNotificationContent(notificationContent)) {
             throw new CustomException(ErrorCode.NOT_VALIDCONTENT);
