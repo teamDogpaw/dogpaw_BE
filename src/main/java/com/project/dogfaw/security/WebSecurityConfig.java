@@ -11,11 +11,18 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RequiredArgsConstructor
 @Configuration
@@ -45,8 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //formlogin사용 x
-        http.formLogin().disable();
-
+//        http.formLogin().disable();
         http.cors().configurationSource(corsConfigurationSource());
         http.csrf().disable().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -63,7 +69,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,"/user/kakao/login/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/all/**").permitAll()
                 .antMatchers(HttpMethod.GET,"/api/bookMark/rank").permitAll()
-                .antMatchers(HttpMethod.GET,"/**").permitAll()
+
 
 
 //                .antMatchers("/api/posts").permitAll()
@@ -79,8 +85,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 // 그 외 어떤 요청이든 '인증'과정 필요
                 .anyRequest().authenticated()
-                .and()
-                .exceptionHandling().accessDeniedPage("/403").and().httpBasic()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider),
                         UsernamePasswordAuthenticationFilter.class);
@@ -103,5 +107,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+
+    public class NoPopupBasicAuthenticationEntryPoint implements AuthenticationEntryPoint {
+        @Override
+        public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, authException.getMessage());
+        }
+    }
 
 }
