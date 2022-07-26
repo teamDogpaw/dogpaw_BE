@@ -1,7 +1,7 @@
 package com.project.dogfaw.apply.service;
 
 //작성자한테 알람이 가야함
-import com.project.dogfaw.acceptance.AcceptanceRepository;
+import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.common.exception.CustomException;
@@ -12,7 +12,6 @@ import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.sse.model.NotificationType;
 import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.model.User;
-import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

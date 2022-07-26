@@ -15,16 +15,24 @@ import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import com.project.dogfaw.user.service.KakaoUserService;
 import com.project.dogfaw.user.service.UserService;
+import com.zaxxer.hikari.HikariPoolMXBean;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.JMX;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.ObjectName;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -40,6 +48,9 @@ public class UserController {
     // 회원가입 API
     @PostMapping("/user/signup")
     public ResponseEntity<Object> registerUser(@RequestBody SignupRequestDto requestDto) {
+        //hikariStatus확인용
+        printHikariStatus();
+
         TokenDto tokenDto = userService.register(requestDto);
         return new ResponseEntity<>(new StatusResponseDto("회원가입 완료했습니다.", ""), HttpStatus.OK);
     }
@@ -47,7 +58,10 @@ public class UserController {
     // 닉네임 중복검사 API
     @PostMapping("/user/nickname")
     public ResponseEntity<Object> nicknameCheck(@RequestBody SignupRequestDto requestDto){
-//        UserValidator.validateInputNickname(requestDto);
+
+        //hikariStatus확인용
+        printHikariStatus();
+
         if(userRepository.existsByNickname(requestDto.getNickname())) {
             return new ResponseEntity<>(new ExceptionResponse(ErrorCode.SIGNUP_NICKNAME_DUPLICATE), HttpStatus.BAD_REQUEST);
         } else {
@@ -61,6 +75,9 @@ public class UserController {
 
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
+
+        //hikariStatus확인용
+        printHikariStatus();
 
         Map<String, Object> data = userService.login(loginDto);
         return new ResponseEntity<>(new StatusResponseDto("로그인에 성공하셨습니다", data), HttpStatus.OK);
@@ -76,6 +93,9 @@ public class UserController {
     // 토큰 재발행 API
     @PostMapping("/user/reissue")
     public ResponseEntity<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
+        //hikariStatus확인용
+        printHikariStatus();
+
         TokenDto tokenDto = userService.reissue(tokenRequestDto);
         return new ResponseEntity<>(new StatusResponseDto("토큰 재발급 성공", tokenDto), HttpStatus.OK);
     }
@@ -84,8 +104,12 @@ public class UserController {
     @GetMapping("/user/userinfo")
     @ResponseBody
     public UserInfo Session(HttpServletRequest httpServletRequest){
+
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
+
+        //hikariStatus확인용
+        printHikariStatus();
 
 
         User user = commonService.getUser();
@@ -98,16 +122,18 @@ public class UserController {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
 
+        //hikariStatus확인용
+        printHikariStatus();
 
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         TokenDto tokenDto = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
         String url = "https://d2yxbwsc3za48s.cloudfront.net/?token=" + tokenDto.getAccessToken() + "&refreshtoken=" + tokenDto.getRefreshToken();
         User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
         if (kakaoUser.getNickname().equals("default")){
-            url = url + "&nickname=default";
+            url = url + "&nickname=default" + "&userId=" + kakaoUser.getId();
         }
         else{
-            url = url + "&nickname=" + kakaoUser.getNickname();
+            url = url + "&nickname=" + kakaoUser.getNickname() + "&userId=" + kakaoUser.getId();
         }
         response.sendRedirect(url);
     }
@@ -134,6 +160,9 @@ public class UserController {
         // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
         log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
 
+        //hikariStatus확인용
+        printHikariStatus();
+
         userService.addInfo(requestDto);
 
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
@@ -146,7 +175,7 @@ public class UserController {
         return new ResponseEntity<>(new StatusResponseDto("회원 정보 삭제 성공",""), HttpStatus.CREATED);
     }
 
-
+    /*요청에 대한 ip추적*/
     public static String getClientIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
 
@@ -168,4 +197,18 @@ public class UserController {
 
         return ip;
     }
+
+
+
+    @Autowired
+    private HikariPoolMXBean poolMXBean;
+
+
+    private void printHikariStatus(){
+        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
+                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
+    }
+
+
+
 }

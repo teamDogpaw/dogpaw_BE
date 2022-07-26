@@ -1,6 +1,7 @@
-package com.project.dogfaw.acceptance;
+package com.project.dogfaw.acceptance.service;
 
-import com.project.dogfaw.apply.model.UserApplication;
+import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
+import com.project.dogfaw.acceptance.model.Acceptance;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
