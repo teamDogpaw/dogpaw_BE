@@ -65,7 +65,7 @@ public class NotificationService {
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
-
+ 
     }
 
 
@@ -137,10 +137,15 @@ public class NotificationService {
 
     @Transactional
     public List<NotificationDto> findAllNotifications(Long userId) {
-        List<Notification> notifications = notificationRepository.findAllByUserId(userId);
-        return notifications.stream()
-                .map(NotificationDto::create)
-                .collect(Collectors.toList());
+        try {
+            List<Notification> notifications = notificationRepository.findAllByUserId(userId);
+            return notifications.stream()
+                    .map(NotificationDto::create)
+                    .collect(Collectors.toList());
+        }catch (Exception e){
+            throw  new CustomException(ErrorCode.FAIL_LOAD_NOTIFICATION);
+        }
+
     }
 
 
