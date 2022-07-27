@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // No activity within 45000 milliseconds. 59 chars received. Reconnecting.
 @Service
@@ -137,13 +138,19 @@ public class NotificationService {
 
     @Transactional
     public List<NotificationDto> findAllNotifications(Long userId) {
+        //try 안에 있던 repo 조회 밖으로 뺌
+        List<Notification> notifications = notificationRepository.findAllByUserId(userId);
         try {
-            List<Notification> notifications = notificationRepository.findAllByUserId(userId);
             return notifications.stream()
                     .map(NotificationDto::create)
                     .collect(Collectors.toList());
         }catch (Exception e){
             throw  new CustomException(ErrorCode.FAIL_LOAD_NOTIFICATION);
+        }finally {
+            //추가코드
+            if (notifications.stream()!=null){
+                notifications.stream().close();
+            }
         }
 
     }
