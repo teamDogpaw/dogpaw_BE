@@ -26,5 +26,7 @@ public interface UserApplicationRepository extends JpaRepository<UserApplication
     List<UserApplication> findAllByPost(Post psot);
 
     Optional<UserApplication> findUserApplyByUserAndPost( User user,Post post);
+
+    void deleteByUserId(Long userId);
 }
 
