@@ -13,5 +13,5 @@ public enum UserStatus {
     USER_STATUS_MEMBER("MEMBER"), //지원안한사람
     USER_STATUS_ANONYMOUS("Guest"); //로그인하지않은사람
 
-    private String userStatus;
+    private String userStatus; 
 }
