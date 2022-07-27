@@ -64,7 +64,7 @@ public class CommentReplyService {
 
         for (CommentReply commentReply : commentReplyListByCommentId) {
             CmtReplyResponseDto cmtReplyResponseDto = new CmtReplyResponseDto(commentReply);
-            cmtReplyResponseDtoList.add(cmtReplyResponseDto);
+            cmtReplyResponseDtoList.add(cmtReplyResponseDto); 
 
         }
         return cmtReplyResponseDtoList;
