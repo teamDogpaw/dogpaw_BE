@@ -178,7 +178,7 @@ public class NotificationService {
             throw new CustomException(ErrorCode.FAIL_DELETE_All_NOTIFICATION);
         }
 
-    } 
+    }
     @Transactional
     public ResponseEntity<Object> deleteByNotifications(Long notificationId) {
         try{
