@@ -40,7 +40,7 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public SseEmitter subscribe(Long userId, String lastEventId) { 
+    public SseEmitter subscribe(Long userId, String lastEventId) {
         try {
             //emitter 하나하나 에 고유의 값을 주기 위해
             String emitterId = makeTimeIncludeId(userId);
@@ -109,7 +109,7 @@ public class NotificationService {
 
      */
 
-    @Async
+    @Async 
     public void send(User receiver, NotificationType notificationType, String notificationContent, String url) {
 
         Notification notification = notificationRepository.save(createNotification(receiver, notificationType, notificationContent, url));
