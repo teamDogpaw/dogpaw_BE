@@ -299,9 +299,8 @@ public class MypageService {
             String imgKey = user.getImgkey();
             amazonS3Client.deleteObject(bucket, imgKey);
         }
-
-        user.setImgkey(null);
-        user.setProfileImg(null);
+        user.basicImg();
+        userRepository.save(user);
     }
 
     /*List<String> 형태로 변환*/
