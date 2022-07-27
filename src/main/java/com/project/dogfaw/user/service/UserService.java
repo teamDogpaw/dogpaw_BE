@@ -5,14 +5,14 @@ import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
-import com.project.dogfaw.common.exception.StatusResponseDto;
 import com.project.dogfaw.common.validator.UserValidator;
-import com.project.dogfaw.security.UserDetailsImpl;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
 import com.project.dogfaw.security.jwt.TokenRequestDto;
-import com.project.dogfaw.user.dto.*;
+import com.project.dogfaw.user.dto.LoginDto;
+import com.project.dogfaw.user.dto.SignupRequestDto;
+import com.project.dogfaw.user.dto.StackDto;
 import com.project.dogfaw.user.model.RefreshToken;
 import com.project.dogfaw.user.model.Stack;
 import com.project.dogfaw.user.model.User;
@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import java.util.*;
 

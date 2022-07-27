@@ -57,7 +57,10 @@ public class User {
         this.nickname = requestDto.getNickname();
     }
 
-
+    public void basicImg(){
+        this.profileImg = null;
+        this.Imgkey = null;
+    }
 
 //    private String List<bookMark>;
 //

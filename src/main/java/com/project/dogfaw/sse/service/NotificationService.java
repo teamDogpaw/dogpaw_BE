@@ -41,14 +41,14 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
-        try {
+
             //emitter 하나하나 에 고유의 값을 주기 위해
             String emitterId = makeTimeIncludeId(userId);
 
             Long timeout = 60L * 1000L * 60L; // 1시간
             // 생성된 emiiterId를 기반으로 emitter를 저장
             SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));
-
+        try {
             //emitter의 시간이 만료된 후 레포에서 삭제
             emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
             emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
@@ -62,11 +62,10 @@ public class NotificationService {
             if (hasLostData(lastEventId)) {
                 sendLostData(lastEventId, userId, emitterId, emitter);
             }
-            return emitter;
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
-
+        return emitter;
     }
 
 
@@ -109,7 +108,7 @@ public class NotificationService {
 
      */
 
-    @Async
+    @Async 
     public void send(User receiver, NotificationType notificationType, String notificationContent, String url) {
 
         Notification notification = notificationRepository.save(createNotification(receiver, notificationType, notificationContent, url));
