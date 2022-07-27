@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configuration status="INFO">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} [%t] %-5level %logger{36} - %msg%n</Property>
+        <property name="LOGS_PATH">/home/ubuntu/logs</property>
+
+    </Properties>
+    <Appenders>
+        <logger name="com.zaxxer.hikari" level="TRACE" />
+        <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>
+
+        <Console name="ConsoleLog" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8"/>
+        </Console>
+        <RollingFile name="FileLog"
+                     fileName="${LOGS_PATH}/spring.log"
+                     filePattern="${LOGS_PATH}/spring-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" charset="UTF-8" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" />
+                <SizeBasedTriggeringPolicy size="100MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="20" fileIndex="min" />
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Root level="DEBUG">
+            <AppenderRef ref="ConsoleLog" />
+            <AppenderRef ref="com.zaxxer.hikari" />
+            <AppenderRef ref="FileLog" />
+        </Root>
+    </Loggers>
+</Configuration>
