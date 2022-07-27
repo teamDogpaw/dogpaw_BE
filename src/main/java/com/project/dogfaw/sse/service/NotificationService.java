@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 // No activity within 45000 milliseconds. 59 chars received. Reconnecting.
 @Service
@@ -41,14 +42,14 @@ public class NotificationService {
     private final NotificationRepository notificationRepository;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
-        try {
+
             //emitter 하나하나 에 고유의 값을 주기 위해
             String emitterId = makeTimeIncludeId(userId);
 
             Long timeout = 60L * 1000L * 60L; // 1시간
             // 생성된 emiiterId를 기반으로 emitter를 저장
             SseEmitter emitter = emitterRepository.save(emitterId, new SseEmitter(timeout));
-
+        try {
             //emitter의 시간이 만료된 후 레포에서 삭제
             emitter.onCompletion(() -> emitterRepository.deleteById(emitterId));
             emitter.onTimeout(() -> emitterRepository.deleteById(emitterId));
@@ -62,11 +63,10 @@ public class NotificationService {
             if (hasLostData(lastEventId)) {
                 sendLostData(lastEventId, userId, emitterId, emitter);
             }
-            return emitter;
         }catch (Exception e){
             throw new CustomException(ErrorCode.FAIL_SUBSCRIBE);
         }
-
+        return emitter;
     }
 
 
@@ -109,7 +109,7 @@ public class NotificationService {
 
      */
 
-    @Async
+    @Async 
     public void send(User receiver, NotificationType notificationType, String notificationContent, String url) {
 
         Notification notification = notificationRepository.save(createNotification(receiver, notificationType, notificationContent, url));
@@ -138,13 +138,19 @@ public class NotificationService {
 
     @Transactional
     public List<NotificationDto> findAllNotifications(Long userId) {
+        //try 안에 있던 repo 조회 밖으로 뺌
+        List<Notification> notifications = notificationRepository.findAllByUserId(userId);
         try {
-            List<Notification> notifications = notificationRepository.findAllByUserId(userId);
             return notifications.stream()
                     .map(NotificationDto::create)
                     .collect(Collectors.toList());
         }catch (Exception e){
             throw  new CustomException(ErrorCode.FAIL_LOAD_NOTIFICATION);
+        }finally {
+            //추가코드
+            if (notifications.stream()!=null){
+                notifications.stream().close();
+            }
         }
 
     }
