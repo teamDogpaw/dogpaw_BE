@@ -9,6 +9,7 @@ import com.project.dogfaw.common.validator.UserValidator;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
+import com.project.dogfaw.security.jwt.TokenRequestDto;
 import com.project.dogfaw.user.dto.LoginDto;
 import com.project.dogfaw.user.dto.SignupRequestDto;
 import com.project.dogfaw.user.dto.StackDto;
