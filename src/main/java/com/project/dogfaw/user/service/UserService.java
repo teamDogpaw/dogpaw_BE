@@ -1,5 +1,7 @@
 package com.project.dogfaw.user.service;
 
+import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
+import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
@@ -37,6 +39,8 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final StackRepository stackRepository;
     private final CommonService commonService;
+    private final UserApplicationRepository userApplicationRepository;
+    private final AcceptanceRepository acceptanceRepository;
 
 
     // 일반 회원가입
@@ -275,7 +279,10 @@ public class UserService {
             String username = "deleteUser_"+foundUser.getId();
             String password = passwordEncoder.encode(UUID.randomUUID().toString());
             String nickname = "알수없음";
+
 //            stackRepository.deleteByUserId(foundUser.getId());
+            userApplicationRepository.deleteByUserId(foundUser.getId());
+            acceptanceRepository.deleteByUserId(foundUser.getId());
             List<Stack> stacks =stackRepository.findByUserId(foundUser.getId());
             for (Stack stack : stacks){
                 stack.setStack(null);
