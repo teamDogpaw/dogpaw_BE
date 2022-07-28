@@ -401,7 +401,7 @@ public class MypageService {
         String Url = "https://dogpaw.kr/user/mypage/post";
         //탈퇴 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = post.getUser().getNickname()+"님! 팀원이 탈퇴하였습니다";
-        notificationService.send(user, NotificationType.REJECT,notificationContent,Url);
+        notificationService.send(post.getUser(), NotificationType.REJECT,notificationContent,Url);
 
         return new ResponseEntity(new StatusResponseDto("팀 탈퇴가 완료되었습니다",""), HttpStatus.OK);
     }
