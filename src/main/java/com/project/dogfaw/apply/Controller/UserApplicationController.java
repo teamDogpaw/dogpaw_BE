@@ -19,7 +19,7 @@ public class UserApplicationController {
     @PostMapping("/api/apply/{postId}")
     public ResponseEntity<Object> userApply(@PathVariable Long postId){
         User user = commonService.getUser(); 
-
+ 
         return userApplicationService.userApply(postId,user);
 
     }
