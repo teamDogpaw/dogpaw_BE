@@ -11,6 +11,6 @@ public class SignupRequestDto {
     private Long userId;
     private String username;
     private String password;
-    private String nickname;
+    private String nickname; 
     private List<StackDto> stacks = new ArrayList<>();
 }
