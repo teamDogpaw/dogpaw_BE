@@ -58,7 +58,7 @@ public class UserApplicationService {
             //해당 댓글로 이동하는 url
             String Url = "https://dogpaw.kr/detail/"+post.getId();
             //신청 시 모집글 작성 유저에게 실시간 알림 전송 ,
-            String notificationContent = post.getUser().getNickname()+"님! 프로젝트 신청 알림이 도착했어요!";
+            String notificationContent = user.getNickname()+"님이 프로젝트를 신청하셨습니다!";
             notificationService.send(post.getUser(),NotificationType.APPLY,notificationContent,Url);
 
 
