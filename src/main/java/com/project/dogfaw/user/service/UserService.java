@@ -175,7 +175,6 @@ public class UserService {
                 .build();
     }
 
-
     //추가 정보 기입
     @Transactional
     public TokenDto addInfo(SignupRequestDto requestDto, User user1) {
@@ -238,5 +237,4 @@ public class UserService {
         }
         return stackList;
     }
-
 }
