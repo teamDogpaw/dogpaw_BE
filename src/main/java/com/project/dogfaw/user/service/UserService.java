@@ -175,7 +175,7 @@ public class UserService {
                 .build();
     }
 
-
+    //추가 정보 기입
     @Transactional
     public TokenDto addInfo(SignupRequestDto requestDto, User user1) {
         // 닉네임 중복 확인
