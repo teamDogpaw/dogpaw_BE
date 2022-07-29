@@ -2,20 +2,13 @@ package com.project.dogfaw.comment.controller;
 
 import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.comment.dto.CommentRequestDto;
-import com.project.dogfaw.comment.dto.CommentResponseDto;
-import com.project.dogfaw.comment.model.Comment;
-import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.comment.service.CommentService;
 import com.project.dogfaw.common.CommonService;
-import com.project.dogfaw.user.repository.UserRepository;
+import com.project.dogfaw.common.exception.StatusResponseDto;
+import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
