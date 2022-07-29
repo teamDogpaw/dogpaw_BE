@@ -61,6 +61,10 @@ public class UserService {
         // 회원 비밀번호 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
 
+        // 유효성 검사
+        UserValidator.validateInputUsername(requestDto);
+        UserValidator.validateInputPassword(requestDto);
+
 
         User user = userRepository.save(
                 User.builder()
@@ -187,8 +191,7 @@ public class UserService {
         User user = userRepository.findById(user1.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_NOT_FOUNT_MEMBERID));
 
-        user.addInfo(requestDto);
-        log.info("===========================" +"addinfo 이후"+ "===============================");
+        user.updateNickname(requestDto);
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
         user.updateStack(stack);
 
@@ -196,7 +199,6 @@ public class UserService {
 
         RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
-        log.info("===========================" +"토큰 저장 이후"+ "===============================");
         return tokenDto;
     }
 
