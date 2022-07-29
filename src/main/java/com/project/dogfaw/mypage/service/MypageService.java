@@ -393,7 +393,8 @@ public class MypageService {
         Boolean deadline = false;
         if(post.getCurrentMember()<post.getMaxCapacity()){
             post.updateDeadline(deadline);
-        }// 스테이터스는 진행중으로 유지한다.
+        }
+        // 스테이터스는 진행중으로 유지한다.
 
         //작성자에게 알람
         // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
