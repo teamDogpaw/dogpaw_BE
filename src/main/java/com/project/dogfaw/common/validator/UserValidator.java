@@ -15,7 +15,7 @@ public class UserValidator {
         String username = requestDto.getUsername();
 
         //이메일 형식
-        String patternUsername = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
+        String patternUsername = "^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$";
 
         // 이메일 설정 유효성 검사
         if (username == null || !Pattern.matches(patternUsername, username)) {
@@ -30,7 +30,7 @@ public class UserValidator {
 
 
         // 8자에서 16자 이내, 대소문자, 숫자.
-        String patternPw = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$";
+        String patternPw = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$";
 
         // 비밀번호 설정 유효성 검사
         if (password == null || !Pattern.matches(patternPw, password)) {
