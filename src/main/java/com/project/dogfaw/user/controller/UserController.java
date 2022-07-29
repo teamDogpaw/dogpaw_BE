@@ -40,9 +40,6 @@ public class UserController {
     // 회원가입 API
     @PostMapping("/user/signup")
     public ResponseEntity<Object> registerUser(@RequestBody SignupRequestDto requestDto) {
-        //hikariStatus확인용
-        printHikariStatus();
-
         TokenDto tokenDto = userService.register(requestDto);
         return new ResponseEntity<>(new StatusResponseDto("회원가입 완료했습니다.", ""), HttpStatus.OK);
     }
@@ -50,10 +47,6 @@ public class UserController {
     // 닉네임 중복검사 API
     @PostMapping("/user/nickname")
     public ResponseEntity<Object> nicknameCheck(@RequestBody SignupRequestDto requestDto){
-
-        //hikariStatus확인용
-        printHikariStatus();
-
         if(userRepository.existsByNickname(requestDto.getNickname())) {
             return new ResponseEntity<>(new ExceptionResponse(ErrorCode.SIGNUP_NICKNAME_DUPLICATE), HttpStatus.BAD_REQUEST);
         } else {
@@ -64,13 +57,6 @@ public class UserController {
     // 로그인 API
     @PostMapping("/user/login")
     public ResponseEntity<Object> login(HttpServletRequest httpServletRequest,@RequestBody LoginDto loginDto) {
-
-        // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
-        log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
-
-        //hikariStatus확인용
-        printHikariStatus();
-
         Map<String, Object> data = userService.login(loginDto);
         return new ResponseEntity<>(new StatusResponseDto("로그인에 성공하셨습니다", data), HttpStatus.OK);
     }
@@ -85,25 +71,13 @@ public class UserController {
     // 토큰 재발행 API
     @PostMapping("/user/reissue")
     public ResponseEntity<Object> reissue(@RequestBody TokenRequestDto tokenRequestDto) {
-        //hikariStatus확인용
-        printHikariStatus();
-
         TokenDto tokenDto = userService.reissue(tokenRequestDto);
         return new ResponseEntity<>(new StatusResponseDto("토큰 재발급 성공", tokenDto), HttpStatus.OK);
     }
 
     // 유저 정보 API
     @GetMapping("/user/userinfo")
-    @ResponseBody
-    public UserInfo Session(HttpServletRequest httpServletRequest){
-
-        // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
-        log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
-
-        //hikariStatus확인용
-        printHikariStatus();
-
-
+    public UserInfo Session(){
         User user = commonService.getUser();
         return new UserInfo(user.getUsername(), user.getNickname(),user.getProfileImg(), user.getStacks());
     }
@@ -111,12 +85,6 @@ public class UserController {
     // 카카오 로그인 API
     @GetMapping("/user/kakao/login")
     public void kakaoLogin(HttpServletRequest httpServletRequest,@RequestParam String code, HttpServletResponse response) throws IOException {
-        // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
-        log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
-
-        //hikariStatus확인용
-        printHikariStatus();
-
         KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
         TokenDto tokenDto = userService.SignupUserCheck(kakaoUserInfo.getKakaoId());
         String url = "https://dogpaw.kr/?token=" + tokenDto.getAccessToken() + "&refreshtoken=" + tokenDto.getRefreshToken();
@@ -131,25 +99,10 @@ public class UserController {
     }
 
 
-//    @GetMapping("/user/kakao/login")
-//    public ResponseEntity<Object> kakaoLogin(@RequestParam String code) throws JsonProcessingException {
-//        KakaoUserInfo kakaoUserInfo = kakaoUserService.kakaoLogin(code);
-//        return new ResponseEntity<>(userService.SignupUserCheck(kakaoUserInfo.getKakaoId()), HttpStatus.OK);
-//    }
-
-
     // 회원가입 추가 정보 API
     @PostMapping("/user/signup/addInfo")
-
     public ResponseEntity<Object> addInfo(HttpServletRequest httpServletRequest,@RequestBody SignupRequestDto requestDto) {
-        // 팀원 외에 다른 ip에서 요청이 들어오는지 확인 위함
-        log.info("===========================요청한 ip"+getClientIpAddr(httpServletRequest)+"=====================================================");
-        log.info("===========================1고승유=====================================================");
-
-        //hikariStatus확인용
-        printHikariStatus();
         User user = commonService.getUser();
-        log.info("===========================2고승유=====================================================");
         userService.addInfo(requestDto,user);
 
         return new ResponseEntity<>(new StatusResponseDto("추가 정보 등록 성공",""), HttpStatus.CREATED);
@@ -184,17 +137,4 @@ public class UserController {
 
         return ip;
     }
-
-
-    @Autowired
-    private HikariPoolMXBean poolMXBean;
-
-
-    private void printHikariStatus(){
-//        log.info("connections info total: {}, active: {}, idle: {}, await: {}", poolMXBean.getTotalConnections(),
-//                poolMXBean.getActiveConnections(), poolMXBean.getIdleConnections(), poolMXBean.getThreadsAwaitingConnection());
-    }
-
-
-
 }

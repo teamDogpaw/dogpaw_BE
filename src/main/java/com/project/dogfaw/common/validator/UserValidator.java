@@ -10,22 +10,36 @@ import java.util.regex.Pattern;
 
 public class UserValidator {
 
-    public static void validateInputNickname(SignupRequestDto requestDto) {
+    public static void validateInputUsername(SignupRequestDto requestDto) {
 
-        String nickname = requestDto.getNickname();
+        String username = requestDto.getUsername();
 
-        String patternNickname = "^[A-Za-z0-9가-힣]{2,6}$";
+        //이메일 형식
+        String patternUsername = "^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$";
 
-        // 닉네임 설정 유효성 검사
-        if (nickname == null || !Pattern.matches(patternNickname, nickname)) {
-            throw new CustomException(ErrorCode.SIGNUP_NICKNAME_WRONG_INPUT);
+        // 이메일 설정 유효성 검사
+        if (username == null || !Pattern.matches(patternUsername, username)) {
+            throw new CustomException(ErrorCode.SIGNUP_MEMBERID_WRONG_INPUT);
         }
     }
 
-    public static void validateInputStack(SignupRequestDto requestDto) {
+    public static void validateInputPassword(SignupRequestDto requestDto) {
 
-        if (requestDto.getStacks().size()==0) {
-            throw new CustomException(ErrorCode.SIGNUP_MAJOR_WRONG_INPUT);
+        String password = requestDto.getPassword();
+        String passwordConfirm = requestDto.getPasswordConfirm();
+
+
+        // 8자에서 16자 이내, 대소문자, 숫자.
+        String patternPw = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,16}$";
+
+        // 비밀번호 설정 유효성 검사
+        if (password == null || !Pattern.matches(patternPw, password)) {
+            throw new CustomException(ErrorCode.SIGNUP_PASSWORD_WRONG_INPUT);
+        }
+
+        // 비밀번호 확인 유효성 검사
+        if (!password.equals(passwordConfirm)) {
+            throw new CustomException(ErrorCode.SIGNUP_PWCHECK_WRONG_INPUT);
         }
     }
 
