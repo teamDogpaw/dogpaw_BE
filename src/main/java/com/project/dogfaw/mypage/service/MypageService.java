@@ -408,8 +408,8 @@ public class MypageService {
     }
 
     /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
-    public OtherUserMypageResponseDto mypageInfo(Long userId, User user) {
-        User otherUser = userRepository.findById(userId)
+    public OtherUserMypageResponseDto mypageInfo(MypageRequestDto requestDto, User user) {
+        User otherUser = userRepository.findByNickname(requestDto.getNickname())
                 .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
 
         //반환할 ArrayList 생성
