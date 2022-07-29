@@ -399,7 +399,7 @@ public class MypageService {
         //작성자에게 알람
         // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
         //해당 댓글로 이동하는 url
-        String Url = "https://dogpaw.kr/user/mypage/post";
+        String Url = "https://dogpaw.kr/detail/"+post.getId();
         //탈퇴 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = user.getNickname()+"님이 프로젝트를 하차하였습니다";
         notificationService.send(post.getUser(), NotificationType.REJECT,notificationContent,Url);
