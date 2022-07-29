@@ -114,9 +114,9 @@ public class MypageController {
     }
 
     /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
-    @GetMapping("/api/user/{userId}/mypage/info")
-    public OtherUserMypageResponseDto mypageInfo(@PathVariable Long userId){
+    @GetMapping("/api/user/other/mypage/info")
+    public OtherUserMypageResponseDto mypageInfo(@RequestBody MypageRequestDto requestDto){
         User user = commonService.getUser();
-        return mypageService.mypageInfo(userId,user);
+        return mypageService.mypageInfo(requestDto,user);
     }
 }
