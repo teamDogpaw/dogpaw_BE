@@ -57,7 +57,7 @@ public class MypageService {
     public ArrayList<MyBookmarkResponseDto> myBookmark(User user) {
 
         //유저가 북마크한 것을 리스트로 모두 불러옴
-        List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
+        List<BookMark> userPosts = bookMarkRepository.findAllByUserOrderByIdDesc(user);
 
         //유저가 북마크한 게시글을 찾아 리스트에 담아주기 위해 ArrayList 생성
         ArrayList<Post> userPostings = new ArrayList<>();
@@ -78,6 +78,7 @@ public class MypageService {
 
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
+
             for (PostStack postStack : postStacks) {
                 stringPostStacks.add(postStack.getStack());
             }
@@ -408,8 +409,8 @@ public class MypageService {
     }
 
     /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
-    public OtherUserMypageResponseDto mypageInfo(MypageRequestDto requestDto, User user) {
-        User otherUser = userRepository.findByNickname(requestDto.getNickname())
+    public OtherUserMypageResponseDto mypageInfo(String nickname, User user) {
+        User otherUser = userRepository.findByNickname(nickname)
                 .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
 
         //반환할 ArrayList 생성
