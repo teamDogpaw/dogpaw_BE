@@ -68,7 +68,7 @@ public class UserService {
 
         // 유효성 검사
 //        UserValidator.validateInputUsername(requestDto);
-        UserValidator.validateInputPassword(requestDto);
+//        UserValidator.validateInputPassword(requestDto);
 
 
         User user = userRepository.save(
