@@ -41,9 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (token != null && jwtTokenProvider.validateToken(token) == JwtReturn.SUCCESS) {
-            log.info("===========================" +"4번째 if문"+ "===============================");
             Authentication authentication = jwtTokenProvider.getAuthentication(token);
-            log.info("===========================" +authentication+ "===============================");
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
         filterChain.doFilter(request, response);
