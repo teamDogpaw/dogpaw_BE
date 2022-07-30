@@ -68,8 +68,6 @@ public class CommentService {
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : commentListByPostId) {
-            List<CommentReply> commentReplyList = comment.getCommentReplyList();
-//            for(CommentReply commentReply :commentReplyList )
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
             commentResponseDtoList.add(commentResponseDto);
         }
