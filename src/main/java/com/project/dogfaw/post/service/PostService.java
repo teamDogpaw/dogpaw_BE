@@ -194,7 +194,9 @@ public class PostService {
             Boolean acceptedStatus = acceptanceRepository.existsByUserAndPost(user, post);
 
             String userStatus;
-            if (checkName.equals(nickname)) {
+            if (user.getRole()==UserRoleEnum.ADMIN){
+                userStatus = UserStatus.USER_STATUS_MASTER.getUserStatus();
+            } else if (checkName.equals(nickname)) {
                 userStatus = UserStatus.USER_STATUS_AUTHOR.getUserStatus();
             } else if (Boolean.TRUE.equals(acceptedStatus)) {
                 userStatus = UserStatus.USER_STATUS_PARTICIPANT.getUserStatus();
