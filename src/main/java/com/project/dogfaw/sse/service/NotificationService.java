@@ -7,6 +7,7 @@ package com.project.dogfaw.sse.service;
 
  */
 
+import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.exception.StatusResponseDto;
@@ -40,6 +41,7 @@ public class NotificationService {
     private final EmitterRepository emitterRepository = new EmitterRepositoryImpl();
 
     private final NotificationRepository notificationRepository;
+    private final CommonService commonService;
 
     public SseEmitter subscribe(Long userId, String lastEventId) {
 
@@ -166,11 +168,12 @@ public class NotificationService {
     }
 
     @Transactional
-    public void readNotification(Long notificationId) {
+    public List<NotificationDto> readNotification(Long notificationId) {
         //알림을 받은 사람의 id 와 알림의 id 를 받아와서 해당 알림을 찾는다.
         Optional<Notification> notification = notificationRepository.findById(notificationId);
         Notification checkNotification = notification.orElseThrow(()-> new CustomException(ErrorCode.NOT_EXIST_NOTIFICATION));
         checkNotification.read(); // 읽음처리
+        return findAllNotifications(commonService.getUser().getId());
 
     }
 
