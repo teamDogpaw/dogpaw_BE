@@ -5,6 +5,7 @@ import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.comment.dto.CommentRequestDto;
 import com.project.dogfaw.comment.dto.CommentResponseDto;
 import com.project.dogfaw.comment.model.Comment;
+import com.project.dogfaw.comment.model.CommentReply;
 import com.project.dogfaw.comment.repository.CommentRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
@@ -64,10 +65,11 @@ public class CommentService {
     @Transactional(readOnly = true)
     public StatusResponseDto getCommentsByPostId(Long postId) {
         List<Comment> commentListByPostId = commentRepository.findAllByPostId(postId);
-
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
 
         for (Comment comment : commentListByPostId) {
+            List<CommentReply> commentReplyList = comment.getCommentReplyList();
+//            for(CommentReply commentReply :commentReplyList )
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
             commentResponseDtoList.add(commentResponseDto);
         }
