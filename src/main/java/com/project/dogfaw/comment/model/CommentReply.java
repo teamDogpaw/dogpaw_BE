@@ -31,30 +31,17 @@ public class CommentReply extends Timestamped {
     @Column(nullable = false)
     private String content;
 
-    @Column(nullable = false)
-    private String nickname;
-
-    @Column
-    private String profileImg;
-    //responseDto에 빼놓기
-
     @ManyToOne //ID 유저네임? 그 이아디?
     @JoinColumn(name = "USER_ID")
     @JsonIgnore
     private User user;
 
-    // FK로 POST_ID 들어옴.
-//    @ManyToOne
-//    @JoinColumn(name = "POST_ID")
-//    private Post post;
 
-    public CommentReply(String content, String nickname, String profileImg, User user, Comment comment) {
+
+    public CommentReply(String content, User user, Comment comment) {
         this.content = content;
-        this.nickname = nickname;
-        this.profileImg = profileImg;
         this.user = user;
         this.comment = comment;
-        //this.post = post;
     }
     public void updateCommentReply(CommentPutDto requestDto) {
         this.content = requestDto.getContent();
