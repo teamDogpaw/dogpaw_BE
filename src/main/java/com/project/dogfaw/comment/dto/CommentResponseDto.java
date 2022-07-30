@@ -17,39 +17,25 @@ public class CommentResponseDto {
 
     private Long commentId;
     private String content;
+
     private String modifiedAt;
     private Long userId;
     private String nickname;
+
     private String profileImg;
-    private List<CommentReply> commentReplyList;
 
-    private Long comment;
+    private List<CmtReplyResponseDto> commentReplyList;
 
-    private Long user;
 
-    public CommentResponseDto(Comment comment) {
+    public CommentResponseDto(Comment comment,List<CmtReplyResponseDto> cmtReplyResponseDtoList) {
         this.commentId = comment.getId();
         this.content = comment.getContent();
         this.userId = comment.getUser().getId();
         this.nickname = comment.getUser().getNickname();
         this.profileImg = comment.getUser().getProfileImg();
         this.modifiedAt = comment.getModifiedDate().toString();
-        this.commentReplyList = CommentReplyList(comment);
+        this.commentReplyList = cmtReplyResponseDtoList;
     }
 
-
-    public List<CommentReply> CommentReplyList(Comment comment){
-        List<CommentReply> commentReplylists = comment.getCommentReplyList();
-        List<CommentReply> commentReplies = new ArrayList<>();
-        for(CommentReply commentReply :commentReplylists ){
-            this.comment = comment.getId();
-            this.content = commentReply.getContent();
-            this.nickname =commentReply.getUser().getNickname();
-            this.profileImg = commentReply.getUser().getProfileImg();
-            this.user = commentReply.getUser().getId();
-            commentReplies.add(commentReply);
-        }
-        return commentReplies;
-    }
 
 }

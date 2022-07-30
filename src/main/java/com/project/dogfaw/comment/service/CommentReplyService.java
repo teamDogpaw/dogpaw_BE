@@ -36,10 +36,9 @@ public class CommentReplyService {
     public void saveCmtReply(Long commentId, User user, CmtReplyReqeustDto requestDto) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(RuntimeException::new);
-        String profileImg = user.getProfileImg();
-        String nickname = user.getNickname();
+
         String content = requestDto.getContent();
-        CommentReply cmtReply = new CommentReply(content, nickname, profileImg, user, comment);
+        CommentReply cmtReply = new CommentReply(content, user, comment);
 
         commentReplyRepository.save(cmtReply);
 
