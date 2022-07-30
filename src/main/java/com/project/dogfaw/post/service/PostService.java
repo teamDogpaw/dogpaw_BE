@@ -1,6 +1,7 @@
 package com.project.dogfaw.post.service;
 
 
+import com.amazonaws.services.quicksight.model.UserRole;
 import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
 import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
@@ -19,6 +20,7 @@ import com.project.dogfaw.post.model.UserStatus;
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.post.repository.PostStackRepository;
 import com.project.dogfaw.user.model.User;
+import com.project.dogfaw.user.model.UserRoleEnum;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -237,18 +239,20 @@ public class PostService {
 
     //게시글 삭제
     @Transactional
-    public void deletePost(Long postId, String username) {
+    public void deletePost(Long postId, User user) {
         Post post = postRepository.findById(postId).orElseThrow(
                 ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
         );
-        if (!Objects.equals(username, post.getUser().getUsername())){
-            throw new IllegalArgumentException("본인의 게시글만 삭제할 수 있습니다.");
+        if(user.getUsername().equals(post.getUser().getUsername()) || user.getRole()== UserRoleEnum.ADMIN ){
+            userApplicationRepository.deleteAllByPost(post);
+            acceptanceRepository.deleteAllByPost(post);
+            bookMarkRepository.deleteAllByPost(post);
+            commentRepository.deleteAllByPost(post);
+            postRepository.deleteById(postId);
+        } else {
+            throw new CustomException(ErrorCode.POST_INQUIRY_NO_AUTHORITY);
         }
-        userApplicationRepository.deleteAllByPost(post);
-        acceptanceRepository.deleteAllByPost(post);
-        bookMarkRepository.deleteAllByPost(post);
-        commentRepository.deleteAllByPost(post);
-        postRepository.deleteById(postId);
+
     }
 
 //    private List<PostStack> tostackByPostId(List<StackDto> requestDto, Post post) {
