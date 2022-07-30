@@ -129,10 +129,8 @@ public class PostController {
     /*post 삭제 (디테일 페이지)*/
     @DeleteMapping("/api/post/{postId}")
     public ResponseEntity<StatusResponseDto> deletePost(@PathVariable Long postId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();
-        String username = principal.getUser().getUsername();
-        postService.deletePost(postId, username);
+        User user = commonService.getUser();
+        postService.deletePost(postId, user);
         String data = null;
         return new ResponseEntity(new StatusResponseDto("게시글 삭제가 완료되었습니다",data),HttpStatus.OK);
     }
