@@ -1,11 +1,14 @@
 package com.project.dogfaw.user.service;
 
+import com.project.dogfaw.acceptance.model.Acceptance;
 import com.project.dogfaw.acceptance.repository.AcceptanceRepository;
+import com.project.dogfaw.apply.model.UserApplication;
 import com.project.dogfaw.apply.repository.UserApplicationRepository;
 import com.project.dogfaw.common.CommonService;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.common.validator.UserValidator;
+import com.project.dogfaw.post.model.Post;
 import com.project.dogfaw.security.jwt.JwtReturn;
 import com.project.dogfaw.security.jwt.JwtTokenProvider;
 import com.project.dogfaw.security.jwt.TokenDto;
@@ -22,6 +25,8 @@ import com.project.dogfaw.user.repository.StackRepository;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +65,10 @@ public class UserService {
 
         // 회원 비밀번호 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
+
+        // 유효성 검사
+//        UserValidator.validateInputUsername(requestDto);
+        UserValidator.validateInputPassword(requestDto);
 
 
         User user = userRepository.save(
@@ -187,8 +196,7 @@ public class UserService {
         User user = userRepository.findById(user1.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.LOGIN_NOT_FOUNT_MEMBERID));
 
-        user.addInfo(requestDto);
-        log.info("===========================" +"addinfo 이후"+ "===============================");
+        user.updateNickname(requestDto);
         List<Stack> stack = stackRepository.saveAll(tostackByUserId(requestDto.getStacks(),user));
         user.updateStack(stack);
 
@@ -196,7 +204,6 @@ public class UserService {
 
         RefreshToken refreshToken = new RefreshToken(user.getUsername(), tokenDto.getRefreshToken());
         refreshTokenRepository.save(refreshToken);
-        log.info("===========================" +"토큰 저장 이후"+ "===============================");
         return tokenDto;
     }
 
@@ -210,7 +217,19 @@ public class UserService {
             String password = passwordEncoder.encode(UUID.randomUUID().toString());
             String nickname = "알수없음";
 
-//            stackRepository.deleteByUserId(foundUser.getId());
+            //회원탈퇴시 참여한 프로젝트에서 삭제하기전 참여한 프로젝트 현재 모집인원 -1
+            List<Acceptance> acceptances =acceptanceRepository.findAllByUser(foundUser);
+            for(Acceptance acceptance: acceptances){
+                Post post = acceptance.getPost();
+                post.decreaseCnt();
+                //모집인원 수 체크후 최대모집인원보다 현재모집인원이 적을경우 모집 중 으로 변경
+                Boolean deadline = false;
+                if(post.getCurrentMember()<post.getMaxCapacity()){
+                    post.updateDeadline(deadline);
+                }
+            }
+
+
             userApplicationRepository.deleteByUserId(foundUser.getId());
             acceptanceRepository.deleteByUserId(foundUser.getId());
             List<Stack> stacks =stackRepository.findByUserId(foundUser.getId());

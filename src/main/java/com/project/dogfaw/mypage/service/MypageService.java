@@ -57,7 +57,7 @@ public class MypageService {
     public ArrayList<MyBookmarkResponseDto> myBookmark(User user) {
 
         //유저가 북마크한 것을 리스트로 모두 불러옴
-        List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
+        List<BookMark> userPosts = bookMarkRepository.findAllByUserOrderByIdDesc(user);
 
         //유저가 북마크한 게시글을 찾아 리스트에 담아주기 위해 ArrayList 생성
         ArrayList<Post> userPostings = new ArrayList<>();
@@ -78,6 +78,7 @@ public class MypageService {
 
             List<PostStack> postStacks = postStackRepository.findByPostId(postId);
             List<String> stringPostStacks = new ArrayList<>();
+
             for (PostStack postStack : postStacks) {
                 stringPostStacks.add(postStack.getStack());
             }
@@ -393,12 +394,13 @@ public class MypageService {
         Boolean deadline = false;
         if(post.getCurrentMember()<post.getMaxCapacity()){
             post.updateDeadline(deadline);
-        }// 스테이터스는 진행중으로 유지한다.
+        }
+        // 스테이터스는 진행중으로 유지한다.
 
         //작성자에게 알람
         // '모집글' -> '신청' 시에 모집글 작성자에게 실시간 알림을 보낸다.
         //해당 댓글로 이동하는 url
-        String Url = "https://dogpaw.kr/user/mypage/post";
+        String Url = "https://dogpaw.kr/detail/"+post.getId();
         //탈퇴 시 모집글 작성 유저에게 실시간 알림 전송 ,
         String notificationContent = user.getNickname()+"님이 프로젝트를 하차하였습니다";
         notificationService.send(post.getUser(), NotificationType.REJECT,notificationContent,Url);
@@ -407,8 +409,8 @@ public class MypageService {
     }
 
     /*다른유저 마이페이지 보기(프로필,참여한 프로젝트, 모집중인 프로젝트)*/
-    public OtherUserMypageResponseDto mypageInfo(Long userId, User user) {
-        User otherUser = userRepository.findById(userId)
+    public OtherUserMypageResponseDto mypageInfo(String nickname, User user) {
+        User otherUser = userRepository.findByNickname(nickname)
                 .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND_USER_INFO));
 
         //반환할 ArrayList 생성

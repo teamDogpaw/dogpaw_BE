@@ -53,7 +53,7 @@ public class User {
         this.stacks = stack;
     }
 
-    public void addInfo(SignupRequestDto requestDto) {
+    public void updateNickname(SignupRequestDto requestDto) {
         this.nickname = requestDto.getNickname();
     }
 
