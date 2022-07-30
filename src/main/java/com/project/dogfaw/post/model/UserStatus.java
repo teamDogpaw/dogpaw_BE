@@ -7,6 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserStatus {
 
+    USER_STATUS_MASTER("master"), //관리자
     USER_STATUS_AUTHOR("author"), //작성자
     USER_STATUS_PARTICIPANT("participant"), //수락된사람
     USER_STATUS_APPLICANT("applicant"), //신청완료
