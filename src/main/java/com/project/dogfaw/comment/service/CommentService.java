@@ -1,6 +1,7 @@
 package com.project.dogfaw.comment.service;
 
 import com.amazonaws.services.networkfirewall.model.Header;
+import com.project.dogfaw.comment.dto.CmtReplyResponseDto;
 import com.project.dogfaw.comment.dto.CommentPutDto;
 import com.project.dogfaw.comment.dto.CommentRequestDto;
 import com.project.dogfaw.comment.dto.CommentResponseDto;
@@ -66,9 +67,15 @@ public class CommentService {
     public StatusResponseDto getCommentsByPostId(Long postId) {
         List<Comment> commentListByPostId = commentRepository.findAllByPostId(postId);
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
+        List<CmtReplyResponseDto> commentReplies = new ArrayList<>();
 
         for (Comment comment : commentListByPostId) {
-            CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
+            List<CommentReply> commentReplyList = comment.getCommentReplyList();
+            for(CommentReply commentReply: commentReplyList){
+                CmtReplyResponseDto cmtReplyResponseDto = new CmtReplyResponseDto(commentReply);
+                commentReplies.add(cmtReplyResponseDto);
+            }
+            CommentResponseDto commentResponseDto = new CommentResponseDto(comment,commentReplies);
             commentResponseDtoList.add(commentResponseDto);
         }
         return new StatusResponseDto("댓글 조회에 성공하였습니다", commentResponseDtoList);
