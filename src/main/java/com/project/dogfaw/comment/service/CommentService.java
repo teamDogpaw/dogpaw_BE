@@ -65,15 +65,20 @@ public class CommentService {
     // 댓글 조회
     @Transactional(readOnly = true)
     public StatusResponseDto getCommentsByPostId(Long postId) {
+        //레포에서 코멘트 리스트 찾음
         List<Comment> commentListByPostId = commentRepository.findAllByPostId(postId);
+
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
-        List<CmtReplyResponseDto> commentReplies = new ArrayList<>();
+
 
         for (Comment comment : commentListByPostId) {
+            //ArrayList 배열이 초기화 되어지지 않아 이전 대댓글 배열이 계속 쌓여서 다음으로 넘어가고 있었음
+            List<CmtReplyResponseDto> commentReplies = new ArrayList<>();
             List<CommentReply> commentReplyList = comment.getCommentReplyList();
             for(CommentReply commentReply: commentReplyList){
                 CmtReplyResponseDto cmtReplyResponseDto = new CmtReplyResponseDto(commentReply);
                 commentReplies.add(cmtReplyResponseDto);
+
             }
             CommentResponseDto commentResponseDto = new CommentResponseDto(comment,commentReplies);
             commentResponseDtoList.add(commentResponseDto);
