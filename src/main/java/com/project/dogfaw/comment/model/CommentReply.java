@@ -33,7 +33,7 @@ public class CommentReply extends Timestamped {
 
     @ManyToOne //ID 유저네임? 그 이아디?
     @JoinColumn(name = "USER_ID")
-    @JsonIgnore
+//    @JsonIgnore
     private User user;
 
 
