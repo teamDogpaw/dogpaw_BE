@@ -26,8 +26,7 @@
 
 ### 프로젝트 기간 : 2022.06.24 ~ 2022.08.05
 [Team Dogpaw Notion ➜](https://www.notion.so/dogpaw-project-board-dfc069757edd48498b410e1c41bf0ab5)<br/>
-[FrontEnd Repository ➜](https://github.com/teamDogpaw/dogpaw_FE)<br/>
-[BackEnd Repository ➜](https://github.com/teamDogpaw/dogpaw_BE)<br/>
+
 
 <hr/>
 
