@@ -58,13 +58,13 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + accessTokenValidTime))
-                .signWith(SignatureAlgorithm.RS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
-                .signWith(SignatureAlgorithm.RS256, secretKey)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
 
         return TokenDto.builder()
