@@ -37,9 +37,7 @@ public class JwtTokenProvider {
     private final UserDetailsService userDetailsService;
 
     @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+    protected void init() {secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());}
 
     // 토큰 생성
     public TokenDto createToken(User user) {
@@ -60,13 +58,13 @@ public class JwtTokenProvider {
                 .setClaims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + accessTokenValidTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.RS256, secretKey)
                 .compact();
 
         String refreshToken = Jwts.builder()
                 .setIssuedAt(now)
                 .setExpiration(new Date(now.getTime() + refreshTokenValidTime))
-                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .signWith(SignatureAlgorithm.RS256, secretKey)
                 .compact();
 
         return TokenDto.builder()
