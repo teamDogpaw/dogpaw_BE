@@ -104,7 +104,11 @@ public class UserService {
         );
 
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-            throw new CustomException(ErrorCode.LOGIN_PASSWORD_NOT_MATCH);
+            if (user.getKakaoId()!=null){
+                throw new CustomException(ErrorCode.LOGIN_NOT_KAKAOUSER);
+            }else {
+                throw new CustomException(ErrorCode.LOGIN_PASSWORD_NOT_MATCH);
+            }
         }
 
         Long userId = user.getId();
