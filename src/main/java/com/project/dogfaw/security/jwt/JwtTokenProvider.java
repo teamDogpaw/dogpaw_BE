@@ -37,9 +37,7 @@ public class JwtTokenProvider {
     private final UserDetailsService userDetailsService;
 
     @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+    protected void init() {secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());}
 
     // 토큰 생성
     public TokenDto createToken(User user) {
