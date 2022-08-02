@@ -7,6 +7,8 @@ import com.project.dogfaw.comment.model.Comment;
 import com.project.dogfaw.comment.model.CommentReply;
 import com.project.dogfaw.comment.repository.CommentReplyRepository;
 import com.project.dogfaw.comment.repository.CommentRepository;
+import com.project.dogfaw.common.exception.CustomException;
+import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.sse.model.NotificationType;
 import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.model.User;
@@ -71,9 +73,12 @@ public class CommentReplyService {
 
         //대댓글삭제
         public Boolean deleteCommentReply(Long commentReplyId, User user, Long commentId) {
-            CommentReply commentReply = commentReplyRepository.findById(commentReplyId).orElseThrow(() -> new IllegalArgumentException("존재하지않는 댓글입니다")
+            CommentReply commentReply = commentReplyRepository.findById(commentReplyId)
+                    .orElseThrow(()->new CustomException(ErrorCode.COMMENT_NOT_FOUND)
             );
-            Comment comment = commentRepository.findById(commentId).orElseThrow(RuntimeException::new);
+
+            Comment comment = commentRepository.findById(commentId)
+                    .orElseThrow(RuntimeException::new);
             Long writerId = commentReply.getUser().getId();
             Long userId = user.getId();
             if (!writerId.equals(userId)) {
@@ -86,8 +91,8 @@ public class CommentReplyService {
 
         //대댓글수정
         public Boolean updateCommentReply(Long commentReplyId, User user, CmtReplyPutDto requestDto) {
-            CommentReply commentReply = commentReplyRepository.findById(commentReplyId).orElseThrow(
-                    () -> new IllegalArgumentException("존재하지 않는 댓글입니다.")
+            CommentReply commentReply = commentReplyRepository.findById(commentReplyId)
+                    .orElseThrow(()->new CustomException(ErrorCode.COMMENT_NOT_FOUND)
             );
             Long writerId = commentReply.getUser().getId();
             Long userId = user.getId();
