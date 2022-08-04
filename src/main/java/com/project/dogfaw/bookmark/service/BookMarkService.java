@@ -1,12 +1,10 @@
 package com.project.dogfaw.bookmark.service;
 
-import com.project.dogfaw.bookmark.dto.BookMarkRequestDto;
 import com.project.dogfaw.bookmark.model.BookMark;
 import com.project.dogfaw.bookmark.repository.BookMarkRepository;
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
 import com.project.dogfaw.post.model.Post;
-
 import com.project.dogfaw.post.repository.PostRepository;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;

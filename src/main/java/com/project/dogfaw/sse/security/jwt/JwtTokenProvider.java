@@ -1,4 +1,4 @@
-package com.project.dogfaw.security.jwt;
+package com.project.dogfaw.sse.security.jwt;
 
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;

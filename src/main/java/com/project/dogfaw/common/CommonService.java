@@ -1,6 +1,6 @@
 package com.project.dogfaw.common;
 
-import com.project.dogfaw.security.UserDetailsImpl;
+import com.project.dogfaw.sse.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
