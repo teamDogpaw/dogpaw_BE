@@ -1,4 +1,4 @@
-package com.project.dogfaw.security;
+package com.project.dogfaw.sse.security;
 
 import com.project.dogfaw.user.model.User;
 import com.project.dogfaw.user.repository.UserRepository;

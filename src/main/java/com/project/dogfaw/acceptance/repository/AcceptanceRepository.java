@@ -13,7 +13,8 @@ import java.util.Optional;
 public interface AcceptanceRepository extends JpaRepository<Acceptance, Long> {
 
     List<Acceptance> findAllByUser(User user);
-    List<Acceptance> findAllByPost(Post post); 
+    List<Acceptance> findAllByUserOrderByIdDesc(User user);
+    List<Acceptance> findAllByPost(Post post);
     Boolean existsByUserAndPost(User user, Post post);
 
     Optional<Acceptance>deleteByUserAndPost(User user, Post post);

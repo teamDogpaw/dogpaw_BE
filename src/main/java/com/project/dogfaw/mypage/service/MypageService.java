@@ -95,7 +95,7 @@ public class MypageService {
     public ArrayList<MyPostResponseDto> myPost(User user) {
 
         //유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
-        List<Post> posts = postRepository.findByUser(user);
+        List<Post> posts = postRepository.findAllByUserOrderByIdDesc(user);
         //유저가 북마크한 것들을 리스트로 불러옴
         List<BookMark> userPosts = bookMarkRepository.findAllByUser(user);
 
@@ -144,7 +144,7 @@ public class MypageService {
     public ArrayList<MyApplyingResponseDto> myApply(User user) {
 
         //유저가 참여신청한 것을 리스트로 모두 불러옴
-        List<UserApplication> userApply = userApplicationRepository.findAllByUser(user);
+        List<UserApplication> userApply = userApplicationRepository.findAllByUserOrderByIdDesc(user);
         //유저가 북마크한 것을 리스트로 모두 불러옴
         List<BookMark> userBookmarks = bookMarkRepository.findAllByUser(user);
 
@@ -198,7 +198,7 @@ public class MypageService {
     /*참여수락된프로젝트조회*/
     public ArrayList<MyAcceptanceResponseDto> participation(User user) {
         //해당 유저의 참여완료된(수락된) 리스트
-        List<Acceptance> acceptances = acceptanceRepository.findAllByUser(user);
+        List<Acceptance> acceptances = acceptanceRepository.findAllByUserOrderByIdDesc(user);
         //해당 유저의 북마크 리스트
         List<BookMark> bookMarks = bookMarkRepository.findAllByUser(user);
         //게시물 객체를 담아줄 ArrayList 생성
@@ -256,7 +256,7 @@ public class MypageService {
             throw new CustomException(ErrorCode.MYPAGE_INQUIRY_NO_AUTHORITY);
         }
         //해당 게시글의 참여신청을 정보를 다 가져오고 해당 유저 정보를 뽑아와 dto에 담아 리스트로 반환
-        List<UserApplication> applicants = userApplicationRepository.findAllByPost(post);
+        List<UserApplication> applicants = userApplicationRepository.findAllByPostOrderByIdDesc(post);
 
         ArrayList<AllApplicantsDto> users = new ArrayList<>();
 
@@ -420,7 +420,7 @@ public class MypageService {
 
         /*다른유저의 참여중인 프로젝트 리스트*/
         //다른 유저의 참여완료된(수락된) 리스트
-        List<Acceptance> acceptances = acceptanceRepository.findAllByUser(otherUser);
+        List<Acceptance> acceptances = acceptanceRepository.findAllByUserOrderByIdDesc(otherUser);
         //현재 로그인한 유저의 북마크 리스트
         List<BookMark> bookMarks = bookMarkRepository.findAllByUser(user);
         //게시물 객체를 담아줄 ArrayList 생성
@@ -465,7 +465,7 @@ public class MypageService {
 
         /*다른유저의 작성글 리스트*/
         //다른 유저가 작성한 모든글 리스트로 불러옴///(모든 게시글 X)
-        List<Post> posts = postRepository.findByUser(otherUser);
+        List<Post> posts = postRepository.findAllByUserOrderByIdDesc(otherUser);
 
         ArrayList<MyPostResponseDto> postList = new ArrayList<>();
 

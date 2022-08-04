@@ -7,23 +7,20 @@ import com.project.dogfaw.post.dto.PostDetailResponseDto;
 import com.project.dogfaw.post.dto.PostRequestDto;
 import com.project.dogfaw.post.dto.MyApplyingResponseDto;
 import com.project.dogfaw.post.service.PostService;
-import com.project.dogfaw.security.UserDetailsImpl;
+import com.project.dogfaw.sse.security.UserDetailsImpl;
 import com.project.dogfaw.user.model.User;
 import com.zaxxer.hikari.HikariDataSource;
 import com.zaxxer.hikari.HikariPoolMXBean;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.management.*;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.Map;
 

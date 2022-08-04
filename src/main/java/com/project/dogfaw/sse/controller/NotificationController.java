@@ -1,14 +1,12 @@
 package com.project.dogfaw.sse.controller;
 
 import com.project.dogfaw.common.CommonService;
-import com.project.dogfaw.common.exception.StatusResponseDto;
-import com.project.dogfaw.security.UserDetailsImpl;
+import com.project.dogfaw.sse.security.UserDetailsImpl;
 import com.project.dogfaw.sse.dto.NotificationCountDto;
 import com.project.dogfaw.sse.dto.NotificationDto;
 import com.project.dogfaw.sse.service.NotificationService;
 import com.project.dogfaw.user.model.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
