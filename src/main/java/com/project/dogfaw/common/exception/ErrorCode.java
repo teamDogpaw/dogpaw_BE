@@ -42,12 +42,12 @@ public enum ErrorCode {
     REFRESH_TOKEN_REISSUE_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "userId, accessToken, refreshToken을 입력해주세요"),
 
     // 로그인
-    LOGIN_NOT_FOUNT_MEMBERID(HttpStatus.BAD_REQUEST, "400", "해당 아이디를 찾을 수 없습니다"),
+    LOGIN_NOT_FOUNT_MEMBERID(HttpStatus.BAD_REQUEST, "400", "해당 이메일을 찾을 수 없습니다"),
+    LOGIN_NOT_KAKAOUSER(HttpStatus.BAD_REQUEST, "400", "카카오 USER는 카카오 로그인을 해주세요."),
     LOGIN_MEMBERID_EMPTY(HttpStatus.BAD_REQUEST, "400", "아이디를 입력해주세요"),
     LOGIN_PASSWORD_EMPTY(HttpStatus.BAD_REQUEST, "400", "비밀번호를 입력해주세요"),
     LOGIN_PASSWORD_NOT_MATCH(HttpStatus.BAD_REQUEST, "400", "비밀번호가 틀렸습니다. 다시 입력해주세요"),
 
-    // 회원 탈퇴
     NOT_MATCH_USER_INFO(HttpStatus.BAD_REQUEST, "400", "유저 정보가 일치하지 않습니다"),
 
     //기타

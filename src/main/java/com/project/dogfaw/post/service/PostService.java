@@ -222,14 +222,14 @@ public class PostService {
     //게시글 수정
     @Transactional
     public void updatePost(Long postId, PostRequestDto postRequestDto, String username) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND)
         );
-        User user = userRepository.findByUsername(username).orElseThrow(
-                () -> new IllegalArgumentException("해당 Id의 회원이 존재하지 않습니다.")
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(()->new CustomException(ErrorCode.NOT_MATCH_USER_INFO)
         );
         if (!Objects.equals(username, post.getUser().getUsername())){
-            throw new IllegalArgumentException("본인의 게시글만 수정할 수 있습니다.");
+            throw new CustomException(ErrorCode.POST_UPDATE_WRONG_ACCESS);
         }
         postStackRepository.deleteByPostId(postId);
         for (String stack : postRequestDto.getStacks()){
@@ -242,8 +242,8 @@ public class PostService {
     //게시글 삭제
     @Transactional
     public void deletePost(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(
-                ()-> new IllegalArgumentException("존재하지 않는 게시글입니다.")
+        Post post = postRepository.findById(postId)
+                .orElseThrow(()->new CustomException(ErrorCode.POST_NOT_FOUND)
         );
         if(user.getUsername().equals(post.getUser().getUsername()) || user.getRole()== UserRoleEnum.ADMIN ){
             userApplicationRepository.deleteAllByPost(post);

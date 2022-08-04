@@ -37,17 +37,14 @@ public class KakaoUserService {
     public KakaoUserInfo kakaoLogin(String code) throws JsonProcessingException {
         // "인가 코드"로 AccessToken 요청
         String accessToken = getAccessToken(code);
-        System.out.println(1);
 
         KakaoUserInfo kakaoUserInfo = getKakaoUserInfo(accessToken);
-        System.out.println(3);
 
         User kakaoUser = userRepository.findByUsername(kakaoUserInfo.getKakaoMemberId()).orElse(null);
         if  (kakaoUser == null) {
             System.out.println("if");
             registerKakaoUser(kakaoUserInfo);
         } 
-        System.out.println(4);
 
 //        return getKakaoUserInfo(accessToken);
         return kakaoUserInfo;
