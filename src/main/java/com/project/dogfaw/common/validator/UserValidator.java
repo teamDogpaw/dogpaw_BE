@@ -2,7 +2,7 @@ package com.project.dogfaw.common.validator;
 
 import com.project.dogfaw.common.exception.CustomException;
 import com.project.dogfaw.common.exception.ErrorCode;
-import com.project.dogfaw.security.jwt.TokenRequestDto;
+import com.project.dogfaw.sse.security.jwt.TokenRequestDto;
 import com.project.dogfaw.user.dto.LoginDto;
 import com.project.dogfaw.user.dto.SignupRequestDto;
 
@@ -30,7 +30,7 @@ public class UserValidator {
 
 
         // 8자에서 16자 이내, 대소문자, 숫자.
-        String patternPw = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,16}$";
+        String patternPw = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,15}$";
 
         // 비밀번호 설정 유효성 검사
         if (password == null || !Pattern.matches(patternPw, password)) {

@@ -19,7 +19,7 @@ public interface PostRepository extends JpaRepository<Post,Long> {
 
     List<Post> findTop20ByOrderByModifiedAtDesc();
 
-    List<Post> findByUser(User user);
+    List<Post> findAllByUserOrderByIdDesc(User user);
 
 //    List<BookmarkRankResponseDto> findByOrderByBookmarkCntDesc(PageRequest pageRequest);
 

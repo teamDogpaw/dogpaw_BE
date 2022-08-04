@@ -22,8 +22,8 @@ public interface UserApplicationRepository extends JpaRepository<UserApplication
     UserApplication getUserApplicationByUserAndPost(User user, Post post);
 
 
-    List<UserApplication> findAllByUser(User user);
-    List<UserApplication> findAllByPost(Post psot);
+    List<UserApplication> findAllByUserOrderByIdDesc(User user);
+    List<UserApplication> findAllByPostOrderByIdDesc(Post psot);
 
     Optional<UserApplication> findUserApplyByUserAndPost( User user,Post post);
 

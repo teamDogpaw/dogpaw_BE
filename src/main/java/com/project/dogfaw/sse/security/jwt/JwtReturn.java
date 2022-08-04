@@ -1,4 +1,4 @@
-package com.project.dogfaw.security.jwt;
+package com.project.dogfaw.sse.security.jwt;
 
 public enum JwtReturn {
     SUCCESS, EXPIRED, FAIL
