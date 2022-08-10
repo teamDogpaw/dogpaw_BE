@@ -51,12 +51,29 @@
 <p float="left">
 
 <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=Spring&logoColor=white">
+<img src="https://img.shields.io/badge/spring boot-6DB33f?style=for-the-badge&logo=springboot&logoColor=white"> 
+<img src="https://img.shields.io/badge/spring security-6db33f?style=for-the-badge&logo=springsecurity&logoColor=white"> 
 <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white">
 <img src="https://img.shields.io/badge/Amazon EC2-FF9900?style=for-the-badge&logo=Amazon EC2&logoColor=white">
 <img src="https://img.shields.io/badge/JAVA-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white">
 <img src="https://img.shields.io/badge/GitHub Actions-2088FF?style=for-the-badge&logo=GitHub Actions&logoColor=white">
 <img src="https://img.shields.io/badge/Amazon S3-569A31?style=for-the-badge&logo=Amazon S3&logoColor=white">
+<img src="https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white"> 
+<img src="https://img.shields.io/badge/hibernate-59666c?style=for-the-badge&logo=hibernate&logoColor=white"> 
+<img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> 
+<img src="https://img.shields.io/badge/SSL-721412?style=for-the-badge&logo=openssl&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon ec2-ff9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
+<img src="https://img.shields.io/badge/Codedeploy-00485B?style=for-the-badge&logo=keepassxc&logoColor=white"> 
+<img src="https://img.shields.io/badge/amazon rds-527fff?style=for-the-badge&logo=amazonrds&logoColor=white"> 
+<img src="https://img.shields.io/badge/Route53-4053d6?style=for-the-badge&logo=amazonaws&logoColor=white">
+  
+### Tools
+<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> 
+<img src="https://img.shields.io/badge/sourcetree-0052CC?style=for-the-badge&logo=sourcetree&logoColor=white"> 
+<img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> 
+<img src="https://img.shields.io/badge/git-f05032?style=for-the-badge&logo=git&logoColor=white"> 
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
 
 ### 1. 서비스 아키텍쳐 Service Architecture
 ![](https://velog.velcdn.com/images/sparrowscout/post/8e1f0a60-63bc-4d74-8db2-fcb109af537d/image.png)
