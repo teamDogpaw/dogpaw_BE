@@ -66,6 +66,7 @@
 <img src="https://img.shields.io/badge/Codedeploy-00485B?style=for-the-badge&logo=keepassxc&logoColor=white"> 
 <img src="https://img.shields.io/badge/amazon rds-527fff?style=for-the-badge&logo=amazonrds&logoColor=white"> 
 <img src="https://img.shields.io/badge/Route53-4053d6?style=for-the-badge&logo=amazonaws&logoColor=white">
+<img src="https://img.shields.io/badge/UBUNTU-E95420?style=for-the-badge&logo=UBUNTU&logoColor=white">
   
 <code> Tools </code>
 </br>
