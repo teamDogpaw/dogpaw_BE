@@ -63,12 +63,14 @@
 <img src="https://img.shields.io/badge/hibernate-59666c?style=for-the-badge&logo=hibernate&logoColor=white"> 
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> 
 <img src="https://img.shields.io/badge/SSL-721412?style=for-the-badge&logo=openssl&logoColor=white">
-<img src="https://img.shields.io/badge/Amazon ec2-ff9900?style=for-the-badge&logo=amazonec2&logoColor=white"> 
 <img src="https://img.shields.io/badge/Codedeploy-00485B?style=for-the-badge&logo=keepassxc&logoColor=white"> 
 <img src="https://img.shields.io/badge/amazon rds-527fff?style=for-the-badge&logo=amazonrds&logoColor=white"> 
 <img src="https://img.shields.io/badge/Route53-4053d6?style=for-the-badge&logo=amazonaws&logoColor=white">
   
-### Tools
+<code> Tools </code>
+</br>
+<p float="left"> 
+ 
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> 
 <img src="https://img.shields.io/badge/sourcetree-0052CC?style=for-the-badge&logo=sourcetree&logoColor=white"> 
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> 
