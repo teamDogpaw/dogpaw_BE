@@ -59,8 +59,6 @@ public class S3Uploader {
         String imgKey = fileName; //파일 확장자 fileName 따로저장(이유: getURL에서 한글이름 파일 깨짐=삭제불가)
         removeNewFile(uploadFile);
 
-
-
         return updateUser(uploadImageUrl,imgKey,requestDto,user);
     }
 
@@ -68,9 +66,6 @@ public class S3Uploader {
     @Transactional
     public String updateUser(String uploadImageUrl,String imgKey, MypageRequestDto requestDto, User user) {
 
-//        if (userRepository.existsByNickname(nickname)) {
-//            throw new CustomException(ErrorCode.SIGNUP_NICKNAME_DUPLICATE_CHECK);
-//        }
             Long userId = user.getId();
             user.setNickname(requestDto.getNickname());
             user.setProfileImg(uploadImageUrl);
@@ -82,12 +77,14 @@ public class S3Uploader {
             
         }
 
-
     // S3로 업로드
     //유저의 기존 프로필 이미지 S3에서 삭제 후 업로드
     private String putS3(File uploadFile, String fileName) {
-
-        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+        try {
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile).withCannedAcl(CannedAccessControlList.PublicRead));
+        }catch (Exception e){
+            throw new CustomException(ErrorCode.IMAGE_UPLOAD_ERROR);
+        }
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
@@ -106,13 +103,13 @@ public class S3Uploader {
         if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
             try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                 fos.write(file.getBytes());
+            }catch (Exception e){
+                throw new CustomException(ErrorCode.WRONG_IMAGE_FORMAT);
             }
             return Optional.of(convertFile);
         }
         return Optional.empty();
     }
-
-
 
     private List<Stack> tostackByUserId(List<StackDto> requestDto, User user) {
         List<Stack> stackList = new ArrayList<>();

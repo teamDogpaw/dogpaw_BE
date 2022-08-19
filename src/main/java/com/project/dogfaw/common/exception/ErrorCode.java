@@ -19,10 +19,10 @@ public enum ErrorCode {
     SIGNUP_MEMBERID_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "아이디 형식을 맞춰주세요"),
     SIGNUP_PASSWORD_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "비밀번호 형식을 맞춰주세요"),
     SIGNUP_PWCHECK_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "비밀번호가 일치하지 않습니다"),
-    SIGNUP_NICKNAME_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "닉네임 형식을 맞춰주세요"),
+
     SIGNUP_MEMBERID_DUPLICATE_CHECK(HttpStatus.BAD_REQUEST, "400", "아이디 중복확인을 해주세요"),
     SIGNUP_NICKNAME_DUPLICATE_CHECK(HttpStatus.BAD_REQUEST, "400", "닉네임 중복확인을 해주세요"),
-    SIGNUP_MAJOR_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "분야를 선택해주세요"),
+
     SIGNUP_USERID_NOT_FOUND(HttpStatus.NOT_FOUND, "404", "userId가 존재하지 않습니다"),
 
     SIGNUP_MEMBERID_DUPLICATE(HttpStatus.BAD_REQUEST, "400", "해당 아이디가 이미 존재합니다"),
@@ -71,8 +71,7 @@ public enum ErrorCode {
     POST_DELETE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인의 게시물만 삭제할 수 있습니다"),
     POST_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "비어있는 항목을 채워주세요"),
     POST_MAJOR_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "모집 분야를 선택해주세요"),
-    POST_TITLE_INPUT_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "400", "제목을 공백 포함 20자 이내로 작성해주세요"),
-    POST_CONTENT_INPUT_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "400", "내용을 공백 포함 250자 이내로 작성해주세요"),
+
 
     // comment
     COMMENT_WRONG_INPUT(HttpStatus.BAD_REQUEST, "400", "댓글을 입력해주세요"),
@@ -80,21 +79,10 @@ public enum ErrorCode {
     COMMENT_UPDATE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인의 댓글만 수정할 수 있습니다"),
     COMMENT_DELETE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인의 댓글만 삭제할 수 있습니다"),
 
-    USER_UPDATE_WRONG_ACCESS(HttpStatus.BAD_REQUEST, "400", "본인이 아니면 수정할 수 없습니다"),
-
     // apply
-    APPLY_WRONG_ERROR(HttpStatus.BAD_REQUEST, "400", "본인의 프로젝트에 지원 신청 할 수 없습니다"),
-    ALREADY_STARTED_ERROR(HttpStatus.BAD_REQUEST, "400", "모집중인 프로젝트가 아닙니다"),
-    ALREADY_APPLY_POST_ERROR(HttpStatus.BAD_REQUEST,"400", "이미 지원한 프로젝트입니다"),
-    APPLY_MAJOR_WRONG_INPUT(HttpStatus.BAD_REQUEST,"400", "지원할 분야를 선택해주세요"),
-    APPLY_MAJOR_NOT_EXIST(HttpStatus.NOT_FOUND, "404","해당 분야는 모집하지 않습니다"),
-    APPLY_PEOPLE_SET_CLOSED(HttpStatus.BAD_REQUEST, "400", "해당 모집글의 정원이 다 찼습니다"),
-    APPLY_NOT_FOUND(HttpStatus.BAD_REQUEST,"404", "해당 지원 정보를 찾을 수 없습니다"),
-    APPLY_OVER_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "권한이 없습니다"),
-    APPLY_MESSAGE_INPUT_LENGTH_ERROR(HttpStatus.BAD_REQUEST, "400", "지원 메시지는 20자 이내로 작성해주세요"),
-    EXCEED_APPLY_USER_NUMBER(HttpStatus.INTERNAL_SERVER_ERROR,"500","전공 모집인원이 초과되었습니다."),
 
-    NO_DIFFERENCE_STATUS(HttpStatus.FORBIDDEN,"403", "Status 변경 사항이 없습니다"),
+    ALREADY_APPLY_POST_ERROR(HttpStatus.BAD_REQUEST,"400", "이미 지원한 프로젝트입니다"),
+    APPLY_NOT_FOUND(HttpStatus.BAD_REQUEST,"404", "해당 지원 정보를 찾을 수 없습니다"),
 
 
     //acceptance
@@ -106,13 +94,6 @@ public enum ErrorCode {
     MYPAGE_ACCEPTANCE_NO_AUTHORITY(HttpStatus.FORBIDDEN,"403", "신청 수락은 작성자만 가능합니다"),
 
 
-    // mail
-    EMAIL_WRONG_PATTERN(HttpStatus.BAD_REQUEST, "400", "이메일 형식을 맞춰주세요"),
-
-    //Room
-
-    ALREADY_EXISTS_CHAT_ROOM(HttpStatus.BAD_REQUEST,"400","채팅방이 이미 존재합니다."),
-    NOT_EXIST_ROOM(HttpStatus.NOT_FOUND,"404","채팅방이 존재하지 않습니다."),
 
     //sse
     NOT_EXIST_NOTIFICATION(HttpStatus.NOT_FOUND,"404","존재하지 않는 알림입니다."),
