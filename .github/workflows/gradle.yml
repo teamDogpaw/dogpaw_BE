@@ -24,16 +24,6 @@ jobs:
         with:
           java-version: 1.8
 
-      #      - name: gradle Caching
-      #        uses: actions/cache@v3
-      #        with:
-      #          path: |
-      #            ~/.gradle/caches
-      #            ~/.gradle/wrapper
-      #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-      #          restore-keys: |
-      #            ${{ runner.os }}-gradle-
-
       - name: Create ./src/main/resources/
         run: |
           mkdir -p ./src/main/resources/
@@ -53,21 +43,21 @@ jobs:
         run: ./gradlew build
         shell: bash
 
-      - name: Make zip file #1
+      - name: Make zip file
         run: zip -qq -r ./$GITHUB_SHA.zip .
         shell: bash
 
-      - name: Configure AWS credentials #2
+      - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      - name: Upload to S3 #3
+      - name: Upload to S3 
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://dogflow-deploy/$GITHUB_SHA.zip
 
-      - name: Code Deploy #4
+      - name: Code Deploy 
         run: aws deploy create-deployment --application-name dog-flow
           --deployment-config-name CodeDeployDefault.OneAtATime
           --deployment-group-name dev
